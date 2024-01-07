@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ru" style="height: 100%">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Авторизация</title>
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
+    <link href="/static/css/login.css" rel="stylesheet">
+  </head>
+  <body class="d-flex align-items-center py-4 bg-body-tertiary">
+    <!-- Фоновое видео -->
+    <video autoplay loop muted class="bgvideo" id="bgvideo">
+     <source src="/static/mp4/study.mp4" type="video/mp4"></source>
+    </video>
+    <!-- Контейнер авторизации -->
+    <div class="authorization">
+      <form>
+        <h3>Вход в систему</h3>
+        <input type="text" id="login" class="form-control" placeholder="Login" required autofocus />
+        <input type="password" id="psw" class="form-control" placeholder="Password" required />
+      </form>
+      <button class="btn btn-md btn-secondary btn-block" onclick="sendForm()">Авторизоваться</button>
+    </div>
+  </body>
+</html>

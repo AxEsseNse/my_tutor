@@ -1,0 +1,49 @@
+.bgvideo {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  z-index: -9999;
+}
+
+.authorization {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  width: 320px;
+  margin:0 auto;
+  margin-top: 15%;
+  justify-content: center;
+}
+.authorization h3{
+  color: #49DED5;
+}
+
+.authorization input{
+  margin-top: 10px;
+  background-color: #868898;
+  color: #CBCDEA;
+}
+.authorization input:hover,
+.authorization input:focus {
+  background-color: #49DED5;
+  color: #04302A;
+}
+
+.authorization button{
+  font-size: 20px;
+  margin-top: 20px;
+  color: #DBE2E1;
+  border: 6px solid #49F5EA;
+  border-radius: 12px;
+}
+.authorization button:hover,
+.authorization button:focus {
+  background-color: #49DED5;
+  color: #0E786B;
+  border-color: #49DED5;
+}
