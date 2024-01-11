@@ -1,0 +1,4 @@
+#content {
+    height: calc(100vh - 70px);
+    background: linear-gradient(to top, #80C4C3, #002F36 620%);
+}

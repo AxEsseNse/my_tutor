@@ -6,8 +6,9 @@
     <title>Авторизация</title>
     <link href="/static/css/bootstrap.css" rel="stylesheet">
     <link href="/static/css/login.css" rel="stylesheet">
+    <script src="/static/js/login.js"></script>
   </head>
-  <body class="d-flex align-items-center py-4 bg-body-tertiary">
+  <body class="d-flex align-items-center py-4 bg-body-tertiary" onload="enableEnterListener()">
     <!-- Фоновое видео -->
     <video autoplay loop muted class="bgvideo" id="bgvideo">
      <source src="/static/mp4/study.mp4" type="video/mp4"></source>
@@ -17,7 +18,7 @@
       <form>
         <h3>Вход в систему</h3>
         <input type="text" id="login" class="form-control" placeholder="Login" required autofocus />
-        <input type="password" id="psw" class="form-control" placeholder="Password" required />
+        <input type="password" id="password" class="form-control" placeholder="Password" required />
       </form>
       <button class="btn btn-md btn-secondary btn-block" onclick="sendForm()">Авторизоваться</button>
     </div>
