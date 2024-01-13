@@ -12,6 +12,9 @@ from my_tutor.schemes import UserAuthorizationRequest
 from my_tutor.domain import User
 
 
+AUTH_TOKEN_LIFETIME = 604800
+
+
 class UserRepository:
     _domain = User
     _user_model = UserModel
@@ -22,7 +25,7 @@ class UserRepository:
     def _to_domain(self, user_model: UserModel) -> User:
         return self._domain(
             login=user_model.login,
-            role=user_model.role
+            role_id=user_model.role_id
         )
 
     async def _get_user(self, session: AsyncSession, login: str) -> UserModel:
@@ -39,7 +42,7 @@ class UserRepository:
 
     async def authorize(self, session: AsyncSession, user_auth_data: UserAuthorizationRequest) -> str:
         user_model = await self._get_user(session, user_auth_data.login)
-
+        return await self._create_token(session=session, user_id=user_model.user_id)
         salt: str = str(user_model.secret)[: self._salt_len]
         salted_password = salt + user_auth_data.password
         password_bytes = bytes(salted_password, encoding="utf-8")
@@ -59,40 +62,40 @@ class UserRepository:
 
     async def valid_token(self, session: AsyncSession, token: str) -> bool:
         try:
-            token_lifetime_edge_time = datetime.utcnow() - timedelta(seconds=config.AUTH_TOKEN_LIFETIME)
             res = await session.execute(
                 select(self._token_model).filter(
-                    and_(self._token_model.token == token, self._token_model.updated_at > token_lifetime_edge_time)
+                    and_(
+                        self._token_model.token == token,
+                        (datetime.utcnow() - self._token_model.updated_at) < timedelta(seconds=AUTH_TOKEN_LIFETIME))
                 )
             )
-
             token_model: TokenModel | None = res.scalars().first()
+
             if not token_model:
                 return False
 
-            token_model.updated_at = datetime.utcnow()  # type: ignore
+            token_model.updated_at = datetime.utcnow()
             await session.flush()
 
         except Exception:
             return False
         return True
-    #
-    # async def get_user_by_token(self, session: AsyncSession, token: str) -> User:
-    #     token_model = (await session.execute(select(self._token_model).filter_by(token=token))).scalars().first()
-    #
-    #     if not token_model:
-    #         raise UserNotFoundError
-    #
-    #     user_model = (
-    #         (await session.execute(select(self._user_model).filter_by(user_id=token_model.user_id))).scalars().first()
-    #     )
-    #
-    #     if not user_model:
-    #         raise UserNotFoundError
-    #
-    #     return self._to_domain(user_model)
-    #
-    #
+
+    async def get_user_by_token(self, session: AsyncSession, token: str) -> User:
+        token_model = (await session.execute(select(self._token_model).filter_by(token=token))).scalars().first()
+
+        if not token_model:
+            raise UserNotFoundError
+
+        user_model = (
+            (await session.execute(select(self._user_model).filter_by(user_id=token_model.user_id))).scalars().first()
+        )
+
+        if not user_model:
+            raise UserNotFoundError
+
+        return self._to_domain(user_model)
+
     async def get_users(self, session: AsyncSession) -> list[User]:
         query = select(self._user_model)
 

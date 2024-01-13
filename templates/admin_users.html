@@ -1,0 +1,64 @@
+{% extends "admin_base.html" %}
+{% block admin_head %}
+    <link rel="stylesheet" href="/static/css/admin_users.css" />
+{% endblock admin_head %}
+{% block admin_content %}
+
+<div class="admin-content-btn-add">
+    <button
+        class="btn btn-success"
+        type="button"
+        title="Регистрация новых пользователей"
+        data-bs-toggle="modal"
+        data-bs-target="#modal-user-add"
+        id="btn-add-sensor"
+    >+
+    <i class="fa-solid fa-plus"></i>
+    </button>
+</div>
+<table id="users-table" class="table table-hover table-info">
+    <thead class="thead-dark">
+        <tr>
+            <th class="col-3">Логин</th>
+            <th class="col-2">Роль</th>
+            <th class="col-2">Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                roma
+            </td>
+            <td>
+                super4elovek
+            </td>
+            <td>
+                povisit'
+            </td>
+        </tr>
+        <tr>
+            <td>
+                serega
+            </td>
+            <td>
+                pulya
+            </td>
+            <td>
+                povisit'
+            </td>
+        </tr>
+        <tr>
+            <td>
+                petya
+            </td>
+            <td>
+                mashina
+            </td>
+            <td>
+                povisit'
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+{% endblock %}

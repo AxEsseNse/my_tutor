@@ -28,17 +28,16 @@ function sendForm() {
     .then(response => response.json())
     .then(data => {
       if (typeof data !== 'string') {
-        console.log(data.message)
-        alert(data.message)
+        console.log(data.detail)
+        alert(data.detail)
         return
       }
-      deleteCookie('X-Monas-Auth-Token')
-      setCookie('X-Monas-Auth-Token', data)
+      deleteCookie('My-Tutor-Auth-Token')
+      setCookie('My-Tutor-Auth-Token', data)
       window.location.reload()
     })
     .catch(error => {
       console.error(error)
-      show_error('Ошибка авторизации')
     })
 }
 
