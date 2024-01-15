@@ -6,13 +6,19 @@ from uuid import uuid4
 from sqlalchemy import and_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from my_tutor.exceptions import UserNotFoundError, UserNotVerifyError
+from my_tutor.exceptions import UserNotFoundError, UserNotVerifyError, UserAlreadyExistError
 from my_tutor.models import TokenModel, UserModel, RoleModel
-from my_tutor.schemes import UserAuthorizationRequest
+from my_tutor.schemes import UserAuthorizationRequest, CreateUserRequest, ChangeUserPasswordRequest
 from my_tutor.domain import User
+from my_tutor.constants import UserRole
 
-
+from sqlalchemy.orm import joinedload
 AUTH_TOKEN_LIFETIME = 604800
+TEMP_ROLES = {
+    'admin': 1,
+    'tutor': 2,
+    'student': 3
+}
 
 
 class UserRepository:
@@ -22,10 +28,13 @@ class UserRepository:
     _token_model = TokenModel
     _salt_len = 13
 
+    async def _get_new_user_id(self, session: AsyncSession) -> int:
+        return await session.scalar(self._user_model.id_seq.next_value())
+
     def _to_domain(self, user_model: UserModel) -> User:
         return self._domain(
             login=user_model.login,
-            role_id=user_model.role_id
+            role=user_model.role.title
         )
 
     async def _get_user(self, session: AsyncSession, login: str) -> UserModel:
@@ -42,13 +51,13 @@ class UserRepository:
 
     async def authorize(self, session: AsyncSession, user_auth_data: UserAuthorizationRequest) -> str:
         user_model = await self._get_user(session, user_auth_data.login)
-        return await self._create_token(session=session, user_id=user_model.user_id)
-        salt: str = str(user_model.secret)[: self._salt_len]
+
+        salt = str(user_model.secret)[: self._salt_len]
         salted_password = salt + user_auth_data.password
         password_bytes = bytes(salted_password, encoding="utf-8")
         password_hash = hashlib.md5(password_bytes).hexdigest()
 
-        if not user_model.secret.endswith(password_hash):
+        if user_model.secret[self._salt_len:] != password_hash:
             raise UserNotVerifyError
 
         return await self._create_token(session=session, user_id=user_model.user_id)
@@ -97,77 +106,47 @@ class UserRepository:
         return self._to_domain(user_model)
 
     async def get_users(self, session: AsyncSession) -> list[User]:
-        query = select(self._user_model)
-
-        user_models = await session.execute(query.order_by(UserModel.login.asc()))
+        query = select(UserModel, RoleModel).options(joinedload(UserModel.role)).where(UserModel.role_id == RoleModel.role_id).order_by(UserModel.login.asc())
+        user_models = await session.execute(query)
 
         return [self._to_domain(user_model) for user_model in user_models.scalars().all()]
 
-    #
-    # async def add_user(self, session: AsyncSession, user_data: CreateUserRequest) -> User:
-    #     user_model = (await session.execute(select(self._model).filter_by(login=user_data.login))).scalars().first()
-    #
-    #     if user_model:
-    #         raise UserAlreadyExistError(user_model.login)
-    #
-    #     salt = self._create_salt()
-    #     salted_password = salt + user_data.password
-    #     password_bytes = bytes(salted_password, encoding="utf-8")
-    #     password_hash = hashlib.md5(password_bytes).hexdigest()
-    #     salted_hash = salt + password_hash
-    #
-    #     new_user = self._model(
-    #         user_id=await self._get_new_user_id(session),
-    #         login=user_data.login,
-    #         secret=salted_hash,
-    #         role=user_data.role,
-    #         settings=self._default_settings,
-    #         created_at=datetime.utcnow(),
-    #         updated_at=datetime.utcnow(),
-    #     )
-    #     session.add(new_user)
-    #     return self._to_domain(new_user)
-    #
-    # async def delete_user(self, session: AsyncSession, login: str) -> User:
-    #     user_model = await self._get_user(session, login=login)
-    #     deleted_user = self._to_domain(user_model)
-    #     await session.delete(user_model)
-    #     return deleted_user
-    #
-    # async def _update_user_role(self, session: AsyncSession, user_data: UpdateUserRoleRequest) -> UserModel:
-    #     user_model = await self._get_user(session, login=user_data.login)
-    #
-    #     user_model.role = user_data.role  # type: ignore
-    #     user_model.updated_at = datetime.utcnow()  # type: ignore
-    #
-    #     session.add(user_model)
-    #     return user_model
-    #
-    # async def _update_user_password(self, session: AsyncSession, user_data: UpdateUserPasswordRequest) -> UserModel:
-    #     user_model = await self._get_user(session, login=user_data.login)
-    #
-    #     salt = self._create_salt()
-    #     salted_password = salt + user_data.password
-    #     password_bytes = bytes(salted_password, encoding="utf-8")
-    #     password_hash = hashlib.md5(password_bytes).hexdigest()
-    #     salted_hash = salt + password_hash
-    #
-    #     user_model.secret = salted_hash  # type: ignore
-    #     user_model.updated_at = datetime.utcnow()  # type: ignore
-    #
-    #     session.add(user_model)
-    #     return user_model
-    #
-    # async def update_user(
-    #     self,
-    #     session: AsyncSession,
-    #     user_data: UpdateUserRoleRequest | UpdateUserPasswordRequest | UpdateUserSettingsRequest,
-    # ) -> User:
-    #     match user_data:
-    #         case UpdateUserRoleRequest():
-    #             user = await self._update_user_role(session=session, user_data=user_data)  # type:ignore
-    #         case UpdateUserPasswordRequest():
-    #             user = await self._update_user_password(session=session, user_data=user_data)  # type:ignore
-    #         case UpdateUserSettingsRequest():
-    #             user = await self._update_user_settings(session=session, user_data=user_data)  # type:ignore
-    #     return self._to_domain(user)
+    async def add_user(self, session: AsyncSession, user_data: CreateUserRequest) -> User:
+        user_model = (await session.execute(select(self._user_model).filter_by(login=user_data.login))).scalars().first()
+
+        if user_model:
+            raise UserAlreadyExistError(user_model.login)
+
+        salt = self._create_salt()
+        salted_password = salt + user_data.password
+        password_bytes = bytes(salted_password, encoding="utf-8")
+        password_hash = hashlib.md5(password_bytes).hexdigest()
+        salted_hash = salt + password_hash
+        #TODO replace to ALIAS in SCHEME
+        role = TEMP_ROLES[user_data.role]
+        new_user = self._user_model(
+            user_id=await self._get_new_user_id(session),
+            login=user_data.login,
+            secret=salted_hash,
+            role_id=role
+        )
+        session.add(new_user)
+        return "Пользователь успешно зарегистрирован"
+
+    async def delete_user(self, session: AsyncSession, login: str) -> dict:
+        user_model = await self._get_user(session, login=login)
+        await session.delete(user_model)
+        return {'success': 'Пользователь успешно удален'}
+
+    async def change_user_password(self, session: AsyncSession, user_data: ChangeUserPasswordRequest) -> str:
+        user_model = await self._get_user(session, login=user_data.login)
+
+        salt = self._create_salt()
+        salted_password = salt + user_data.password
+        password_bytes = bytes(salted_password, encoding="utf-8")
+        password_hash = hashlib.md5(password_bytes).hexdigest()
+        salted_hash = salt + password_hash
+
+        user_model.secret = salted_hash
+        session.add(user_model)
+        return {'success': 'Пароль успешно изменен'}

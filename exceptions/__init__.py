@@ -1,1 +1,1 @@
-from .users import UserNotFoundError, UserNotVerifyError
+from .users import UserNotFoundError, UserNotVerifyError, UserAlreadyExistError

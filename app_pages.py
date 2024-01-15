@@ -22,8 +22,8 @@ async def login(request: Request, authorized_user=Depends(get_authorized_user)):
 
 
 async def main_page(request: Request, authorized_user=Depends(get_authorized_user)):
-    if authorized_user is None:
-        return RedirectResponse(LOGIN_URL)
+    # if authorized_user is None:
+    #     return RedirectResponse(LOGIN_URL)
     return templates.TemplateResponse(
         "main_page.html",
         {

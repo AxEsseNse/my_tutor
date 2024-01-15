@@ -4,4 +4,4 @@ from my_tutor.constants import UserRole
 
 class User(BaseModel):
     login: str
-    role_id: UserRole
+    role: str

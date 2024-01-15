@@ -19,7 +19,7 @@ branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
 BEGIN_ADMIN_LOGIN = "admin"
-BEGIN_ADMIN_SECRET = "admin"
+BEGIN_ADMIN_SECRET = "WDxIAs1kUrFaib45e3494e3fa2038e87fbba8b0cf3c50"
 
 
 def upgrade() -> None:

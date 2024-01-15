@@ -1,0 +1,48 @@
+<div
+    class="modal fade bd-example-modal-lg"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="modal-user-delete"
+    aria-hidden="true"
+    id="modal-user-delete"
+>
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <!-- Header окна удаления пользователя -->
+            <div class="modal-header">
+                <h5 class="modal-title">Удалить пользователя</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <!-- Форма удаления пользователя -->
+            <div class="modal-body">
+                <form class="needs-validation" id="user-delete-form" novalidate>
+                    <!-- Логин удаляемого пользователя -->
+                    <div class="form-group row">
+                        <label class="col-3 col-form-label" for="user-delete-form-login">Логин</label>
+                        <div class="col-9">
+                            <input class="form-control" type="text" id="user-delete-form-login" disabled />
+                        </div>
+                    </div>
+                    <!-- Роль удаляемого пользователя -->
+                    <div class="form-group row">
+                        <label class="col-3 col-form-label" for="user-delete-form-role">Права</label>
+                        <div class="col-9">
+                            <input class="form-control" type="text" id="user-delete-form-role" value="" disabled />
+                        </div>
+                    </div>
+                    <!-- Поле ответа сервера -->
+                    <div class="form-group row">
+                        <label class="col-3 col-form-label" for="user-delete-form-flash-msg"><strong>Feedback</strong></label>
+                        <div class="col-9" id="user-delete-form-flash-msg"></div>
+                    </div>
+
+                    <hr />
+                    <!-- Кнопка отправки формы -->
+                    <button type="button" class="btn btn-dark btn-block" id="user-delete-form-button">
+                        Удалить пользователя
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

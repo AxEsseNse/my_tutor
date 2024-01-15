@@ -1,94 +1,97 @@
 <div
-  class="modal fade"
-  tabindex="-1"
-  aria-labelledby="modal-user-add"
-  aria-hidden="true"
-  id="modal-user-add"
+    class="modal fade"
+    tabindex="-1"
+    aria-labelledby="modal-user-add"
+    aria-hidden="true"
+    id="modal-user-add"
 >
-  <div class="modal-dialog modal-md">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Регистрация нового пользователя</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-      </div>
-
-      <div class="modal-body">
-        <form class="needs-validation" id="user-add-form" novalidate>
-          <div class="form-group row">
-            <label class="col-3 col-form-label" for="user-add-form-login">Логин</label>
-            <div class="col-9">
-              <input
-                class="form-control"
-                type="text"
-                id="user-add-form-login"
-                value=""
-                placeholder="Придумайте имя пользователя"
-                required
-              />
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <!-- Header окна добавления нового пользователя -->
+            <div class="modal-header">
+                <h5 class="modal-title">Регистрация нового пользователя</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
             </div>
-          </div>
+            <!-- Форма добавления нового пользователя -->
+            <div class="modal-body">
+                <form class="needs-validation" id="user-add-form" novalidate>
+                    <!-- Поле ввода логина -->
+                    <div class="form-group row">
+                        <label class="col-3 col-form-label" for="user-add-form-login">Логин</label>
+                        <div class="col-9">
+                            <input
+                                class="form-control"
+                                type="text"
+                                id="user-add-form-login"
+                                value=""
+                                placeholder="Придумайте имя пользователя"
+                                required
+                            />
+                        </div>
+                    </div>
+                    <!-- Поле ввода пароля -->
+                    <div class="form-group row">
+                        <label class="col-3 col-form-label" for="user-add-form-password"> Пароль</label>
+                        <div class="col-9">
+                            <input
+                                class="form-control"
+                                type="text"
+                                id="user-add-form-password"
+                                value=""
+                                placeholder="Введите пароль"
+                                required
+                            />
+                        </div>
+                    </div>
+                    <!-- Поле повторного ввода пароля -->
+                    <div class="form-group row">
+                        <label class="col-3 col-form-label" for="user-add-form-password-re">Re: Пароль</label>
+                        <div class="col-9">
+                            <input
+                                class="form-control"
+                                type="text"
+                                id="user-add-form-password-re"
+                                value=""
+                                placeholder="Повторите пароль"
+                                required
+                            />
+                        <div class="invalid-feedback">Пароли не совпадают</div>
+                        </div>
+                    </div>
+                    <!-- Поле выбора роли пользователя -->
+                    <div class="form-group row">
+                        <label class="col-3 col-form-label" for="user-add-form-role">Права</label>
+                        <div class="input-group mb-3 col-9">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="user-add-form-role">Роль</label>
+                            </div>
+                            <select class="custom-select" id="user-add-form-role">
+                                <option value="admin">Администратор</option>
+                                <option value="student" selected>Ученик</option>
+                                <option value="tutor">Преподаватель</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- Кнопка очистки формы -->
+                    <div class="form-group row">
+                        <i
+                            class="fa-solid fa-eraser fa-lg"
+                            style="margin-left: 15px"
+                            title="Очистить форму"
+                            onclick="clearAddUserForm()"
+                        ></i>
+                    </div>
+                    <!-- Поле ответа сервера -->
+                    <div class="form-group row">
+                        <label class="col-3 col-form-label" for="user-add-form-flash-msg"><strong>Feedback</strong></label>
+                        <div class="col-9" id="user-add-form-flash-msg"></div>
+                    </div>
 
-          <div class="form-group row">
-            <label class="col-3 col-form-label" for="user-add-form-password"> Пароль</label>
-            <div class="col-9">
-              <input
-                class="form-control"
-                type="text"
-                id="user-add-form-password"
-                value=""
-                placeholder="Введите пароль"
-                required
-              />
+                    <hr />
+                    <!-- Кнопка отправки формы -->
+                    <button type="button" class="btn btn-dark btn-block" id="user-add-form-button">Зарегистрировать</button>
+                </form>
             </div>
-          </div>
-
-          <div class="form-group row">
-            <label class="col-3 col-form-label" for="user-add-form-password-re">Re: Пароль</label>
-            <div class="col-9">
-              <input
-                class="form-control"
-                type="text"
-                id="user-add-form-password-re"
-                value=""
-                placeholder="Повторите пароль"
-                required
-              />
-              <div class="invalid-feedback">Пароли не совпадают</div>
-            </div>
-          </div>
-
-          <div class="form-group row">
-            <label class="col-3 col-form-label" for="user-add-form-role">Права</label>
-            <div class="input-group mb-3 col-9">
-              <div class="input-group-prepend">
-                <label class="input-group-text" for="user-add-form-role">Роль</label>
-              </div>
-              <select class="custom-select" id="user-add-form-role">
-                <option value="operator">Оператор</option>
-                <option value="user" selected>Персонал</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form-group row">
-            <i
-              class="fa-solid fa-eraser fa-lg"
-              style="margin-left: 15px"
-              title="Очистить форму"
-              onclick="clearAddUserForm()"
-            ></i>
-          </div>
-
-          <div class="form-group row">
-            <label class="col-3 col-form-label" for="user-add-form-flash-msg"><strong>Feedback</strong></label>
-            <div class="col-9" id="user-add-form-flash-msg"></div>
-          </div>
-
-          <hr />
-
-          <button type="button" class="btn btn-dark btn-block" id="user-add-form-button">Зарегистрировать</button>
-        </form>
-      </div>
+        </div>
     </div>
-  </div>
 </div>
