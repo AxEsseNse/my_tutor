@@ -97,10 +97,16 @@ class EditStudentImageForm {
         const imgData = new FormData();
         imgData.append('student_data', this.inputImage.files[0]);
 
+        let token = getCookie('My-Tutor-Auth-Token')
+
+        if (token == undefined) {
+            return
+        }
+
         fetch(`/api/students/student/${this.login}/image`, {
             method: 'PUT',
             headers: {
-                'My-Tutor-Auth-Token': getCookie('My-Tutor-Auth-Token'),
+                'My-Tutor-Auth-Token': token,
                 'Login': this.login
             },
             body: imgData,
@@ -162,9 +168,18 @@ class EditStudentPrimaryInfoForm {
             birthday: this.inputBirthday.value
         }
 
+        let token = getCookie('My-Tutor-Auth-Token')
+
+        if (token == undefined) {
+            return
+        }
+
         fetch(`/api/students/student/${this.login}/`, {
             method: 'PUT',
-                headers: { 'Content-Type': 'application/json', 'My-Tutor-Auth-Token': getCookie('My-Tutor-Auth-Token') },
+                headers: {
+                'Content-Type': 'application/json',
+                'My-Tutor-Auth-Token': token
+                },
                 body: JSON.stringify(newPrimaryInfo),
             })
         .then(response => {
@@ -225,9 +240,18 @@ class EditStudentContactInfoForm {
             whatsapp: this.inputWhatsapp.value
         }
 
+        let token = getCookie('My-Tutor-Auth-Token')
+
+        if (token == undefined) {
+            return
+        }
+
         fetch(`/api/students/student/${this.login}/`, {
             method: 'PUT',
-                headers: { 'Content-Type': 'application/json', 'My-Tutor-Auth-Token': getCookie('My-Tutor-Auth-Token') },
+                headers: {
+                'Content-Type': 'application/json',
+                'My-Tutor-Auth-Token': token
+                },
                 body: JSON.stringify(newContactInfo),
             })
         .then(response => {
@@ -343,9 +367,105 @@ class AddParentForm {
     }
 }
 
+class UpdateParentForm {
+
+    constructor(updateRow) {
+        this.updateRow = updateRow
+
+        this.studentLogin = document.getElementById('student-login').textContent.trim()
+        this.phone = this.updateRow.childNodes[3].innerText
+
+        this.inputLogin = document.getElementById('parent-update-form-login')
+
+        this.inputStatus = document.getElementById('parent-update-form-status')
+        this.inputFirstName = document.getElementById('parent-update-form-first-name')
+        this.inputSecondName = document.getElementById('parent-update-form-second-name')
+        this.inputPhone = document.getElementById('parent-update-form-phone')
+        this.inputTelegram = document.getElementById('parent-update-form-telegram')
+        this.inputWhatsApp = document.getElementById('parent-update-form-whatsapp')
+
+        this.flashMsg = document.getElementById('parent-update-form-flash-msg')
+
+        this.btnUpdateParent = document.getElementById('parent-update-form-button')
+        this.btnUpdateParent.onclick = () => {
+            this.updateParent()
+        }
+    }
+
+    fillUpdateForm() {
+        console.log('Заполнение формы для изменения данных родителя')
+        this.inputLogin.value = this.studentLogin
+
+        this.inputStatus.value = this.updateRow.childNodes[0].innerText
+        this.inputFirstName.value = this.updateRow.childNodes[1].innerText
+        this.inputSecondName.value = this.updateRow.childNodes[2].innerText
+        this.inputPhone.value = this.updateRow.childNodes[3].innerText
+        this.inputTelegram.value = this.updateRow.childNodes[4].innerText
+        this.inputWhatsApp.value = this.updateRow.childNodes[5].innerText
+
+        this.flashMsg.innerHTML = ''
+    }
+
+    updateParent() {
+        const updateParentData = {
+            studentLogin: this.studentLogin,
+            status: this.inputStatus.value,
+            firstName: this.inputFirstName.value,
+            secondName: this.inputSecondName.value,
+            phoneKey: this.phone,
+            new_phone: this.inputPhone.value,
+            telegram: this.inputTelegram.value,
+            whatsApp: this.inputWhatsApp.value,
+        }
+
+        let token = getCookie('My-Tutor-Auth-Token')
+
+        if (token == undefined) {
+            return
+        }
+
+        fetch(`/api/students/parents/${this.studentLogin}/`, {
+            method: 'PUT',
+                headers: {
+                'Content-Type': 'application/json',
+                'My-Tutor-Auth-Token': token
+                },
+                body: JSON.stringify(updateParentData),
+            })
+        .then(response => {
+            if (!response.ok) {
+                if (!(response.status == 400)) {
+                    return Promise.reject(response.text())
+                }
+            }
+            return Promise.resolve(response.text())
+        })
+        .then(text => {
+            return JSON.parse(text)
+        })
+        .then(parent => {
+            if (parent.hasOwnProperty('status')) {
+                this.updateRow.childNodes[0].innerText = parent.status
+                this.updateRow.childNodes[1].innerText = parent.first_name
+                this.updateRow.childNodes[2].innerText = parent.second_name
+                this.updateRow.childNodes[3].innerText = parent.phone
+                this.updateRow.childNodes[4].innerText = parent.telegram
+                this.updateRow.childNodes[5].innerText = parent.whatsapp
+
+                flashMsg(parent.message, this.flashMsg, 'success')
+                console.log(parent.message)
+            } else {
+                flashMsg(parent.message, this.flashMsg, 'wrong')
+            }
+        })
+        .catch(error => {
+            console.log(error)
+        })
+    }
+}
+
 class DeleteParentForm {
-    constructor(userTable, delRow) {
-        this.userTable = userTable
+    constructor(delRow) {
         this.delRow = delRow
 
         this.studentLogin = document.getElementById('student-login').textContent.trim()
@@ -367,7 +487,6 @@ class DeleteParentForm {
     }
 
     fillDeleteForm() {
-        console.log(document.getElementById('student-login').textContent.trim(), this.studentLogin)
         this.inputLogin.value = this.studentLogin
 
         this.inputStatus.value = this.delRow.childNodes[0].innerText
@@ -557,6 +676,7 @@ class ParentTable {
         const controllers = document.createElement('div')
         controllers.classList.add('text-end')
         controllers.style.right = '0px'
+        controllers.appendChild(this.createUpdateButton(row))
         controllers.appendChild(this.createDeleteButton(row))
         this.addCell(row, controllers)
     }
@@ -568,6 +688,22 @@ class ParentTable {
         else cell.innerHTML = content
     }
 
+    createUpdateButton(row) {
+        const btn = document.createElement('button')
+        btn.classList.add('btn', 'btn-sm', 'btn-info')
+        btn.setAttribute('type', 'button')
+        btn.setAttribute('title', 'Обновить данные родителя')
+        btn.setAttribute('data-bs-toggle', 'modal')
+        btn.setAttribute('data-bs-target', '#modal-parent-update')
+        btn.innerHTML = '<i class="fa-solid fa-pen"></i>'
+        btn.onclick = () => {
+            const form = new UpdateParentForm(row)
+            form.fillUpdateForm()
+        }
+
+        return btn
+    }
+
     createDeleteButton(row) {
         const btn = document.createElement('button')
         btn.classList.add('btn', 'btn-sm', 'btn-danger')
@@ -577,10 +713,8 @@ class ParentTable {
         btn.setAttribute('data-bs-target', '#modal-parent-delete')
         btn.innerHTML = '<i class="fa-solid fa-trash"></i>'
         btn.onclick = () => {
-            const form = new DeleteParentForm(this, row)
-            console.log('eshe ne zafileno')
+            const form = new DeleteParentForm(row)
             form.fillDeleteForm()
-            console.log('vrode zafileno')
         }
 
         return btn

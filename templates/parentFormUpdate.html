@@ -3,23 +3,23 @@
     tabindex="-1"
     aria-labelledby="modal-parent-add"
     aria-hidden="true"
-    id="modal-parent-add"
+    id="modal-parent-update"
 >
     <div class="modal-dialog modal-md">
         <div class="modal-content">
-            <!-- Header окна добавления нового пользователя -->
+            <!-- Header окна обновления данных родителя -->
             <div class="modal-header">
-                <h5 class="modal-title">Добавление данных родителя</h5>
+                <h5 class="modal-title">Обновление данных родителя</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
             </div>
-            <!-- Форма добавления нового пользователя -->
+            <!-- Форма обновления данных родителя -->
             <div class="modal-body">
-                <form class="needs-validation" id="parent-add-form" novalidate>
+                <form class="needs-validation" id="parent-update-form" novalidate>
                     <!-- Логин пользователя -->
                     <div class="form-group row mt-2 mb-2">
-                        <label class="col-4 col-form-label" for="parent-add-form-login">Пользователь</label>
+                        <label class="col-4 col-form-label" for="parent-update-form-login">Пользователь</label>
                         <div class="col-8">
-                            <input class="form-control" type="text" id="parent-add-form-login" disabled />
+                            <input class="form-control" type="text" id="parent-update-form-login" disabled />
                         </div>
                     </div>
                     <!-- Кнопка очистки формы -->
@@ -33,9 +33,9 @@
                     </div>
                     <!-- Поле выбора родителя -->
                     <div class="input-group mb-3">
-                        <label class="input-group-text" for="parent-add-form-status">Статус</label>
-                        <select class="form-select" id="parent-add-form-status">
-                            <option value="Мать" selected>Мать</option>
+                        <label class="input-group-text" for="parent-update-form-status">Статус</label>
+                        <select class="form-select" id="parent-update-form-status">
+                            <option value="Мать">Мать</option>
                             <option value="Отец">Отец</option>
                             <option value="Отчим">Отчим</option>
                             <option value="Мачеха">Мачеха</option>
@@ -45,12 +45,12 @@
                     </div>
                     <!-- Поле ввода имени -->
                     <div class="form-group row mb-1">
-                        <label class="col-4 col-form-label" for="parent-add-form-first-name">Имя</label>
+                        <label class="col-4 col-form-label" for="parent-update-form-first-name">Имя</label>
                         <div class="col-8">
                             <input
                                 class="form-control"
                                 type="text"
-                                id="parent-add-form-first-name"
+                                id="parent-update-form-first-name"
                                 value=""
                                 placeholder="Введите имя"
                                 required
@@ -59,12 +59,12 @@
                     </div>
                     <!-- Поле ввода фамилии -->
                     <div class="form-group row mb-1">
-                        <label class="col-4 col-form-label" for="parent-add-form-second-name">Фамилия</label>
+                        <label class="col-4 col-form-label" for="parent-update-form-second-name">Фамилия</label>
                         <div class="col-8">
                             <input
                                 class="form-control"
                                 type="text"
-                                id="parent-add-form-second-name"
+                                id="parent-update-form-second-name"
                                 value=""
                                 placeholder="Введите фамилию"
                                 required
@@ -73,12 +73,12 @@
                     </div>
                     <!-- Поле ввода телефона -->
                     <div class="form-group row mb-1">
-                        <label class="col-4 col-form-label" for="parent-add-form-phone">Телефон</label>
+                        <label class="col-4 col-form-label" for="parent-update-form-phone">Телефон</label>
                         <div class="col-8">
                             <input
                                 class="form-control"
                                 type="text"
-                                id="parent-add-form-phone"
+                                id="parent-update-form-phone"
                                 value=""
                                 placeholder="Введите телефон"
                                 required
@@ -87,12 +87,12 @@
                     </div>
                     <!-- Поле ввода Telegram -->
                     <div class="form-group row mb-1">
-                        <label class="col-4 col-form-label" for="parent-add-form-telegram">Telegram</label>
+                        <label class="col-4 col-form-label" for="parent-update-form-telegram">Telegram</label>
                         <div class="col-8">
                             <input
                                 class="form-control"
                                 type="text"
-                                id="parent-add-form-telegram"
+                                id="parent-update-form-telegram"
                                 value=""
                                 placeholder="Введите Telegram"
                                 required
@@ -101,12 +101,12 @@
                     </div>
                     <!-- Поле ввода WhatsApp -->
                     <div class="form-group row mb-1">
-                        <label class="col-4 col-form-label" for="parent-add-form-whatsapp">WhatsApp</label>
+                        <label class="col-4 col-form-label" for="parent-update-form-whatsapp">WhatsApp</label>
                         <div class="col-8">
                             <input
                                 class="form-control"
                                 type="text"
-                                id="parent-add-form-whatsapp"
+                                id="parent-update-form-whatsapp"
                                 value=""
                                 placeholder="Введите WhatsApp"
                                 required
@@ -117,14 +117,14 @@
                     <hr/>
 
                     <div class="form-group row mt-2 mb-2">
-                        <label class="col-4 col-form-label" for="parent-add-form-flash-msg"><strong>Feedback</strong></label>
-                        <div class="col-8" id="parent-add-form-flash-msg"></div>
+                        <label class="col-4 col-form-label" for="parent-update-form-flash-msg"><strong>Feedback</strong></label>
+                        <div class="col-8" id="parent-update-form-flash-msg"></div>
                     </div>
 
                     <hr />
                     <!-- Кнопка отправки формы -->
                     <div class="text-center">
-                        <button type="button" class="btn btn-dark btn-block" id="parent-add-form-button">
+                        <button type="button" class="btn btn-dark btn-block" id="parent-update-form-button">
                             Добавить
                         </button>
                     </div>
