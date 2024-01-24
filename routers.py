@@ -12,4 +12,12 @@ admin_router = APIRouter(
     prefix="/admin",
     tags=["Admin"]
 )
+users_router = APIRouter(
+    prefix="/users",
+    tags=["Users"]
+)
+students_router = APIRouter(
+    prefix="/students",
+    tags=["Users"]
+)
 # TODO включить депенденси на админа

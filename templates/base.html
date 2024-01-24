@@ -37,33 +37,51 @@
                 </div>
             </div>
             <!--User space-->
+            {% if user %}
             <div class="col-3" id="header-user">
                 <div class="row">
                     <!--Username-->
                     <div class="col-9 text-end" id="header-user-name">
-                        Никита Новосибирский
+                        {{ user.name + ' ' + user.surname }}
                     </div>
                     <!--Usermenu-->
                     <div class="col-2">
                         <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
                             <div class="dropdown text-end" id="header-user-dropdown">
                                 <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <img src="https://github.com/mdo.png" alt="mdo" width="50" height="50" class="rounded-circle">
+                                    <img src="{{ user.img_path }}" alt="Err" width="50" height="50" class="rounded-circle" id="user-image">
                                 </a>
                                 <ul class="dropdown-menu text-small">
-                                    <li><h6 class="dropdown-header">Студент</h6></li>
+                                    <li><h6 class="dropdown-header">{{ user.role }}</h6></li>
                                     <li><hr class="dropdown-divider"></li>
+                                    {% if user.role == "Администратор" %}
                                     <li><a class="dropdown-item" href="/admin">Админ панель</a></li>
-                                    <li><a class="dropdown-item" href="#">Личный кабинет</a></li>
+                                    {% elif user.role == "Студент" %}
+                                    <li><a class="dropdown-item" href="/student-profile">Мой профиль</a></li>
+                                    <li><a class="dropdown-item" href="/my-study">Мое обучение</a></li>
+                                    {% endif %}
                                     <li><a class="dropdown-item" href="#">Сменить пароль</a></li>
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="#">Выйти из профиля</a></li>
+                                    <li><a class="dropdown-item" onclick="logOut()">Выйти из профиля</a></li>
                                 </ul>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            {% else %}
+            <div class="col-3 text-end" id="user-login">
+                <button
+                class="btn btn-sm btn-info"
+                type="button"
+                title="Авторизация"
+                id="btn-login"
+                onclick="logIn()"
+                >
+                    Войти в систему
+                </button>
+            </div>
+            {% endif %}
         </div>
     </div>
 

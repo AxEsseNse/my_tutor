@@ -64,8 +64,17 @@ body {
     margin-top: 10px;
 }
 
-
-
+#user-login {
+    margin-top: 15px;
+    margin-right: 0px;
+}
+#btn-login {
+    min-width: 200px;
+    background-color: #4A918B;
+}
+#btn-login:hover {
+    background-color: #14A9A5;
+}
 
 
 #content {

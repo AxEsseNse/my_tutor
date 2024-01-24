@@ -43,3 +43,13 @@ async def admin_board(request: Request, authorized_user=Depends(get_authorized_u
             "user": authorized_user
         }
     )
+
+async def student_profile(request: Request, authorized_user=Depends(get_authorized_user)):
+    return templates.TemplateResponse(
+        "student_profile.html",
+        {
+            "request": request,
+            "title": "Профиль",
+            "user": authorized_user
+        }
+    )

@@ -42,7 +42,7 @@ def upgrade() -> None:
         sa.Column("token", UUID(as_uuid=True), primary_key=True),
         sa.Column("user_id", sa.Integer(), sa.ForeignKey("users.user_id", ondelete="CASCADE"), nullable=False),
         sa.Column("created_at", sa.DateTime(), default=datetime.utcnow, nullable=False),
-        sa.Column("updated_at", sa.DateTime(), onupdate=datetime.utcnow),
+        sa.Column("updated_at", sa.DateTime(), default=datetime.utcnow, onupdate=datetime.utcnow),
     )
 
     connection = op.get_bind()
@@ -53,8 +53,8 @@ def upgrade() -> None:
     )
     connection.execute(
         sa.text(
-            f"""INSERT INTO "users" values (1, '{BEGIN_ADMIN_LOGIN}', '{BEGIN_ADMIN_SECRET}', 1)"""
-        )
+            f"""INSERT INTO "users" values (1, :login, :secret, 1), (2, 'kira', '6RejtX1QX1Wx3c451edd3b20dc37272f3f697e379596a', 3)"""
+        ), dict(login=BEGIN_ADMIN_LOGIN, secret=BEGIN_ADMIN_SECRET)
     )
 
 

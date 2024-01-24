@@ -1,0 +1,87 @@
+<div
+    class="modal fade bd-example-modal-lg"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="modal-parent-delete"
+    aria-hidden="true"
+    id="modal-parent-delete"
+>
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <!-- Header окна удаления родителя -->
+            <div class="modal-header">
+                <h5 class="modal-title">Удалить данные родителя</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <!-- Форма удаления родителя -->
+            <div class="modal-body">
+                <form class="needs-validation" id="parent-delete-form" novalidate>
+                    <!-- Логин пользователя -->
+                    <div class="form-group row mt-2 mb-2">
+                        <label class="col-4 col-form-label" for="parent-delete-form-login">Пользователь</label>
+                        <div class="col-8">
+                            <input class="form-control" type="text" id="parent-delete-form-login" disabled />
+                        </div>
+                    </div>
+                    <!-- Статус удаляемого родителя -->
+                    <div class="form-group row mb-1">
+                        <label class="col-4 col-form-label" for="parent-delete-form-status">Статус</label>
+                        <div class="col-8">
+                            <input class="form-control" type="text" id="parent-delete-form-status" disabled />
+                        </div>
+                    </div>
+                    <!-- Имя удаляемого родителя -->
+                    <div class="form-group row mb-1">
+                        <label class="col-4 col-form-label" for="parent-delete-form-first-name">Имя</label>
+                        <div class="col-8">
+                            <input class="form-control" type="text" id="parent-delete-form-first-name" disabled />
+                        </div>
+                    </div>
+                    <!-- Фамилия удаляемого родителя -->
+                    <div class="form-group row mb-1">
+                        <label class="col-4 col-form-label" for="parent-delete-form-second-name">Фамилия</label>
+                        <div class="col-8">
+                            <input class="form-control" type="text" id="parent-delete-form-second-name" disabled />
+                        </div>
+                    </div>
+                    <!-- Телефон удаляемого родителя -->
+                    <div class="form-group row mb-1">
+                        <label class="col-4 col-form-label" for="parent-delete-form-phone">Телефон</label>
+                        <div class="col-8">
+                            <input class="form-control" type="text" id="parent-delete-form-phone" disabled />
+                        </div>
+                    </div>
+                    <!-- Telegram удаляемого родителя -->
+                    <div class="form-group row mb-1">
+                        <label class="col-4 col-form-label" for="parent-delete-form-telegram">Telegram</label>
+                        <div class="col-8">
+                            <input class="form-control" type="text" id="parent-delete-form-telegram" disabled />
+                        </div>
+                    </div>
+                    <!-- WhatsApp удаляемого родителя -->
+                    <div class="form-group row mb-1">
+                        <label class="col-4 col-form-label" for="parent-delete-form-whatsapp">WhatsApp</label>
+                        <div class="col-8">
+                            <input class="form-control" type="text" id="parent-delete-form-whatsapp" disabled />
+                        </div>
+                    </div>
+                    <!-- Поле ответа сервера -->
+                    <hr/>
+
+                    <div class="form-group row mt-2 mb-2">
+                        <label class="col-4 col-form-label" for="parent-delete-form-flash-msg"><strong>Feedback</strong></label>
+                        <div class="col-8" id="parent-delete-form-flash-msg"></div>
+                    </div>
+
+                    <hr />
+                    <!-- Кнопка отправки формы -->
+                    <div class="text-center">
+                        <button type="button" class="btn btn-dark btn-block" id="parent-delete-form-button">
+                            Удалить
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -17,6 +17,15 @@ function deleteCookie(name) {
     document.cookie = deletedCookie
 }
 
+function logIn() {
+    window.location.href = '/login';
+}
+
+function logOut() {
+    deleteCookie('My-Tutor-Auth-Token')
+    window.location.reload()
+}
+
 function checkPasswords(psw, pswRe) {
     if (psw.length < 3) {
         return 'Длина пароля должна быть не менее 10 символов'

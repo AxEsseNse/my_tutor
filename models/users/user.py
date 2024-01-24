@@ -10,7 +10,8 @@ class UserModel(Base):
 
     user_id = Column(Integer, primary_key=True)
     login = Column(String(length=25), nullable=False, unique=True)
-    secret = Column(String(), nullable=False)
+    secret = Column(String, nullable=False)
     role_id = Column(Integer, ForeignKey(column="roles.role_id", ondelete="CASCADE"), nullable=False)
 
     role = relationship("RoleModel")
+    student = relationship("StudentModel", uselist=False)

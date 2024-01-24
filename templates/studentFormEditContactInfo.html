@@ -1,0 +1,104 @@
+<div
+    class="modal fade bd-example-modal-lg"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="modal-student-edit-contact-info"
+    aria-hidden="true"
+    id="modal-student-edit-contact-info"
+>
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <!-- Header окна изменения контактных данных пользователя -->
+            <div class="modal-header">
+                <h5 class="modal-title">Контактные данные</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+
+            <div class="modal-body">
+                <form class="needs-validation" id="student-edit-contact-info-form" novalidate>
+                    <!-- Логин пользователя -->
+                    <div class="form-group row mt-2 mb-2">
+                        <label class="col-4 col-form-label" for="student-edit-contact-info-form-login">Пользователь</label>
+                        <div class="col-8">
+                            <input class="form-control" type="text" id="student-edit-contact-info-form-login" disabled />
+                        </div>
+                    </div>
+                    <!-- Поле ввода нового дискорда -->
+                    <div class="form-group row mb-1">
+                        <label class="col-4 col-form-label" for="student-edit-contact-info-form-discord">Discord</label>
+                        <div class="col-8">
+                            <input
+                                class="form-control"
+                                type="text"
+                                id="student-edit-contact-info-form-discord"
+                                value=""
+                                placeholder="Введите новый аккаунт в Discord"
+                                required
+                            />
+                        </div>
+                    </div>
+                    <!-- Поле ввода нового номера телефона -->
+                    <div class="form-group row mb-1">
+                        <label class="col-4 col-form-label" for="student-edit-contact-info-form-phone">Телефон</label>
+                        <div class="col-8">
+                            <input
+                                class="form-control"
+                                type="text"
+                                id="student-edit-contact-info-form-phone"
+                                value=""
+                                placeholder="Введите новый номер телефона"
+                                required
+                            />
+                        </div>
+                    </div>
+                    <!-- Поле ввода нового аккаунта в Telegram -->
+                    <div class="form-group row mb-1">
+                        <label class="col-4 col-form-label" for="student-edit-contact-info-form-telegram">Telegram</label>
+                        <div class="col-8">
+                            <input
+                                class="form-control"
+                                type="text"
+                                id="student-edit-contact-info-form-telegram"
+                                value=""
+                                placeholder="Введите новый аккаунт в Telegram"
+                                required
+                            />
+                        </div>
+                    </div>
+                    <!-- Поле ввода нового аккаунта в WhatsApp -->
+                    <div class="form-group row">
+                        <label class="col-4 col-form-label" for="student-edit-contact-info-form-whatsapp">Telegram</label>
+                        <div class="col-8">
+                            <input
+                                class="form-control"
+                                type="text"
+                                id="student-edit-contact-info-form-whatsapp"
+                                value=""
+                                placeholder="Введите новый аккаунт в WhatsApp"
+                                required
+                            />
+                        </div>
+                    </div>
+                    <!-- Поле ответа сервера -->
+                    <hr />
+
+                    <div class="form-group row mt-2 mb-2">
+                        <label class="col-2 col-form-label" for="student-edit-contact-info-form-flash-msg">
+                            <strong>Feedback</strong>
+                        </label>
+                        <div class="col-10" id="student-edit-contact-info-form-flash-msg"></div>
+                    </div>
+
+                    <hr />
+                    <!-- Поле кнопки отправки формы -->
+                    <div class="text-center">
+                        <button type="button" class="btn btn-dark btn-block" id="student-edit-contact-info-form-button">
+                            Применить изменения
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

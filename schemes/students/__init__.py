@@ -1,0 +1,3 @@
+from .change_primary_info import ChangeStudentPrimaryInfoRequest, StudentPrimaryInfoResponse
+from .change_contact_info import ChangeStudentContactInfoRequest, StudentContactInfoResponse
+from .change_image import StudentImageResponse

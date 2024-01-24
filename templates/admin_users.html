@@ -20,8 +20,10 @@
 <table id="users-table" class="table table-hover table-info">
     <thead class="thead-dark">
         <tr>
-            <th class="col-3">Логин</th>
-            <th class="col-2">Роль</th>
+            <th class="col-1"></th>
+            <th class="col-2 text-start">Логин</th>
+            <th class="col-3 text-start">Имя пользователя</th>
+            <th class="col-2 text-start">Роль</th>
             <th class="col-2 text-end">Действия</th>
         </tr>
     </thead>
@@ -33,5 +35,5 @@
 {% endblock admin_content %}
 {% block admin_scripts %}
     <-- Подключение js страницы-->
-    <script src="/static/js/users.js"></script>
+    <script src="/static/js/admin_users.js"></script>
 {% endblock admin_scripts %}

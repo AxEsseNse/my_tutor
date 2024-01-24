@@ -1,0 +1,100 @@
+.student-info {
+    display: block;
+}
+#content {
+    background: #4A918B;
+}
+
+#student-data {
+    margin-top: 30px;
+}
+
+.student-profile-title {
+    display: flex;
+    align-items: center;
+}
+
+#student-image-btn {
+    position: relative;
+}
+
+#btn-edit-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#btn-edit-img,
+#btn-edit-primary,
+#btn-edit-contact,
+#btn-add-parent {
+    color: black;
+    background-color: #4A918B;
+}
+#btn-edit-img:hover,
+#btn-edit-primary:hover,
+#btn-edit-contact:hover,
+#btn-add-parent:hover {
+    background-color: #14A9A5;
+}
+
+#hr-under-info,
+#hr-under-contact {
+    margin-top: 0px;
+}
+
+#btn-edit-primary,
+#btn-edit-contact {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.parent-table-title {
+    margin-top: 50px;
+}
+
+.table {
+    margin-top: 30px;
+}
+
+.table th,
+.table td{
+    background-color: #4A918B;
+}
+
+.table tr:hover td {
+    background-image: linear-gradient(to right, #4A918B, #14A9A5 20%, #14A9A5 80%, #4A918B);
+    background-size: calc(100% * 7) 100%;
+}
+
+.table tr:hover td:first-child {
+    background-position: 0 0;
+}
+
+.table tr:hover td:nth-child(2) {
+    background-position: -100% 0;
+}
+
+.table tr:hover td:nth-child(3) {
+    background-position: -200% 0;
+}
+
+.table tr:hover td:nth-child(4) {
+    background-position: -300% 0;
+}
+
+.table tr:hover td:nth-child(5) {
+    background-position: -400% 0;
+}
+
+.table tr:hover td:nth-child(6) {
+    background-position: -500% 0;
+}
+
+.table tr:hover td:nth-child(7) {
+    background-position: -600% 0;
+}
+
+#parent-add-cleaner {
+    margin-right: 15px;
+}

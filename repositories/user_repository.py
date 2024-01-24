@@ -7,9 +7,9 @@ from sqlalchemy import and_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from my_tutor.exceptions import UserNotFoundError, UserNotVerifyError, UserAlreadyExistError
-from my_tutor.models import TokenModel, UserModel, RoleModel
+from my_tutor.models import TokenModel, UserModel, RoleModel, StudentModel
 from my_tutor.schemes import UserAuthorizationRequest, CreateUserRequest, ChangeUserPasswordRequest
-from my_tutor.domain import User
+from my_tutor.domain import UserInfo
 from my_tutor.constants import UserRole
 
 from sqlalchemy.orm import joinedload
@@ -19,23 +19,55 @@ TEMP_ROLES = {
     'tutor': 2,
     'student': 3
 }
-
+RUS_ROLES = {
+    'admin': "Администратор",
+    'tutor': "Преподаватель",
+    'student': "Студент"
+}
 
 class UserRepository:
-    _domain = User
+    _info_domain = UserInfo
     _user_model = UserModel
     _role_model = RoleModel
+    _student_model = StudentModel
     _token_model = TokenModel
     _salt_len = 13
+    _default_men_img_path = "/storage/users/men_default_image.jpg"
+    _default_female_img_path = "/storage/users/female_default_image.jpg"
 
     async def _get_new_user_id(self, session: AsyncSession) -> int:
         return await session.scalar(self._user_model.id_seq.next_value())
 
-    def _to_domain(self, user_model: UserModel) -> User:
-        return self._domain(
+    def _to_info_domain(self, user_model: UserModel) -> UserInfo:
+
+        if user_model.student.img_path is None:
+            user_img_path = self._default_men_img_path if user_model.student.gender == "men" else self._default_female_img_path
+        else:
+            user_img_path = user_model.student.img_path
+
+        return self._info_domain(
             login=user_model.login,
-            role=user_model.role.title
+            name=user_model.student.first_name,
+            surname=user_model.student.second_name,
+            img_path=user_img_path,
+            role=RUS_ROLES[user_model.role.title]
         )
+
+    async def get_user_id(self, session: AsyncSession, token: str) -> int:
+        token_model = (await session.execute(select(self._token_model).filter_by(token=token))).scalars().first()
+
+        if not token_model:
+            raise UserNotFoundError
+
+        return token_model.user_id
+
+    async def get_user_id_by_login(self, session: AsyncSession, login: str) -> int:
+        user_model = (await session.execute(select(self._user_model).filter_by(login=login))).scalars().first()
+
+        if not user_model:
+            raise UserNotFoundError
+
+        return user_model.user_id
 
     async def _get_user(self, session: AsyncSession, login: str) -> UserModel:
         user_model = (await session.execute(select(self._user_model).filter_by(login=login))).scalars().first()
@@ -78,7 +110,7 @@ class UserRepository:
                         (datetime.utcnow() - self._token_model.updated_at) < timedelta(seconds=AUTH_TOKEN_LIFETIME))
                 )
             )
-            token_model: TokenModel | None = res.scalars().first()
+            token_model = res.scalars().first()
 
             if not token_model:
                 return False
@@ -90,28 +122,40 @@ class UserRepository:
             return False
         return True
 
-    async def get_user_by_token(self, session: AsyncSession, token: str) -> User:
+    async def get_user_info(self, session: AsyncSession, token: str) -> UserInfo:
+
         token_model = (await session.execute(select(self._token_model).filter_by(token=token))).scalars().first()
 
         if not token_model:
             raise UserNotFoundError
 
-        user_model = (
-            (await session.execute(select(self._user_model).filter_by(user_id=token_model.user_id))).scalars().first()
+        query = (
+            select(UserModel, RoleModel, StudentModel)
+            .options(joinedload(UserModel.role), joinedload(UserModel.student))
+            .where(UserModel.role_id == RoleModel.role_id)
+            .where(UserModel.user_id == StudentModel.user_id)
+            .where(UserModel.user_id == token_model.user_id)
         )
+        user_model = (await session.execute(query)).scalars().first()
 
         if not user_model:
             raise UserNotFoundError
 
-        return self._to_domain(user_model)
+        return self._to_info_domain(user_model)
 
-    async def get_users(self, session: AsyncSession) -> list[User]:
-        query = select(UserModel, RoleModel).options(joinedload(UserModel.role)).where(UserModel.role_id == RoleModel.role_id).order_by(UserModel.login.asc())
+    async def get_users_info(self, session: AsyncSession) -> list[UserInfo]:
+        query = (
+            select(UserModel, RoleModel, StudentModel)
+            .options(joinedload(UserModel.role), joinedload(UserModel.student))
+            .where(UserModel.role_id == RoleModel.role_id)
+            .where(UserModel.user_id == StudentModel.user_id)
+            .order_by(UserModel.login.asc())
+        )
         user_models = await session.execute(query)
 
-        return [self._to_domain(user_model) for user_model in user_models.scalars().all()]
+        return [self._to_info_domain(user_model) for user_model in user_models.scalars().all()]
 
-    async def add_user(self, session: AsyncSession, user_data: CreateUserRequest) -> User:
+    async def add_user(self, session: AsyncSession, user_data: CreateUserRequest) -> str:
         user_model = (await session.execute(select(self._user_model).filter_by(login=user_data.login))).scalars().first()
 
         if user_model:
@@ -131,10 +175,15 @@ class UserRepository:
             role_id=role
         )
         session.add(new_user)
+
         return "Пользователь успешно зарегистрирован"
 
     async def delete_user(self, session: AsyncSession, login: str) -> dict:
         user_model = await self._get_user(session, login=login)
+
+        if not user_model:
+            raise UserNotFoundError
+
         await session.delete(user_model)
         return {'success': 'Пользователь успешно удален'}
 

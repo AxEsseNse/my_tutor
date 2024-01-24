@@ -1,4 +1,4 @@
-__all__ = ["UserNotFoundError", "UserNotVerifyError"]
+__all__ = ["UserNotFoundError", "UserNotVerifyError", "UserAlreadyExistError"]
 
 
 class UserNotFoundError(Exception):

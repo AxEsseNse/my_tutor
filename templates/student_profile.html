@@ -1,0 +1,159 @@
+{% extends "student_base.html" %}
+{% block student_head %}
+    <link rel="stylesheet" href="/static/css/student_profile.css" />
+{% endblock student_head %}
+{% block student_content %}
+<div class="container-fluid" id="student-data">
+    <div class="row">
+        <!-- Изображение пользователя -->
+        <div class="col-3 text-end">
+            <img width="300" height="300" class="rounded-circle" id="student-img">
+        </div>
+        <div class="col-1 text-start" id="student-image-btn">
+            <button
+                class="btn btn-sm btn-secondary align-top align-middle"
+                type="button"
+                title="Изменить аватар"
+                data-bs-toggle="modal"
+                data-bs-target="#modal-student-edit-img"
+                id="btn-edit-img"
+                onclick="fillEditImageForm()"
+            ><i class="fa-solid fa-image text-dark"></i></i>
+            </button>
+        </div>
+        <!-- Личная информация пользователя -->
+        <div class="col-4 student-info" id="student-info">
+            <div class="row">
+                <div class="col-10 student-profile-title">
+                    Личная информация
+                </div>
+                <div class="col-2 text-center">
+                    <button
+                        class="btn btn-sm btn-secondary"
+                        type="button"
+                        title="Изменить личную информацию"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modal-student-edit-primary-info"
+                        id="btn-edit-primary"
+                        onclick="fillEditPrimaryInfoForm()"
+                    >
+                        <i class="fa-solid fa-user-pen text-dark"></i>
+                    </button>
+                </div>
+            </div>
+            <hr id="hr-under-info"/>
+            <div id="student-login">
+                <i class="fa-solid fa-user"></i>
+                -
+            </div>
+            <div id="student-first-name">
+                -
+            </div>
+            <div id="student-second-name">
+                -
+            </div>
+            <div id="student-gender">
+                <i class="fa-solid fa-venus-mars"></i>
+                -
+            </div>
+            <div title="Дата рождения"  id="student-birthday">
+                <i class="fa-solid fa-calendar-days"></i>
+                -
+            </div>
+            <hr/>
+            <div id="student-lesson-price">
+                <i class="fa-solid fa-sack-dollar"></i>
+                Стоимость занятий: <strong>- рублей</strong>
+            </div>
+        </div>
+        <!-- Контактные данные пользователя -->
+        <div class="col-4">
+            <div class="row">
+                <div class="col-10 student-profile-title">
+                    Контактные данные
+                </div>
+                <div class="col-2 text-center">
+                    <button
+                        class="btn btn-sm btn-secondary"
+                        type="button"
+                        title="Изменить контактные данные"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modal-student-edit-contact-info"
+                        id="btn-edit-contact"
+                        onclick="fillEditContactInfoForm()"
+                    >
+                        <i class="fa-solid fa-mobile text-dark"></i>
+                    </button>
+                </div>
+            </div>
+            <hr id="hr-under-contact"/>
+            <div id="student-discord">
+                <i class="fa-brands fa-discord"></i>
+                -
+            </div>
+            <div id="student-phone">
+                <i class="fa-solid fa-phone"></i>
+                -
+            </div>
+            <div id="student-telegram">
+                <i class="fa-brands fa-telegram"></i>
+                -
+            </div>
+            <div id="student-whatsapp">
+                <i class="fa-brands fa-whatsapp"></i>
+                -
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid parent-table-title">
+    <div class="row">
+        <!-- Изображение пользователя -->
+        <div class="col-2 text-start">
+            <h3>Родители</h3>
+            <hr/>
+        </div>
+        <div class="col-10 text-end">
+
+            <button
+                class="btn btn-sm btn-secondary"
+                type="button"
+                title="Добавить родителя"
+                data-bs-toggle="modal"
+                data-bs-target="#modal-parent-add"
+                id="btn-add-parent"
+                onclick="fillAddParentForm()"
+            >
+                <i class="fa-solid fa-plus text-dark"></i>
+                Добавить
+            </button>
+
+        </div>
+    </div>
+</div>
+
+<table id="parents-table" class="table table-info">
+    <thead class="thead-dark">
+        <tr>
+            <th class="col-1"></th>
+            <th class="col-2 text-start">Имя</th>
+            <th class="col-2 text-start">Фамилия</th>
+            <th class="col-2 text-start">Телефон</th>
+            <th class="col-2 text-start">Telegram</th>
+            <th class="col-2 text-start">Whatsapp</th>
+            <th class="col-1"></th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+{% include "studentFormEditPrimaryInfo.html" %}
+{% include "studentFormEditContactInfo.html" %}
+{% include "studentFormEditImage.html" %}
+{% include "parentFormAdd.html" %}
+{% include "parentFormDelete.html" %}
+{% endblock student_content %}
+{% block student_scripts %}
+    <!-- Подключение js страницы-->
+    <script src="/static/js/student_profile.js"></script>
+{% endblock student_scripts %}

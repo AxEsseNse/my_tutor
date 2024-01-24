@@ -100,7 +100,7 @@ class ChangeUserPasswordForm {
     constructor(updateRow) {
         this.row = updateRow
 
-        this.login = updateRow.childNodes[0].innerText
+        this.login = updateRow.childNodes[1].innerText
 
         this.inputLogin = document.getElementById('user-change-password-form-login')
         this.inputPsw = document.getElementById('user-change-password-form-password')
@@ -176,8 +176,8 @@ class UserFormDelete {
     constructor(userTable, delRow) {
         this.userTable = userTable
 
-        this.login = delRow.childNodes[0].innerText
-        this.role = delRow.childNodes[1].innerText
+        this.login = delRow.childNodes[1].innerText
+        this.role = delRow.childNodes[3].innerText
 
         this.inputLogin = document.getElementById('user-delete-form-login')
         this.inputRole = document.getElementById('user-delete-form-role')
@@ -272,7 +272,16 @@ class UserTable {
     }
 
     fillRow(row, user) {
+        const userImage = document.createElement('img')
+        userImage.src = user.img_path;
+        userImage.alt = "Err";
+        userImage.width = 50;
+        userImage.height = 50;
+        userImage.classList.add("rounded-circle");
+
+        this.addCell(row, userImage)
         this.addCell(row, user.login)
+        this.addCell(row, user.name)
         this.addCell(row, user.role)
 
         const controllers = document.createElement('div')

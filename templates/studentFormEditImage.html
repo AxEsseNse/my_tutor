@@ -1,0 +1,56 @@
+<div
+    class="modal fade bd-example-modal-lg"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="modal-student-edit-img"
+    aria-hidden="true"
+    id="modal-student-edit-img"
+>
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <!-- Header окна изменения пароля пользователя -->
+            <div class="modal-header">
+                <h5 class="modal-title">Изменить аватар</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+
+            <div class="modal-body text-center">
+                <form class="needs-validation" id="student-edit-contact-info-form" novalidate>
+                    <!-- Логин пользователя -->
+                    <div class="form-group row mt-2 mb-2">
+                        <label class="col-6 col-form-label text-start" for="student-edit-image-form-login">Пользователь</label>
+                        <div class="col-6">
+                            <input class="form-control" type="text" id="student-edit-image-form-login" disabled />
+                        </div>
+                    </div>
+                    <!-- Поле загрузки нового изображения -->
+                    <div class="input-group mb-3">
+                        <input type="file" class="form-control" accept="image/*" id="image-input">
+                    </div>
+                    <!-- Поле предпросмотра изображения -->
+                    <hr />
+
+                    <div id="student-modal-image">
+                        <img id="preview-image" width="300" height="300" class="rounded-circle mx-auto" style="display: none; max-width: 100%;" alt="Preview">
+                    </div>
+                    <div class="text-center mt-2" id="student-modal-image-type"></div>
+
+                    <hr />
+                    <!-- Поле ответа сервера -->
+                    <div class="form-group row">
+                        <label class="col-3 col-form-label" for="student-edit-image-form-flash-msg">
+                            <strong>Feedback</strong>
+                        </label>
+                        <div class="col-9" id="student-edit-image-form-flash-msg"></div>
+                    </div>
+
+                    <hr />
+                    <!-- Кнопка отправки формы -->
+                    <button type="button" class="btn btn-dark btn-block" id="student-edit-image-form-button">
+                        Применить изменения
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
