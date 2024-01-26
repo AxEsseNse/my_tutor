@@ -34,9 +34,19 @@ async def main_page(request: Request, authorized_user=Depends(get_authorized_use
     )
 
 
-async def admin_board(request: Request, authorized_user=Depends(get_authorized_user)):
+async def users_list(request: Request, authorized_user=Depends(get_authorized_user)):
     return templates.TemplateResponse(
-        "admin_users.html",
+        "users_list.html",
+        {
+            "request": request,
+            "title": "Панель администрирования",
+            "user": authorized_user
+        }
+    )
+
+async def students_list(request: Request, authorized_user=Depends(get_authorized_user)):
+    return templates.TemplateResponse(
+        "students_list.html",
         {
             "request": request,
             "title": "Панель администрирования",

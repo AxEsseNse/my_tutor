@@ -30,8 +30,7 @@ async def get_authorized_user(
             user = await user_repository.get_user_info(session=session, token=token)
             #TODO После того как достали юзера - по его роли залазим в БД и достаем имя, аватарку и роль для меню наверху справа
         except Exception as e:
-            #print('DEPEND oshibka get user info?', e)
+            print('DEPEND oshibka get user info?', e)
             return None
 
-    print(">>>>>", user)
     return user

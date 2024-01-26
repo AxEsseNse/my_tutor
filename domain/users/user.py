@@ -1,10 +1,18 @@
 from pydantic import BaseModel
-from my_tutor.constants import UserRole
+
+
+class User(BaseModel):
+    login: str
+    role: str
+    have_profile: bool
+
+
+class UserLogin(BaseModel):
+    login: str
+
 
 class UserInfo(BaseModel):
     login: str
-    name: str
-    surname: str
     img_path: str
+    name: str
     role: str
-

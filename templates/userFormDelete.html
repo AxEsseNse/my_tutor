@@ -17,30 +17,34 @@
             <div class="modal-body">
                 <form class="needs-validation" id="user-delete-form" novalidate>
                     <!-- Логин удаляемого пользователя -->
-                    <div class="form-group row">
-                        <label class="col-3 col-form-label" for="user-delete-form-login">Логин</label>
-                        <div class="col-9">
+                    <div class="form-group row mt-2 mb-2">
+                        <label class="col-4 col-form-label" for="user-delete-form-login">Логин</label>
+                        <div class="col-8">
                             <input class="form-control" type="text" id="user-delete-form-login" disabled />
                         </div>
                     </div>
                     <!-- Роль удаляемого пользователя -->
-                    <div class="form-group row">
-                        <label class="col-3 col-form-label" for="user-delete-form-role">Права</label>
-                        <div class="col-9">
+                    <div class="form-group row mb-1">
+                        <label class="col-4 col-form-label" for="user-delete-form-role">Права</label>
+                        <div class="col-8">
                             <input class="form-control" type="text" id="user-delete-form-role" value="" disabled />
                         </div>
                     </div>
                     <!-- Поле ответа сервера -->
-                    <div class="form-group row">
-                        <label class="col-3 col-form-label" for="user-delete-form-flash-msg"><strong>Feedback</strong></label>
-                        <div class="col-9" id="user-delete-form-flash-msg"></div>
+                    <hr/>
+
+                    <div class="form-group row mt-2 mb-2">
+                        <label class="col-4 col-form-label" for="user-delete-form-flash-msg"><strong>Feedback</strong></label>
+                        <div class="col-8" id="user-delete-form-flash-msg"></div>
                     </div>
 
                     <hr />
                     <!-- Кнопка отправки формы -->
-                    <button type="button" class="btn btn-dark btn-block" id="user-delete-form-button">
-                        Удалить пользователя
-                    </button>
+                    <div class="text-center">
+                        <button type="button" class="btn btn-dark btn-block" id="user-delete-form-button">
+                            Удалить
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>

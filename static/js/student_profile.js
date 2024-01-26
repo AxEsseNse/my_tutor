@@ -347,7 +347,6 @@ class AddParentForm {
                 console.log(parent)
 
                 const body = this.parentTable.table.tBodies[0]
-
                 const row = body.insertRow()
                 this.parentTable.fillRow(row, parent)
 

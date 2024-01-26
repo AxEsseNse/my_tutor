@@ -1,1 +1,1 @@
-from .student import StudentNotFoundError, StudentSaveImageError
+from .student import StudentNotFoundError, StudentSaveImageError, StudentAlreadyExistError

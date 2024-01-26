@@ -1,23 +1,29 @@
 import aiofiles
 import os
-from typing import IO
 
 from fastapi import UploadFile
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import datetime
 
-from my_tutor.exceptions import StudentNotFoundError, StudentSaveImageError
+from my_tutor.repositories import UserRepository
+from my_tutor.exceptions import StudentNotFoundError, StudentSaveImageError, StudentAlreadyExistError
 from my_tutor.models import UserModel, StudentModel
 from my_tutor.schemes import (
+    AddStudentRequest,
+    AddStudentResponse,
+    DeleteStudentRequest,
+    DeleteStudentResponse,
     ChangeStudentPrimaryInfoRequest,
     ChangeStudentContactInfoRequest,
     StudentPrimaryInfoResponse,
     StudentContactInfoResponse,
     StudentImageResponse
 )
-from my_tutor.domain import StudentInfo
+from my_tutor.domain import StudentInfo, Student
 
+
+user_repository = UserRepository()
 MONTHS = (
     "января",
     "февраля",
@@ -35,14 +41,35 @@ MONTHS = (
 
 
 class StudentRepository:
+    _student = Student
     _user_model = UserModel
     _student_model = StudentModel
     _info_domain = StudentInfo
+    _add_student_response = AddStudentResponse
+    _delete_student_response = DeleteStudentResponse
     _student_primary_info_response = StudentPrimaryInfoResponse
     _student_contact_info_response = StudentContactInfoResponse
     _student_image_response = StudentImageResponse
+    _default_male_image_path = "/storage/users/male_default_image.jpg"
+    _default_female_image_path = "/storage/users/female_default_image.jpg"
 
-    def _to_info_domain(self, student_model: StudentModel, login: str) -> StudentInfo:
+    def _to_student(self, student_model: StudentModel) -> Student:
+
+        return self._student(
+            img_path=student_model.img_path,
+            second_name=student_model.second_name,
+            first_name=student_model.first_name,
+            gender=student_model.gender,
+            age=18,
+            lesson_price=student_model.lesson_price,
+            discord=student_model.discord,
+            phone=student_model.phone,
+            telegram=student_model.telegram,
+            whatsapp=student_model.whatsapp
+        )
+
+
+    def _to_student_info(self, student_model: StudentModel, login: str) -> StudentInfo:
 
         return self._info_domain(
             login=login,
@@ -56,6 +83,30 @@ class StudentRepository:
             phone=student_model.phone,
             telegram=student_model.telegram,
             whatsapp=student_model.whatsapp
+        )
+
+    def _to_add_student_response(self, student_model: StudentModel, student_login: str) -> AddStudentResponse:
+
+        return self._add_student_response(
+            student_login=student_login,
+            img_path=student_model.img_path,
+            second_name=student_model.second_name,
+            first_name=student_model.first_name,
+            gender=student_model.gender,
+            age=18,
+            lesson_price=student_model.lesson_price,
+            discord=student_model.discord,
+            phone=student_model.phone,
+            telegram=student_model.telegram,
+            whatsapp=student_model.whatsapp,
+            message="Профиль студента успешно создан"
+        )
+
+    def _to_delete_student_response(self, student_model: StudentModel) -> DeleteStudentResponse:
+
+        return self._delete_student_response(
+            name=f"{student_model.second_name} {student_model.first_name}",
+            message="Профиль студента успешно удален"
         )
 
     def _to_student_primary_info_response(self, student_model: StudentModel) -> StudentPrimaryInfoResponse:
@@ -93,13 +144,10 @@ class StudentRepository:
 
         return student_model
 
-    async def get_student_id(self, session: AsyncSession, user_id: int) -> int:
-        student_model = (await session.execute(select(self._student_model).filter_by(user_id=user_id))).scalars().first()
+    async def get_students(self, session: AsyncSession) -> list[Student]:
+        students_models = (await session.execute(select(self._student_model).order_by(self._student_model.second_name, self._student_model.first_name))).scalars().all()
 
-        if not student_model:
-            raise StudentNotFoundError
-
-        return student_model.student_id
+        return [self._to_student(student_model=student_model) for student_model in students_models]
 
     async def get_student_info(self, session: AsyncSession, user_id: int, login: str) -> StudentInfo:
         student_model = (await session.execute(select(self._student_model).filter_by(user_id=user_id))).scalars().first()
@@ -107,7 +155,53 @@ class StudentRepository:
         if not student_model:
             raise StudentNotFoundError
 
-        return self._to_info_domain(student_model=student_model, login=login)
+        return self._to_student_info(student_model=student_model, login=login)
+
+    async def add_student(self, session: AsyncSession, student_data: AddStudentRequest, user_id: int) -> AddStudentResponse:
+        student_model = (
+            await session.execute(select(self._student_model).filter_by(user_id=user_id))).scalars().first()
+
+        if student_model:
+            raise StudentAlreadyExistError
+
+        user_model = (
+            await session.execute(select(self._user_model).filter_by(user_id=user_id))).scalars().first()
+
+        user_model.have_profile = True
+        new_student = self._student_model(
+            student_id=await self._get_new_student_id(session),
+            user_id=user_id,
+            first_name=student_data.first_name,
+            second_name=student_data.second_name,
+            gender=student_data.gender,
+            lesson_price=student_data.lesson_price,
+            img_path=self._default_male_image_path if student_data.gender == "парень" else self._default_female_image_path,
+            birthday=datetime.strptime(student_data.birthday, "%Y-%m-%d"),
+            discord=student_data.discord,
+            phone=student_data.phone,
+            telegram=student_data.telegram,
+            whatsapp=student_data.whatsapp
+        )
+        session.add(new_student)
+
+        return self._to_add_student_response(student_model=new_student, student_login=student_data.student_login)
+
+    async def delete_student(self, session: AsyncSession, student_data: DeleteStudentRequest) -> DeleteStudentResponse:
+        student_model = (
+            await session.execute(select(self._student_model).filter_by(phone=student_data.phone))).scalars().first()
+
+        if not student_model:
+            raise StudentNotFoundError
+
+        user_model = (
+            await session.execute(select(self._user_model).filter_by(user_id=student_model.user_id))).scalars().first()
+
+        user_model.have_profile = False
+        delete_student_response = self._to_delete_student_response(student_model=student_model)
+        session.add(user_model)
+        await session.delete(student_model)
+
+        return delete_student_response
 
     async def change_primary_info(self, session: AsyncSession, student_data: ChangeStudentPrimaryInfoRequest, user_id: int) -> StudentPrimaryInfoResponse:
         student_model = (
@@ -174,3 +268,12 @@ class StudentRepository:
         session.add(student_model)
 
         return self._to_student_image_response(student_model=student_model)
+
+
+    async def get_student_id(self, session: AsyncSession, user_id: int) -> int:
+        student_model = (await session.execute(select(self._student_model).filter_by(user_id=user_id))).scalars().first()
+
+        if not student_model:
+            raise StudentNotFoundError
+
+        return student_model.student_id

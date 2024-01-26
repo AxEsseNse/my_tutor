@@ -35,6 +35,7 @@ def upgrade() -> None:
         sa.Column("login", sa.String(length=25), nullable=False, unique=True),
         sa.Column("secret", sa.String(), nullable=False),
         sa.Column("role_id", sa.Integer(), sa.ForeignKey("roles.role_id", ondelete="CASCADE"), nullable=False),
+        sa.Column("have_profile", sa.Boolean(), nullable=False),
     )
 
     op.create_table(
@@ -53,7 +54,7 @@ def upgrade() -> None:
     )
     connection.execute(
         sa.text(
-            f"""INSERT INTO "users" values (1, :login, :secret, 1), (2, 'kira', '6RejtX1QX1Wx3c451edd3b20dc37272f3f697e379596a', 3)"""
+            f"""INSERT INTO "users" values (1, :login, :secret, 1, False), (2, 'kira', '6RejtX1QX1Wx3c451edd3b20dc37272f3f697e379596a', 3, False)"""
         ), dict(login=BEGIN_ADMIN_LOGIN, secret=BEGIN_ADMIN_SECRET)
     )
 
