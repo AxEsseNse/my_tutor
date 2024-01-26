@@ -26,3 +26,9 @@ from .parents import (
     DeleteParentRequest,
     DeleteParentResponse
 )
+from .themes import (
+    AddThemeRequest,
+    AddThemeResponse,
+    DeleteThemeRequest,
+    DeleteThemeResponse
+)
