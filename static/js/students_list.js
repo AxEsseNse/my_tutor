@@ -298,9 +298,6 @@ class StudentTable {
 document.addEventListener('DOMContentLoaded', function (event) {
     const studentTable = new StudentTable()
     studentTable.loadStudents()
-    console.log(1)
     const AddStudent = new AddStudentForm(studentTable)
-    console.log(2)
     AddStudent.setUsersSelectOptions()
-    console.log(3)
 })

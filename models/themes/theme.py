@@ -9,6 +9,6 @@ class ThemeModel(Base):
 
     theme_id = Column(Integer, primary_key=True)
     exam_id = Column(Integer, ForeignKey(column="exams.exam_id", ondelete="CASCADE"), nullable=False)
-    title = Column(String, unique=True, nullable=False)
+    title = Column(String, nullable=False)
     descr = Column(String, nullable=False)
     material = Column(JSON, default={})

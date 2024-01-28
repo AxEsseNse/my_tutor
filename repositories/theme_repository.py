@@ -7,7 +7,9 @@ from my_tutor.schemes import (
     AddThemeRequest,
     AddThemeResponse,
     DeleteThemeRequest,
-    DeleteThemeResponse
+    DeleteThemeResponse,
+    UpdateThemeRequest,
+    UpdateThemeResponse
 )
 from my_tutor.domain import Theme
 RUS_EXAMS = {
@@ -21,10 +23,12 @@ class ThemeRepository:
     _theme_model = ThemeModel
     _add_theme_response = AddThemeResponse
     _delete_theme_response = DeleteThemeResponse
+    _update_theme_response = UpdateThemeResponse
 
     def _to_theme(self, theme_model: ThemeModel) -> Theme:
 
         return self._theme(
+            theme_id=theme_model.theme_id,
             exam=RUS_EXAMS[theme_model.exam_id],
             title=theme_model.title,
             descr=theme_model.descr
@@ -33,6 +37,7 @@ class ThemeRepository:
     def _to_add_theme_response(self, theme_model: ThemeModel) -> AddThemeResponse:
 
         return self._add_theme_response(
+            theme_id=theme_model.theme_id,
             exam=RUS_EXAMS[theme_model.exam_id],
             title=theme_model.title,
             descr=theme_model.descr,
@@ -47,6 +52,16 @@ class ThemeRepository:
             message="Тема успешно удалена"
         )
 
+    def _to_update_theme_response(self, theme_model: UpdateThemeRequest) -> UpdateThemeResponse:
+
+        return self._update_theme_response(
+            theme_id=theme_model.theme_id,
+            exam=RUS_EXAMS[theme_model.exam_id],
+            title=theme_model.title,
+            descr=theme_model.descr,
+            message="Тема успешно изменена"
+        )
+
     async def _get_new_theme_id(self, session: AsyncSession) -> int:
         return await session.scalar(self._theme_model.id_seq.next_value())
 
@@ -57,7 +72,7 @@ class ThemeRepository:
 
     async def add_theme(self, session: AsyncSession, theme_data: AddThemeRequest) -> AddThemeResponse:
         theme_model = (
-            await session.execute(select(self._theme_model).filter_by(title=theme_data.title))).scalars().first()
+            await session.execute(select(self._theme_model).filter_by(title=theme_data.title, exam_id=theme_data.exam_id, descr=theme_data.descr))).scalars().first()
 
         if theme_model:
             raise ThemeAlreadyExistError
@@ -75,7 +90,7 @@ class ThemeRepository:
 
     async def delete_theme(self, session: AsyncSession, theme_data: DeleteThemeRequest) -> DeleteThemeResponse:
         theme_model = (
-            await session.execute(select(self._theme_model).filter_by(title=theme_data.title))).scalars().first()
+            await session.execute(select(self._theme_model).filter_by(theme_id=theme_data.theme_id))).scalars().first()
 
         if not theme_model:
             raise ThemeNotFoundError
@@ -84,3 +99,17 @@ class ThemeRepository:
         await session.delete(theme_model)
 
         return delete_theme_response
+
+    async def update_theme(self, session: AsyncSession, theme_data: UpdateThemeRequest) -> UpdateThemeResponse:
+        theme_model = (
+            await session.execute(select(self._theme_model).filter_by(theme_id=theme_data.theme_id))).scalars().first()
+
+        if not theme_model:
+            raise ThemeNotFoundError
+
+        theme_model.exam_id = theme_data.exam_id
+        theme_model.title = theme_data.title
+        theme_model.descr = theme_data.descr
+        session.add(theme_model)
+
+        return self._to_update_theme_response(theme_model=theme_model)

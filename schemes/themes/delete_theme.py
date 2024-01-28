@@ -1,8 +1,8 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class DeleteThemeRequest(BaseModel):
-    title: str
+    theme_id: int = Field(alias="themeId")
 
 
 class DeleteThemeResponse(BaseModel):

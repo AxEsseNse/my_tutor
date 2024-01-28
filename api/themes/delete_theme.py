@@ -12,9 +12,9 @@ from my_tutor.schemes import DeleteThemeRequest, DeleteThemeResponse
 theme_repository = ThemeRepository()
 
 
-@admin_router.delete("/themes/{title:str}/")
-async def delete_theme(title: str, theme_data: DeleteThemeRequest, session: AsyncSession = Depends(get_db_session)) -> DeleteThemeResponse:
-    if title != theme_data.title:
+@admin_router.delete("/themes/{theme_id:int}/")
+async def delete_theme(theme_id: int, theme_data: DeleteThemeRequest, session: AsyncSession = Depends(get_db_session)) -> DeleteThemeResponse:
+    if theme_id != theme_data.theme_id:
         raise HTTPException(HTTPStatus.BAD_REQUEST, "Bad request data")
 
     try:

@@ -30,5 +30,7 @@ from .themes import (
     AddThemeRequest,
     AddThemeResponse,
     DeleteThemeRequest,
-    DeleteThemeResponse
+    DeleteThemeResponse,
+    UpdateThemeRequest,
+    UpdateThemeResponse
 )
