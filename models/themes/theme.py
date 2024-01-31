@@ -1,5 +1,6 @@
-from sqlalchemy import Integer, Column, String, ForeignKey, Sequence, JSON
+from sqlalchemy import Integer, Column, String, ForeignKey, Sequence
 from my_tutor.models import Base
+from sqlalchemy.dialects.postgresql import JSONB
 
 
 class ThemeModel(Base):
@@ -11,4 +12,4 @@ class ThemeModel(Base):
     exam_id = Column(Integer, ForeignKey(column="exams.exam_id", ondelete="CASCADE"), nullable=False)
     title = Column(String, nullable=False)
     descr = Column(String, nullable=False)
-    material = Column(JSON, default={})
+    material = Column(JSONB, server_default="{}")

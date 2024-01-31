@@ -109,3 +109,19 @@ body {
     font-size: 20px;
     font-family: Georgia;
 }
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #4A918B;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #F6E6AE;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #888;
+}

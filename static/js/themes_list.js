@@ -199,7 +199,7 @@ class ThemeFormUpdate {
             return
         }
 
-        fetch(`/api/admin/themes/${this.themeId}/`, {
+        fetch(`/api/lessons/${this.themeId}/`, {
             method: 'PUT',
                 headers: {
                 'Content-Type': 'application/json',

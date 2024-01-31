@@ -20,4 +20,8 @@ students_router = APIRouter(
     prefix="/students",
     tags=["Users"]
 )
+lessons_router = APIRouter(
+    prefix="/lessons",
+    tags=["Users"]
+)
 # TODO включить депенденси на админа

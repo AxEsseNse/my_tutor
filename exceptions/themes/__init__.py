@@ -1,1 +1,1 @@
-from .theme import ThemeNotFoundError, ThemeAlreadyExistError
+from .theme import ThemeNotFoundError, ThemeAlreadyExistError, ThemeMaterialNotFoundError

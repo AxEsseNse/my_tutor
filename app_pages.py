@@ -64,6 +64,16 @@ async def themes_list(request: Request, authorized_user=Depends(get_authorized_u
         }
     )
 
+async def lesson(request: Request, authorized_user=Depends(get_authorized_user)):
+    return templates.TemplateResponse(
+        "lesson.html",
+        {
+            "request": request,
+            "title": "Урок",
+            "user": authorized_user
+        }
+    )
+
 async def student_profile(request: Request, authorized_user=Depends(get_authorized_user)):
     return templates.TemplateResponse(
         "student_profile.html",

@@ -32,5 +32,13 @@ from .themes import (
     DeleteThemeRequest,
     DeleteThemeResponse,
     UpdateThemeRequest,
-    UpdateThemeResponse
+    UpdateThemeResponse,
+    AddThemeMaterialTheoryRequest,
+    AddThemeMaterialPracticeRequest,
+    AddThemeMaterialResponse,
+    DeleteThemeMaterialRequest,
+    DeleteThemeMaterialResponse,
+    UpdateThemeMaterialTheoryRequest,
+    UpdateThemeMaterialPracticeRequest,
+    UpdateThemeMaterialResponse
 )
