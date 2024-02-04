@@ -21,7 +21,7 @@ theme_repository = ThemeRepository()
 @admin_router.post("/themes/material/{theme_id: int}/", status_code=HTTPStatus.CREATED)
 async def add_theme_material(
     theme_id: int,
-    theme_material_data: AddThemeMaterialTheoryRequest | AddThemeMaterialPracticeRequest,
+    theme_material_data: AddThemeMaterialPracticeRequest | AddThemeMaterialTheoryRequest,
     session: AsyncSession = Depends(get_db_session)
 ) -> AddThemeMaterialResponse:
 

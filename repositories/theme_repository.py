@@ -46,6 +46,7 @@ class ThemeRepository:
         return self._theme(
             theme_id=theme_model.theme_id,
             exam=RUS_EXAMS[theme_model.exam_id],
+            exam_task_number=theme_model.exam_task_number,
             title=theme_model.title,
             descr=theme_model.descr
         )
@@ -54,6 +55,7 @@ class ThemeRepository:
 
         return self._lesson(
             exam=RUS_EXAMS[theme_model.exam_id],
+            exam_task_number=theme_model.exam_task_number,
             title=theme_model.title,
             material=theme_model.material,
             message="Данные урока успешно получены"
@@ -64,6 +66,7 @@ class ThemeRepository:
         return self._add_theme_response(
             theme_id=theme_model.theme_id,
             exam=RUS_EXAMS[theme_model.exam_id],
+            exam_task_number=theme_model.exam_task_number,
             title=theme_model.title,
             descr=theme_model.descr,
             message="Новая тема успешно создана"
@@ -113,12 +116,12 @@ class ThemeRepository:
             message="В теме успешно изменена карточка"
         )
 
-    async def _get_new_theme_id(self, session: AsyncSession) -> int:
-
-        return await session.scalar(self._theme_model.id_seq.next_value())
+    # async def _get_new_practice_material_id(self, session: AsyncSession) -> int:
+    #
+    #     return await session.scalar(self._theme_model.practice_seq.next_value())
 
     async def get_themes(self, session: AsyncSession) -> list[Theme]:
-        themes_models = (await session.execute(select(self._theme_model).order_by(self._theme_model.exam_id, self._theme_model.title))).scalars().all()
+        themes_models = (await session.execute(select(self._theme_model).order_by(self._theme_model.exam_id, self._theme_model.exam_task_number, self._theme_model.title))).scalars().all()
 
         return [self._to_theme(theme_model=theme_model) for theme_model in themes_models]
 
@@ -128,6 +131,7 @@ class ThemeRepository:
         if not theme_model:
             raise ThemeNotFoundError
 
+        print(theme_model)
         return self._to_lesson(theme_model=theme_model)
 
     async def add_theme(self, session: AsyncSession, theme_data: AddThemeRequest) -> AddThemeResponse:
@@ -138,13 +142,14 @@ class ThemeRepository:
             raise ThemeAlreadyExistError
 
         new_theme = self._theme_model(
-            theme_id=await self._get_new_theme_id(session),
             exam_id=theme_data.exam_id,
+            exam_task_number=theme_data.exam_task_number,
             title=theme_data.title,
             descr=theme_data.descr,
             material=[]
         )
         session.add(new_theme)
+        await session.flush()
 
         return self._to_add_theme_response(theme_model=new_theme)
 
@@ -193,6 +198,7 @@ class ThemeRepository:
                 descr=theme_material_data.descr
             )
         else:
+            # practice_id = await self._get_new_practice_material_id(session=session)
             if theme_material_data.tip:
                 new_tip = self._material_practice_tip(
                     image_path=theme_material_data.tip_image_path,
@@ -201,6 +207,7 @@ class ThemeRepository:
             else:
                 new_tip = None
             new_card = self._material_practice(
+                # id=practice_id,
                 type="practice",
                 title=theme_material_data.title,
                 image_path=theme_material_data.image_path,
@@ -261,6 +268,8 @@ class ThemeRepository:
                 descr=theme_material_data.descr
             )
         else:
+            # practice_id = await self._get_new_practice_material_id(session=session)
+
             if theme_material_data.tip:
                 new_tip = self._material_practice_tip(
                     image_path=theme_material_data.tip_image_path,
@@ -269,6 +278,7 @@ class ThemeRepository:
             else:
                 new_tip = None
             new_card = self._material_practice(
+                # id=practice_id,
                 type="practice",
                 title=theme_material_data.title,
                 image_path=theme_material_data.image_path,

@@ -29,3 +29,11 @@ from .themes import (
     delete_theme_material,
     update_theme_material
 )
+from .tutors import (
+    get_tutors,
+    add_tutor,
+    delete_tutor,
+    get_tutor_info,
+    update_tutor,
+    update_tutor_image
+)

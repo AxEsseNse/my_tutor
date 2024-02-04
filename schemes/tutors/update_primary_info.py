@@ -1,7 +1,7 @@
 from pydantic import BaseModel, Field
 
 
-class ChangeStudentPrimaryInfoRequest(BaseModel):
+class UpdateTutorPrimaryInfoRequest(BaseModel):
     login: str
     first_name: str = Field(alias="firstName")
     second_name: str = Field(alias="secondName")
@@ -9,7 +9,7 @@ class ChangeStudentPrimaryInfoRequest(BaseModel):
     birthday: str
 
 
-class StudentPrimaryInfoResponse(BaseModel):
+class UpdateTutorPrimaryInfoResponse(BaseModel):
     first_name: str
     second_name: str
     gender: str

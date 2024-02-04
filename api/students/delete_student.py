@@ -3,7 +3,7 @@ from http import HTTPStatus
 from fastapi import Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from my_tutor.exceptions import UserNotFoundError
+from my_tutor.exceptions import StudentNotFoundError
 from my_tutor.repositories import StudentRepository
 from my_tutor.routers import admin_router
 from my_tutor.session import get_db_session
@@ -20,5 +20,5 @@ async def delete_student(phone: str, student_data: DeleteStudentRequest, session
     try:
         async with session.begin():
             return await student_repository.delete_student(session, student_data=student_data)
-    except UserNotFoundError as e:
+    except StudentNotFoundError as e:
         raise HTTPException(HTTPStatus.NOT_FOUND, e.message)

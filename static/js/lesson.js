@@ -1,22 +1,35 @@
-function fillLessonMenuItem(divId, data, iconTag=null) {
-    let fillDiv = document.getElementById(divId)
-    fillDiv.innerHTML = "";
-
-    if (iconTag!==null) {
-        let iconElement = document.createElement("i")
-        iconElement.className = iconLib[iconTag]
-
-        fillDiv.appendChild(iconElement)
-        fillDiv.innerHTML += data;
-    } else {
-        fillDiv.innerHTML += data;
-    }
-}
-
-class LessonMenu {
+class LessonController {
     constructor() {
+        this.lessonId = 1
+        this.practiceAnswer = ''
+        this.currentPracticeCardAnswer = ''
+        this.currentPracticeCardId = 0
+        this.studentAnswers = {
+        }
+
+        this.theoryIcon = '<i class="fa-solid fa-book"></i>'
+        this.practiceIcon = '<i class="fa-solid fa-keyboard"></i>'
+
         this.menu = document.getElementById('lesson-list')
-        this.lessonId = 6
+        this.examField = document.getElementById('lesson-exam-btn')
+        this.examItemIdField = document.getElementById('lesson-exam-task-id')
+        this.titleField = document.getElementById('lesson-title')
+
+        this.theoryField = document.getElementById('theory-content')
+        this.theoryTitle = document.getElementById('theory-title')
+        this.theoryImage = document.getElementById('theory-image')
+        this.theoryDescr = document.getElementById('theory-descr')
+
+        this.practiceField = document.getElementById('practice-content')
+        this.practiceTitle = document.getElementById('practice-title')
+        this.practiceImage = document.getElementById('practice-image')
+        this.practiceDescr = document.getElementById('practice-descr-field')
+        this.practiceAnswerField = document.getElementById('practice-answer')
+        this.practiceAnswerButton = document.getElementById('practice-answer-button')
+        this.practiceTipButton = document.getElementById('practice-tip-button')
+        this.practiceTipField = document.getElementById('practice-tip-field')
+        this.practiceTipImage = document.getElementById('practice-tip-image')
+        this.practiceTipDescr = document.getElementById('practice-tip-descr')
     }
 
     loadLesson() {
@@ -26,93 +39,150 @@ class LessonMenu {
             return
         }
 
-        fetch(`/api/lesson/${this.lessonId}/`, {
+        console.log('Запрос данных урока с сервера')
+
+        fetch(`/api/lessons/${this.lessonId}/`, {
             method: 'GET',
             headers: {
             'My-tutor-Auth-Token': token
             }
         })
         .then(response => response.json())
-        .then(material => {
-            this.fillLessonMenu(material)
+        .then(theme => {
+            console.log('Данные урока с сервера получены')
+            this.fillThemeMenu(theme)
         })
         .catch(error => {
             console.error(error)
         })
     }
 
-    fillLessonMenu(material) {
-        console.log(material)
-
-        students.forEach(student => {
-            const row = body.insertRow()
-            this.fillRow(row, student)
+    fillThemeMenu(theme) {
+        console.log(theme)
+        this.examField.innerText = theme.exam
+        this.titleField.innerText = theme.title
+        this.examItemIdField.innerText = `Задание № ${theme.exam_task_number}`
+        this.menu.innerHTML = ''
+        let theoryCardId = 0
+        let practiceCardId = 0
+        theme.material.forEach(card => {
+            console.log(card)
+            if (card.type === 'theory') {
+                theoryCardId++
+                let cardName = `Теория № ${theoryCardId}`
+                this.addThemeCard(card, cardName)
+            } else {
+                practiceCardId++
+                let cardName = `Практика № ${practiceCardId}`
+                this.addThemeCard(card, cardName)
+            }
         })
     }
 
-    fillRow(row, student) {
-        const studentImage = document.createElement('img')
-        studentImage.src = student.img_path
-        studentImage.style.display = 'block'
-        studentImage.classList.add('rounded-circle')
-        studentImage.width = 50
-        studentImage.height = 50
-        this.addCell(row, studentImage)
+    addThemeCard(card, cardName) {
+        let newLiItem = document.createElement('li')
 
-        this.addCell(row, student.second_name)
-        this.addCell(row, student.first_name)
-        this.addCell(row, student.gender)
-        this.addCell(row, student.age)
-        this.addCell(row, student.lesson_price)
-        this.addCell(row, student.discord)
-        this.addCell(row, student.phone)
-        this.addCell(row, student.telegram)
-        this.addCell(row, student.whatsapp)
+        let liButton = document.createElement('button')
+        liButton.className = 'lesson-button'
+        liButton.onclick = () => {
+            document.querySelectorAll('.lesson-button.active-lesson-menu-item').forEach(button => {
+                button.classList.remove('active-lesson-menu-item');
+            })
+            this.practiceTipField.style.display = 'none';
+            this.practiceTipButton.innerText = 'Показать решение'
+            liButton.classList.add('active-lesson-menu-item');
+            this.fillContent(card)
+        }
 
-        const controllers = document.createElement('div')
-        controllers.classList.add('text-end')
-        controllers.style.right = '0px'
-        controllers.appendChild(this.createDeleteButton(row))
-        this.addCell(row, controllers)
-    }
-
-    addCell(row, content) {
-        this.menu
-        let card = document.createElement('li')
-        card.innerHTML = content
-
-
-
-        let cell = row.insertCell()
-        cell.classList.add('align-middle')
-        if (typeof content === 'object') {
-            cell.appendChild(content)
+        if (card.type === 'theory') {
+            liButton.innerHTML = `${this.theoryIcon} ${cardName}`
         } else {
-            cell.innerHTML = content
-            cell.classList.add('small')
+            liButton.innerHTML = `${this.practiceIcon} ${cardName}`
+        }
+        newLiItem.appendChild(liButton)
+        this.menu.appendChild(newLiItem);
+    }
+
+    fillContent(card) {
+
+        if (card.type === 'theory') {
+            this.practiceField.style.display = 'none';
+            this.theoryTitle.innerText = card.title
+            this.theoryImage.src = card.image_path
+            this.theoryDescr.innerText = card.descr
+            this.theoryField.style.display = 'block';
+        } else {
+            this.theoryField.style.display = 'none';
+            this.currentPracticeCardId = card.id
+            this.practiceTitle.innerText = card.title
+            this.practiceImage.src = card.image_path
+            this.practiceDescr.innerText = card.descr
+            this.currentPracticeCardAnswer = card.answer
+            this.practiceAnswerButton.onclick = () => {
+                this.checkAnswer()
+            }
+            this.practiceAnswerField.classList.remove('input-answer-wrong', 'input-answer-success');
+            this.practiceAnswerField.disabled = false;
+            this.practiceAnswerButton.disabled = false;
+            this.practiceAnswerButton.innerHTML = 'Проверить'
+
+            if (card.tip != null) {
+                this.practiceTipButton.onclick = () => {
+                    this.switchTip(card.tip)
+                }
+            }
+
+            if (this.studentAnswers[this.currentPracticeCardId] != undefined) {
+                this.practiceAnswerField.value = this.studentAnswers[this.currentPracticeCardId]
+                this.checkAnswer()
+            } else {
+                this.practiceAnswerField.value = ''
+            }
+
+            this.practiceField.style.display = 'block';
         }
     }
 
-    createDeleteButton(row) {
-        const btn = document.createElement('button')
-        btn.classList.add('btn', 'btn-sm', 'btn-danger')
-        btn.setAttribute('type', 'button')
-        btn.setAttribute('title', 'Удалить профиль студента')
-        btn.setAttribute('data-bs-toggle', 'modal')
-        btn.setAttribute('data-bs-target', '#modal-student-delete')
-        btn.innerHTML = '<i class="fa-solid fa-trash text-dark"></i>'
-        btn.onclick = () => {
-            const form = new StudentFormDelete(row)
-            form.fillDeleteForm()
-        }
+    checkAnswer() {
+        let studentAnswer = this.practiceAnswerField.value
+        this.studentAnswers[this.currentPracticeCardId] = studentAnswer
 
-        return btn
+        if (studentAnswer != this.currentPracticeCardAnswer) {
+            this.practiceAnswerField.classList.remove('input-answer-success');
+            this.practiceAnswerField.classList.add('input-answer-wrong');
+            document.querySelectorAll('.lesson-button.active-lesson-menu-item').forEach(button => {
+                button.classList.add('lesson-button-wrong');
+            })
+        } else {
+            document.querySelectorAll('.lesson-button.active-lesson-menu-item').forEach(button => {
+                button.classList.remove('lesson-button-wrong');
+                button.classList.add('lesson-button-success');
+            })
+            this.practiceAnswerField.classList.remove('input-answer-wrong');
+            this.practiceAnswerField.classList.add('input-answer-success');
+            this.practiceAnswerButton.innerHTML = '<i class="fa-solid fa-check"></i>'
+            this.practiceAnswerField.disabled = true;
+            this.practiceAnswerButton.disabled = true;
+        }
+    }
+
+    switchTip(tip) {
+
+        if (this.practiceTipField.style.display === 'none') {
+            this.practiceTipImage.src = tip.image_path
+            this.practiceTipDescr.innerText = tip.descr
+            this.practiceTipField.style.display = 'block';
+            this.practiceTipButton.innerText = 'Скрыть решение'
+        } else {
+            this.practiceTipImage.src = ""
+            this.practiceTipDescr.innerText = ""
+            this.practiceTipField.style.display = 'none';
+            this.practiceTipButton.innerText = 'Показать решение'
+        }
     }
 }
 
 document.addEventListener('DOMContentLoaded', function (event) {
-    const studentTable = new StudentTable()
-    studentTable.loadStudents()
-    const AddStudent = new AddStudentForm(studentTable)
-    AddStudent.setUsersSelectOptions()
+    const lessonController = new LessonController()
+    lessonController.loadLesson()
 })

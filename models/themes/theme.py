@@ -6,10 +6,12 @@ from sqlalchemy.dialects.postgresql import JSONB
 class ThemeModel(Base):
     __tablename__ = "themes"
 
-    id_seq = Sequence("themes_theme_id_seq")
+    theme_id_seq = Sequence("themes_theme_id_seq")
+    theme_practice_material_id_seq = Sequence('themes_theme_practice_material_id_seq')
 
     theme_id = Column(Integer, primary_key=True)
-    exam_id = Column(Integer, ForeignKey(column="exams.exam_id", ondelete="CASCADE"), nullable=False)
+    exam_id = Column(Integer, ForeignKey(column="exams.exam_id"), nullable=False)
+    exam_task_number = Column(Integer, nullable=False)
     title = Column(String, nullable=False)
     descr = Column(String, nullable=False)
     material = Column(JSONB, server_default="{}")

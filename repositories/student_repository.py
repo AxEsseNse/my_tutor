@@ -14,11 +14,11 @@ from my_tutor.schemes import (
     AddStudentResponse,
     DeleteStudentRequest,
     DeleteStudentResponse,
-    ChangeStudentPrimaryInfoRequest,
-    ChangeStudentContactInfoRequest,
-    StudentPrimaryInfoResponse,
-    StudentContactInfoResponse,
-    StudentImageResponse
+    UpdateStudentPrimaryInfoRequest,
+    UpdateStudentContactInfoRequest,
+    UpdateStudentPrimaryInfoResponse,
+    UpdateStudentContactInfoResponse,
+    UpdateStudentImageResponse
 )
 from my_tutor.domain import StudentInfo, Student
 
@@ -47,9 +47,9 @@ class StudentRepository:
     _info_domain = StudentInfo
     _add_student_response = AddStudentResponse
     _delete_student_response = DeleteStudentResponse
-    _student_primary_info_response = StudentPrimaryInfoResponse
-    _student_contact_info_response = StudentContactInfoResponse
-    _student_image_response = StudentImageResponse
+    _update_student_primary_info_response = UpdateStudentPrimaryInfoResponse
+    _update_student_contact_info_response = UpdateStudentContactInfoResponse
+    _update_student_image_response = UpdateStudentImageResponse
     _default_male_image_path = "/storage/users/male_default_image.jpg"
     _default_female_image_path = "/storage/users/female_default_image.jpg"
 
@@ -109,8 +109,8 @@ class StudentRepository:
             message="Профиль студента успешно удален"
         )
 
-    def _to_student_primary_info_response(self, student_model: StudentModel) -> StudentPrimaryInfoResponse:
-        return self._student_primary_info_response(
+    def _to_update_student_primary_info_response(self, student_model: StudentModel) -> UpdateStudentPrimaryInfoResponse:
+        return self._update_student_primary_info_response(
             first_name=student_model.first_name,
             second_name=student_model.second_name,
             gender=student_model.gender,
@@ -118,8 +118,8 @@ class StudentRepository:
             message="Личные данные студента успешно изменены"
         )
 
-    def _to_student_contact_info_response(self, student_model: StudentModel) -> StudentContactInfoResponse:
-        return self._student_contact_info_response(
+    def _to_update_student_contact_info_response(self, student_model: StudentModel) -> UpdateStudentContactInfoResponse:
+        return self._update_student_contact_info_response(
             discord=student_model.discord,
             phone=student_model.phone,
             telegram=student_model.telegram,
@@ -127,8 +127,8 @@ class StudentRepository:
             message="Контактные данные студента успешно изменены"
         )
 
-    def _to_student_image_response(self, student_model: StudentModel) -> StudentImageResponse:
-        return self._student_image_response(
+    def _to_update_student_image_response(self, student_model: StudentModel) -> UpdateStudentImageResponse:
+        return self._update_student_image_response(
             img_path=student_model.img_path,
             message="Изображение успешно изменено"
         )
@@ -203,7 +203,7 @@ class StudentRepository:
 
         return delete_student_response
 
-    async def change_primary_info(self, session: AsyncSession, student_data: ChangeStudentPrimaryInfoRequest, user_id: int) -> StudentPrimaryInfoResponse:
+    async def update_primary_info(self, session: AsyncSession, student_data: UpdateStudentPrimaryInfoRequest, user_id: int) -> UpdateStudentPrimaryInfoResponse:
         student_model = (
             await session.execute(select(self._student_model).filter_by(user_id=user_id))).scalars().first()
 
@@ -216,9 +216,9 @@ class StudentRepository:
         student_model.birthday = datetime.strptime(student_data.birthday, "%Y-%m-%d")
         session.add(student_model)
 
-        return self._to_student_primary_info_response(student_model=student_model)
+        return self._to_update_student_primary_info_response(student_model=student_model)
 
-    async def change_contact_info(self, session: AsyncSession, student_data: ChangeStudentContactInfoRequest, user_id: int):
+    async def update_contact_info(self, session: AsyncSession, student_data: UpdateStudentContactInfoRequest, user_id: int) -> UpdateStudentContactInfoResponse:
         student_model = (
             await session.execute(select(self._student_model).filter_by(user_id=user_id))).scalars().first()
 
@@ -231,7 +231,7 @@ class StudentRepository:
         student_model.whatsapp = student_data.whatsapp
         session.add(student_model)
 
-        return self._to_student_contact_info_response(student_model=student_model)
+        return self._to_update_student_contact_info_response(student_model=student_model)
 
     @staticmethod
     async def _save_image_to_file(login: str, image_data: UploadFile):
@@ -253,7 +253,7 @@ class StudentRepository:
             print(e)
             return False
 
-    async def change_image(self, session: AsyncSession, image_data: UploadFile, login: str, user_id: int):
+    async def update_image(self, session: AsyncSession, image_data: UploadFile, login: str, user_id: int) -> UpdateStudentImageResponse:
         student_model = (await session.execute(select(self._student_model).filter_by(user_id=user_id))).scalars().first()
 
         if not student_model:
@@ -267,7 +267,7 @@ class StudentRepository:
         student_model.img_path = new_image_path
         session.add(student_model)
 
-        return self._to_student_image_response(student_model=student_model)
+        return self._to_update_student_image_response(student_model=student_model)
 
 
     async def get_student_id(self, session: AsyncSession, user_id: int) -> int:

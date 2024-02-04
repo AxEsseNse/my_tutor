@@ -2,6 +2,17 @@ const exams = {
     ЕГЭ: 1,
     ОГЭ: 2
 }
+const egeOptions = [
+    { value: '1', text: '1', selected: true },
+    { value: '2', text: '2' },
+    { value: '3', text: '3' }
+];
+
+const ogeOptions = [
+    { value: '10', text: '10', selected: true },
+    { value: '20', text: '20' },
+    { value: '30', text: '30' }
+];
 
 function clearAddThemeForm() {
     console.log('Очистка формы добавления темы')
@@ -16,6 +27,7 @@ class AddThemeForm {
         this.themeTable = themeTable
 
         this.inputExam = document.getElementById('theme-add-form-exam')
+        this.inputExamTaskNumber = document.getElementById('theme-add-form-exam-task-number');
         this.inputTitle = document.getElementById('theme-add-form-title')
         this.inputDescr = document.getElementById('theme-add-form-descr')
 
@@ -27,6 +39,27 @@ class AddThemeForm {
         }
     }
 
+    addExamTaskNumberOptions(options) {
+        options.forEach(option => {
+            const optionElement = document.createElement('option');
+            optionElement.value = option.value;
+            optionElement.textContent = option.text;
+            if (option.selected) {
+                optionElement.selected = true;
+            }
+            this.inputExamTaskNumber.appendChild(optionElement);
+        });
+    }
+
+    fillExamTaskNumberOptions() {
+        this.inputExamTaskNumber.innerHTML = '';
+        if (this.inputExam.value === '1') {
+            this.addExamTaskNumberOptions(egeOptions);
+        } else if (this.inputExam.value === '2') {
+            this.addExamTaskNumberOptions(ogeOptions);
+        }
+    }
+
     addTheme() {
         let token = getCookie('My-Tutor-Auth-Token')
 
@@ -35,11 +68,12 @@ class AddThemeForm {
         }
 
         const newTheme = {
-            examId: this.inputExam.value,
+            examId: parseInt(this.inputExam.value, 10),
+            examTaskNumber: parseInt(this.inputExamTaskNumber.value, 10),
             title: this.inputTitle.value,
             descr: this.inputDescr.value
         }
-
+        console.log(newTheme)
         fetch('/api/admin/themes/', {
             method: 'POST',
             headers: {
@@ -67,7 +101,7 @@ class AddThemeForm {
                 this.themeTable.fillRow(row, theme)
 
                 flashMsg(
-                    `Для профиля "${theme.exam}" создана новая тема "${theme.title}"`,
+                    `В профиле "${theme.exam}" для задания № ${theme.exam_task_number} создана новая тема "${theme.title}"`,
                     this.flashMsg,
                     'success',
                 )
@@ -199,7 +233,7 @@ class ThemeFormUpdate {
             return
         }
 
-        fetch(`/api/lessons/${this.themeId}/`, {
+        fetch(`/api/admin/themes/${this.themeId}/`, {
             method: 'PUT',
                 headers: {
                 'Content-Type': 'application/json',
@@ -276,6 +310,7 @@ class ThemeTable {
     fillRow(row, theme) {
         this.addCell(row, theme.theme_id)
         this.addCell(row, theme.exam)
+        this.addCell(row, `Задание № ${theme.exam_task_number}`)
         this.addCell(row, theme.title)
         this.addCell(row, theme.descr)
 
@@ -333,5 +368,9 @@ class ThemeTable {
 document.addEventListener('DOMContentLoaded', function (event) {
     const themeTable = new ThemeTable()
     themeTable.loadThemes()
-    new AddThemeForm(themeTable)
+    addThemeForm = new AddThemeForm(themeTable)
+    addThemeForm.inputExam.addEventListener('change', () => {
+        addThemeForm.fillExamTaskNumberOptions()
+    });
+    addThemeForm.inputExam.dispatchEvent(new Event('change'));
 })

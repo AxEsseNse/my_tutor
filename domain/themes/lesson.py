@@ -15,6 +15,7 @@ class MaterialPracticeTip(BaseModel):
 
 
 class MaterialPractice(BaseModel):
+    id: int
     type: str
     title: str
     image_path: str
@@ -25,8 +26,9 @@ class MaterialPractice(BaseModel):
 
 class Lesson(BaseModel):
     exam: str
+    exam_task_number: int
     title: str
-    material: List[MaterialTheory | MaterialPractice]
+    material: List[MaterialPractice | MaterialTheory]
     message: str
 
 
