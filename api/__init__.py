@@ -1,7 +1,8 @@
 from .users import (
     login,
     get_users,
-    get_users_without_profile,
+    get_tutors_without_profile,
+    get_students_without_profile,
     add_user,
     delete_user,
     update_password

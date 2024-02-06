@@ -1,0 +1,59 @@
+<div
+    class="modal fade bd-example-modal-lg"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="modal-tutor-delete"
+    aria-hidden="true"
+    id="modal-tutor-delete"
+>
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <!-- Header окна удаления профиля преподавателя -->
+            <div class="modal-header">
+                <h5 class="modal-title">Удалить профиль студента</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <!-- Форма удаления профиля преподавателя -->
+            <div class="modal-body">
+                <form class="needs-validation" id="tutor-delete-form" novalidate>
+                    <!-- Фамилия удаляемого преподавателя -->
+                    <div class="form-group row mb-1">
+                        <label class="col-4 col-form-label" for="tutor-delete-form-second-name">Фамилия</label>
+                        <div class="col-8">
+                            <input class="form-control" type="text" id="tutor-delete-form-second-name" value="" disabled />
+                        </div>
+                    </div>
+                    <!-- Имя удаляемого преподавателя -->
+                    <div class="form-group row mb-1">
+                        <label class="col-4 col-form-label" for="tutor-delete-form-first-name">Имя</label>
+                        <div class="col-8">
+                            <input class="form-control" type="text" id="tutor-delete-form-first-name" value="" disabled />
+                        </div>
+                    </div>
+                    <!-- Телефон удаляемого преподавателя -->
+                    <div class="form-group row mb-1">
+                        <label class="col-4 col-form-label" for="tutor-delete-form-phone">Телефон</label>
+                        <div class="col-8">
+                            <input class="form-control" type="text" id="tutor-delete-form-phone" value="" disabled />
+                        </div>
+                    </div>
+                    <!-- Поле ответа сервера -->
+                    <hr/>
+
+                    <div class="form-group row mt-2 mb-2">
+                        <label class="col-4 col-form-label" for="tutor-delete-form-flash-msg"><strong>Feedback</strong></label>
+                        <div class="col-8" id="tutor-delete-form-flash-msg"></div>
+                    </div>
+
+                    <hr />
+                    <!-- Кнопка отправки формы -->
+                    <div class="text-center">
+                        <button type="button" class="btn btn-dark btn-block" id="tutor-delete-form-button">
+                            Удалить
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -5,7 +5,7 @@ function clearAddStudentForm() {
     document.getElementById('student-add-form-second-name').value = ''
     document.getElementById('student-add-form-gender').value = 'парень'
     document.getElementById('student-add-form-lesson-price').value = ''
-    document.getElementById('student-add-form-birthday') = '2013-09-13'
+    document.getElementById('student-add-form-birthday').value = '2013-09-13'
     document.getElementById('student-add-form-discord').value = ''
     document.getElementById('student-add-form-phone').value = ''
     document.getElementById('student-add-form-telegram').value = ''
@@ -39,7 +39,7 @@ class AddStudentForm {
     }
 
     loadUsers() {
-        return fetch('/api/admin/users/no_profile/', {
+        return fetch('/api/admin/users/students_without_profile/', {
         method: 'GET',
         })
         .then(response => response.json())

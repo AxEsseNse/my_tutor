@@ -14,11 +14,11 @@ student_repository = StudentRepository()
 user_repository = UserRepository()
 
 
-@students_router.put("/student/{login}/image")
+@students_router.put("/student/image/{login}/")
 async def update_student_image(
     login: str,
     request: Request,
-    student_data: UploadFile = File(...),
+    image_data: UploadFile = File(...),
     session: AsyncSession = Depends(get_db_session)
 ) -> UpdateStudentImageResponse:
     header_login = request.headers['Login']
@@ -29,7 +29,7 @@ async def update_student_image(
         async with session.begin():
             user_id = await user_repository.get_user_id_by_login(session=session, login=login)
 
-            return await student_repository.update_image(session, student_data, login, user_id)
+            return await student_repository.update_image(session, image_data, login, user_id)
     except ValidationError as e:
         raise HTTPException(HTTPStatus.BAD_REQUEST, str(e))
     except StudentNotFoundError as e:

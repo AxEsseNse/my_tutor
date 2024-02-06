@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from my_tutor.exceptions import TutorNotFoundError
 from my_tutor.repositories import TutorRepository, UserRepository
-from my_tutor.routers import students_router
+from my_tutor.routers import tutors_router
 from my_tutor.schemes import (
     UpdateTutorPrimaryInfoRequest,
     UpdateTutorPrimaryInfoResponse,
@@ -19,7 +19,7 @@ user_repository = UserRepository()
 tutor_repository = TutorRepository()
 
 
-@students_router.put("/tutor/{login:str}/")
+@tutors_router.put("/tutor/{login:str}/")
 async def update_tutor(
     login: str,
     tutor_data: UpdateTutorPrimaryInfoRequest | UpdateTutorContactInfoRequest,

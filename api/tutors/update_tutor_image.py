@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from my_tutor.exceptions import TutorNotFoundError, TutorSaveImageError
 from my_tutor.repositories import TutorRepository, UserRepository
-from my_tutor.routers import students_router
+from my_tutor.routers import tutors_router
 from my_tutor.schemes import UpdateTutorImageResponse
 from my_tutor.session import get_db_session
 
@@ -14,7 +14,7 @@ user_repository = UserRepository()
 tutor_repository = TutorRepository()
 
 
-@students_router.put("/tutor/{login}/image")
+@tutors_router.put("/tutor/image/{login}/")
 async def update_tutor_image(
     login: str,
     request: Request,

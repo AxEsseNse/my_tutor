@@ -16,6 +16,10 @@ users_router = APIRouter(
     prefix="/users",
     tags=["Users"]
 )
+tutors_router = APIRouter(
+    prefix="/tutors",
+    tags=["Users"]
+)
 students_router = APIRouter(
     prefix="/students",
     tags=["Users"]

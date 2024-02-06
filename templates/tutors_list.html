@@ -1,6 +1,6 @@
 {% extends "admin_base.html" %}
 {% block admin_head %}
-    <link rel="stylesheet" href="/static/css/students_list.css" />
+    <link rel="stylesheet" href="/static/css/tutors_list.css" />
 {% endblock admin_head %}
 {% block admin_content %}
 
@@ -8,16 +8,16 @@
     <button
         class="btn btn-success"
         type="button"
-        title="Создать профиль студента"
+        title="Создать профиль преподавателя"
         data-bs-toggle="modal"
-        data-bs-target="#modal-student-add"
-        id="btn-add-student"
-        onclick="clearAddStudentForm()"
+        data-bs-target="#modal-tutor-add"
+        id="btn-add-tutor"
+        onclick="clearAddTutorForm()"
     >
         <i class="fa-solid fa-plus"></i>
     </button>
 </div>
-<table id="students-table" class="table table-info">
+<table id="tutors-table" class="table table-info">
     <thead class="thead-dark">
         <tr>
             <th class="col-1 text-start text-sm"></th>
@@ -25,20 +25,19 @@
             <th class="col-1 text-start text-sm">Имя</th>
             <th class="col-1 text-start text-sm">Пол</th>
             <th class="col-1 text-start text-sm">Возраст</th>
-            <th class="col-1 text-start text-sm">Стоимость</th>
             <th class="col-1 text-start text-sm">Дискорд</th>
             <th class="col-1 text-start text-sm">Телефон</th>
             <th class="col-1 text-start text-sm">Телеграм</th>
             <th class="col-1 text-start text-sm">WhatsApp</th>
-            <th class="col-2 text-end text-sm">Действия</th>
+            <th class="col-3 text-end text-sm">Действия</th>
         </tr>
     </thead>
     <tbody></tbody>
 </table>
-{% include "studentFormAdd.html" %}
-{% include "studentFormDelete.html" %}
+{% include "tutorFormAdd.html" %}
+{% include "tutorFormDelete.html" %}
 {% endblock admin_content %}
 {% block admin_scripts %}
     <-- Подключение js страницы-->
-    <script src="/static/js/students_list.js"></script>
+    <script src="/static/js/tutors_list.js"></script>
 {% endblock admin_scripts %}

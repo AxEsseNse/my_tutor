@@ -10,6 +10,29 @@ const iconLib = {
     telegram: "fa-brands fa-telegram",
     whatsapp: "fa-brands fa-whatsapp"
 }
+const monthNumber = {
+    'января': '01',
+    'февраля': '02',
+    'марта': '03',
+    'апреля': '04',
+    'мая': '05',
+    'июня': '06',
+    'июля': '07',
+    'августа': '08',
+    'сентября': '09',
+    'октября': '10',
+    'ноября': '11',
+    'декабря': '12'
+  };
+
+function convertDate(dateString) {
+  const parts = dateString.replace(' года', '').split(' ');
+  const day = parts[0].padStart(2, '0');
+  const month = monthNumber[parts[1]];
+  const year = parts[2];
+
+  return `${year}-${month}-${day}`;
+}
 
 function fillAddParentForm() {
     console.log('Подготовка формы добавления родителя')
@@ -43,7 +66,7 @@ function fillEditPrimaryInfoForm() {
     document.getElementById('student-edit-primary-info-form-first-name').value = document.getElementById('student-first-name').textContent.trim()
     document.getElementById('student-edit-primary-info-form-second-name').value = document.getElementById('student-second-name').textContent.trim()
     document.getElementById('student-edit-primary-info-form-gender').value = document.getElementById('student-gender').textContent.trim()
-    document.getElementById('student-edit-primary-info-form-birthday').value = document.getElementById('student-birthday').textContent.trim()
+    document.getElementById('student-edit-primary-info-form-birthday').value = convertDate(document.getElementById('student-birthday').textContent.trim())
     document.getElementById('student-edit-primary-info-form-flash-msg').innerHTML = ''
 }
 
@@ -95,7 +118,7 @@ class EditStudentImageForm {
 
     editImage() {
         const imgData = new FormData();
-        imgData.append('student_data', this.inputImage.files[0]);
+        imgData.append('image_data', this.inputImage.files[0]);
 
         let token = getCookie('My-Tutor-Auth-Token')
 
@@ -103,7 +126,7 @@ class EditStudentImageForm {
             return
         }
 
-        fetch(`/api/students/student/${this.login}/image`, {
+        fetch(`/api/students/student/image/${this.login}/`, {
             method: 'PUT',
             headers: {
                 'My-Tutor-Auth-Token': token,
@@ -225,8 +248,8 @@ class EditStudentContactInfoForm {
 
         this.flashMsg = document.getElementById('student-edit-contact-info-form-flash-msg')
 
-        this.btnEditPrimaryInfo = document.getElementById('student-edit-contact-info-form-button')
-        this.btnEditPrimaryInfo.onclick = () => {
+        this.btnEditContactInfo = document.getElementById('student-edit-contact-info-form-button')
+        this.btnEditContactInfo.onclick = () => {
             this.editContactInfo()
         }
     }

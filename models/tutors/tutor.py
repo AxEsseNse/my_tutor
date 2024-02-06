@@ -7,7 +7,7 @@ class TutorModel(Base):
 
     tutor_id_seq = Sequence("tutors_tutor_id_seq")
 
-    student_id = Column(Integer, primary_key=True)
+    tutor_id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey(column="users.user_id", ondelete="CASCADE"), unique=True, nullable=False)
     first_name = Column(String(length=15), nullable=False)
     second_name = Column(String(length=25), nullable=False)

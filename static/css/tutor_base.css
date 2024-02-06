@@ -1,0 +1,39 @@
+#content {
+    background: linear-gradient(to top, #80C4C3, #002F36 620%);
+}
+
+.tutor-menu{
+	//background: rgba(20, 20, 20, 0.5);
+	height: 100%;
+	border-right: 3px solid #fcfffc;
+}
+.list_menu{
+	margin-top: 40px;
+}
+.list_menu li{
+	margin-top: 10px;
+}
+.list_menu a{
+    text-decoration: none;
+    font-family: Georgia;
+	font-size: 20px;
+	color: #096F67;
+	border-left: 2px solid #035E57;
+	transition: 0.2s ease;
+	padding-left: 5px;
+}
+.list_menu a:hover{
+	border-left: 4px solid #035E57;
+	border-radius: 3px;
+	color: #035E57;
+	transition: 0.2s ease;
+	padding-left: 10px;
+}
+
+
+
+
+
+#tutor-content {
+
+}

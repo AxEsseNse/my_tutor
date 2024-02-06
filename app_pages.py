@@ -44,6 +44,16 @@ async def users_list(request: Request, authorized_user=Depends(get_authorized_us
         }
     )
 
+async def tutors_list(request: Request, authorized_user=Depends(get_authorized_user)):
+    return templates.TemplateResponse(
+        "tutors_list.html",
+        {
+            "request": request,
+            "title": "Панель администрирования",
+            "user": authorized_user
+        }
+    )
+
 async def students_list(request: Request, authorized_user=Depends(get_authorized_user)):
     return templates.TemplateResponse(
         "students_list.html",
@@ -70,6 +80,16 @@ async def lesson(request: Request, authorized_user=Depends(get_authorized_user))
         {
             "request": request,
             "title": "Урок",
+            "user": authorized_user
+        }
+    )
+
+async def tutor_profile(request: Request, authorized_user=Depends(get_authorized_user)):
+    return templates.TemplateResponse(
+        "tutor_profile.html",
+        {
+            "request": request,
+            "title": "Профиль",
             "user": authorized_user
         }
     )

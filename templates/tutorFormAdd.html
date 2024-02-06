@@ -1,0 +1,155 @@
+<div
+    class="modal fade"
+    tabindex="-1"
+    aria-labelledby="modal-tutor-add"
+    aria-hidden="true"
+    id="modal-tutor-add"
+>
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <!-- Header окна создания нового профиля преподавателя -->
+            <div class="modal-header">
+                <h5 class="modal-title">Создание профиля преподавателя</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <!-- Форма создания нового профиля преподавателя -->
+            <div class="modal-body">
+                <form class="needs-validation" id="tutor-add-form" novalidate>
+                    <!-- Поле выбора логина -->
+                    <div class="input-group mt-2 mb-2">
+                        <label class="input-group-text" for="tutor-add-form-login">Пользователь</label>
+                        <select class="form-select" id="tutor-add-form-login">
+                        </select>
+                    </div>
+                    <!-- Кнопка очистки формы -->
+                    <div class="form-group text-end mb-3 mt-4">
+                        <button
+                            class="btn btn-sm btn-secondary"
+                            type="button"
+                            title="Очистить форму"
+                            id="btn-add-tutor"
+                            onclick="clearAddTutorForm()"
+                        >
+                            <i class="fa-solid fa-eraser fa-lg"></i>
+                        </button>
+                    </div>
+                    <!-- Поле ввода имени -->
+                    <div class="form-group row mb-1">
+                        <label class="col-4 col-form-label" for="tutor-add-form-first-name">Имя</label>
+                        <div class="col-8">
+                            <input
+                                class="form-control"
+                                type="text"
+                                id="tutor-add-form-first-name"
+                                value=""
+                                placeholder="Имя преподавателя"
+                                required
+                            />
+                        </div>
+                    </div>
+                    <!-- Поле ввода фамилии -->
+                    <div class="form-group row mb-1">
+                        <label class="col-4 col-form-label" for="tutor-add-form-second-name">Фамилия</label>
+                        <div class="col-8">
+                            <input
+                                class="form-control"
+                                type="text"
+                                id="tutor-add-form-second-name"
+                                value=""
+                                placeholder="Фамилия преподавателя"
+                                required
+                            />
+                        </div>
+                    </div>
+                    <!-- Поле выбора пола -->
+                    <div class="input-group mb-3">
+                        <label class="input-group-text" for="tutor-add-form-gender">Пол</label>
+                        <select class="form-select" id="tutor-add-form-gender">
+                            <option value="парень" selected>парень</option>
+                            <option value="девушка">девушка</option>
+                        </select>
+                    </div>
+                    <!-- Поле ввода даты рождения -->
+                    <div class="form-group row mb-1">
+                        <label class="col-5 col-form-label" for="tutor-add-form-birthday">Дата рождения</label>
+                        <div class="col-2"></div>
+                        <div class="col-5">
+                            <input type="date" class="form-control" value="2013-09-13" id="tutor-add-form-birthday" required />
+                        </div>
+                    </div>
+                    <!-- Поле ввода discord -->
+                    <div class="form-group row mb-1">
+                        <label class="col-4 col-form-label" for="tutor-add-form-discord">Discord</label>
+                        <div class="col-8">
+                            <input
+                                class="form-control"
+                                type="text"
+                                id="tutor-add-form-discord"
+                                value=""
+                                placeholder="Введите логин discord"
+                                required
+                            />
+                        </div>
+                    </div>
+                    <!-- Поле ввода телефона -->
+                    <div class="form-group row mb-1">
+                        <label class="col-4 col-form-label" for="tutor-add-form-phone">Телефон</label>
+                        <div class="col-8">
+                            <input
+                                class="form-control"
+                                type="text"
+                                id="tutor-add-form-phone"
+                                value=""
+                                placeholder="Введите номер телефона"
+                                required
+                            />
+                        </div>
+                    </div>
+                    <!-- Поле ввода telegram -->
+                    <div class="form-group row mb-1">
+                        <label class="col-4 col-form-label" for="tutor-add-form-telegram">Telegram</label>
+                        <div class="col-8">
+                            <input
+                                class="form-control"
+                                type="text"
+                                id="tutor-add-form-telegram"
+                                value=""
+                                placeholder="Введите аккаунт telegram"
+                                required
+                            />
+                        </div>
+                    </div>
+                    <!-- Поле ввода whatsapp -->
+                    <div class="form-group row mb-1">
+                        <label class="col-4 col-form-label" for="tutor-add-form-whatsapp">WhatsApp</label>
+                        <div class="col-8">
+                            <input
+                                class="form-control"
+                                type="text"
+                                id="tutor-add-form-whatsapp"
+                                value=""
+                                placeholder="Введите аккаунт whatsapp"
+                                required
+                            />
+                        </div>
+                    </div>
+                    <!-- Поле ответа сервера -->
+                    <hr/>
+
+                    <div class="form-group row mt-2 mb-2">
+                        <label class="col-4 col-form-label" for="tutor-add-form-flash-msg"><strong>Feedback</strong></label>
+                        <div class="col-8" id="tutor-add-form-flash-msg"></div>
+                    </div>
+
+                    <hr />
+                    <!-- Кнопка отправки формы -->
+                    <div class="text-center">
+                        <button type="button" class="btn btn-dark btn-block" id="tutor-add-form-button">
+                            Создать
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

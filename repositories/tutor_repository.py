@@ -226,12 +226,12 @@ class TutorRepository:
 
     @staticmethod
     async def _save_image_to_file(login: str, image_data: UploadFile):
-        user_folder = os.path.join('storage', 'users', login)
+        user_folder = "storage/users/" + login
         try:
             if not os.path.exists(user_folder):
                 os.makedirs(user_folder)
 
-            image_path = os.path.join(user_folder, 'tutor_image.jpg')
+            image_path = user_folder + "/tutor_image.jpg"
 
             async with aiofiles.open(image_path, 'wb') as file:
                 while True:
@@ -239,7 +239,7 @@ class TutorRepository:
                     if not image_part:
                         break
                     await file.write(image_part)
-            return image_path
+            return "/" + image_path
         except Exception:
             #TODO применить кастомный класс ошибки
             return False
@@ -251,7 +251,7 @@ class TutorRepository:
             raise TutorNotFoundError
 
         new_image_path = await self._save_image_to_file(login=login, image_data=image_data)
-
+        print(new_image_path)
         if not new_image_path:
             raise TutorSaveImageError
 
@@ -259,12 +259,3 @@ class TutorRepository:
         session.add(tutor_model)
 
         return self._to_update_tutor_image_response(tutor_model=tutor_model)
-    #
-    #
-    # async def get_student_id(self, session: AsyncSession, user_id: int) -> int:
-    #     student_model = (await session.execute(select(self._student_model).filter_by(user_id=user_id))).scalars().first()
-    #
-    #     if not student_model:
-    #         raise StudentNotFoundError
-    #
-    #     return student_model.student_id
