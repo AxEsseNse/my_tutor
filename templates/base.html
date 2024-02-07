@@ -26,7 +26,7 @@
                         <a href="/"><strong>Главная</strong></a>
                     </div>
                     <div class="col-2">
-                        <a href="/"><strong>Мое обучение</strong></a>
+                        <a href="/lesson"><strong>Мое обучение</strong></a>
                     </div>
                     <div class="col-2">
                         <a href="/admin/users"><strong>Об обучении</strong></a>
@@ -56,6 +56,8 @@
                                     <li><hr class="dropdown-divider"></li>
                                     {% if user.role == "Администратор" %}
                                     <li><a class="dropdown-item" href="/admin">Админ панель</a></li>
+                                    {% elif user.role == "Преподаватель" %}
+                                    <li><a class="dropdown-item" href="/tutor-profile">Мой профиль</a></li>
                                     {% elif user.role == "Студент" %}
                                     <li><a class="dropdown-item" href="/student-profile">Мой профиль</a></li>
                                     <li><a class="dropdown-item" href="/my-study">Мое обучение</a></li>

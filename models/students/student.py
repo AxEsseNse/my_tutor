@@ -5,7 +5,7 @@ from my_tutor.models import Base
 class StudentModel(Base):
     __tablename__ = "students"
 
-    id_seq = Sequence("students_student_id_seq")
+    student_id_seq = Sequence("students_student_id_seq")
 
     student_id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey(column="users.user_id", ondelete="CASCADE"), unique=True, nullable=False)

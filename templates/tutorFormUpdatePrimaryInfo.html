@@ -1,0 +1,91 @@
+<div
+    class="modal fade bd-example-modal-lg"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="modal-tutor-update-primary-info"
+    aria-hidden="true"
+    id="modal-tutor-update-primary-info"
+>
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <!-- Header окна изменения личной информации пользователя -->
+            <div class="modal-header">
+                <h5 class="modal-title">Личная информация</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+
+            <div class="modal-body">
+                <form class="needs-validation" id="student-edit-primary-info-form" novalidate>
+                    <!-- Логин пользователя -->
+                    <div class="form-group row mt-2 mb-2">
+                        <label class="col-4 col-form-label" for="tutor-update-primary-info-form-login">Пользователь</label>
+                        <div class="col-8">
+                            <input class="form-control" type="text" id="tutor-update-primary-info-form-login" disabled />
+                        </div>
+                    </div>
+                    <!-- Поле ввода нового имени -->
+                    <div class="form-group row mb-1">
+                        <label class="col-4 col-form-label" for="tutor-update-primary-info-form-first-name">Имя</label>
+                        <div class="col-8">
+                            <input
+                                class="form-control"
+                                type="text"
+                                id="tutor-update-primary-info-form-first-name"
+                                value=""
+                                placeholder="Введите новое имя"
+                                required
+                            />
+                        </div>
+                    </div>
+                    <!-- Поле ввода новой фамилии -->
+                    <div class="form-group row mb-1">
+                        <label class="col-4 col-form-label" for="tutor-update-primary-info-form-second-name">Фамилия</label>
+                        <div class="col-8">
+                            <input
+                                class="form-control"
+                                type="text"
+                                id="tutor-update-primary-info-form-second-name"
+                                value=""
+                                placeholder="Введите новую фамилию"
+                                required
+                            />
+                        </div>
+                    </div>
+                    <!-- Поле для ввода даты рождения -->
+                    <div class="form-group row mb-1">
+                        <label class="col-5 col-form-label" for="tutor-update-primary-info-form-birthday">Дата рождения</label>
+                        <div class="col-2"></div>
+                        <div class="col-5">
+                            <input type="date" class="form-control" id="tutor-update-primary-info-form-birthday" required />
+                        </div>
+                    </div>
+                    <!-- Поле выбора пола -->
+                    <div class="input-group mb-3">
+                        <label class="input-group-text" for="tutor-update-primary-info-form-gender">Пол</label>
+                        <select class="form-select" id="tutor-update-primary-info-form-gender">
+                            <option value="парень" selected>парень</option>
+                            <option value="девушка">девушка</option>
+                        </select>
+                    </div>
+                    <!-- Поле ответа сервера -->
+                    <hr />
+
+                    <div class="form-group row mt-2 mb-2">
+                        <label class="col-3 col-form-label" for="tutor-update-primary-info-form-flash-msg">
+                            <strong>Feedback</strong>
+                        </label>
+                        <div class="col-9" id="tutor-update-primary-info-form-flash-msg"></div>
+                    </div>
+
+                    <hr />
+                    <!-- Поле кнопки отправки формы -->
+                    <div class="text-center">
+                        <button type="button" class="btn btn-dark btn-block" id="tutor-update-primary-info-form-button">
+                            Применить изменения
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

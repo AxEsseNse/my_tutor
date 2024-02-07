@@ -12,11 +12,11 @@ from .students import (
     AddStudentResponse,
     DeleteStudentRequest,
     DeleteStudentResponse,
-    ChangeStudentPrimaryInfoRequest,
-    ChangeStudentContactInfoRequest,
-    StudentPrimaryInfoResponse,
-    StudentContactInfoResponse,
-    StudentImageResponse
+    UpdateStudentPrimaryInfoRequest,
+    UpdateStudentContactInfoRequest,
+    UpdateStudentPrimaryInfoResponse,
+    UpdateStudentContactInfoResponse,
+    UpdateStudentImageResponse
 )
 from .parents import (
     AddParentRequest,
@@ -25,4 +25,31 @@ from .parents import (
     UpdateParentResponse,
     DeleteParentRequest,
     DeleteParentResponse
+)
+from .themes import (
+    AddThemeRequest,
+    AddThemeResponse,
+    DeleteThemeRequest,
+    DeleteThemeResponse,
+    UpdateThemeRequest,
+    UpdateThemeResponse,
+    AddThemeMaterialTheoryRequest,
+    AddThemeMaterialPracticeRequest,
+    AddThemeMaterialResponse,
+    DeleteThemeMaterialRequest,
+    DeleteThemeMaterialResponse,
+    UpdateThemeMaterialTheoryRequest,
+    UpdateThemeMaterialPracticeRequest,
+    UpdateThemeMaterialResponse
+)
+from .tutors import (
+    AddTutorRequest,
+    AddTutorResponse,
+    DeleteTutorRequest,
+    DeleteTutorResponse,
+    UpdateTutorPrimaryInfoRequest,
+    UpdateTutorPrimaryInfoResponse,
+    UpdateTutorContactInfoRequest,
+    UpdateTutorContactInfoResponse,
+    UpdateTutorImageResponse
 )

@@ -1,0 +1,64 @@
+<div
+    class="modal fade bd-example-modal-lg"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="modal-theme-delete"
+    aria-hidden="true"
+    id="modal-theme-delete"
+>
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <!-- Header окна удаления темы -->
+            <div class="modal-header">
+                <h5 class="modal-title">Удалить тему</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <!-- Форма удаления темы -->
+            <div class="modal-body">
+                <form class="needs-validation" id="theme-delete-form" novalidate>
+                    <!-- ID удаляемой темы -->
+                    <div class="form-group row mb-3">
+                        <label class="col-3 col-form-label" for="theme-delete-form-id">ID</label>
+                        <div class="col-9">
+                            <input class="form-control" type="text" id="theme-delete-form-id" value="" disabled />
+                        </div>
+                    </div>
+                    <!-- Профиль удаляемой темы -->
+                    <div class="form-group row mb-1">
+                        <label class="col-3 col-form-label" for="theme-delete-form-exam">Профиль</label>
+                        <div class="col-9">
+                            <input class="form-control" type="text" id="theme-delete-form-exam" value="" disabled />
+                        </div>
+                    </div>
+                    <!-- Название удаляемой темы -->
+                    <div class="form-group row mb-1">
+                        <label class="col-3 col-form-label" for="theme-delete-form-title">Название</label>
+                        <div class="col-9">
+                            <textarea
+                                class="form-control"
+                                id="theme-delete-form-title"
+                                style="height: 200px"
+                                disabled
+                            ></textarea>
+                        </div>
+                    </div>
+                    <!-- Поле ответа сервера -->
+                    <hr/>
+
+                    <div class="form-group row mt-2 mb-2">
+                        <label class="col-4 col-form-label" for="theme-delete-form-flash-msg"><strong>Feedback</strong></label>
+                        <div class="col-8" id="theme-delete-form-flash-msg"></div>
+                    </div>
+
+                    <hr />
+                    <!-- Кнопка отправки формы -->
+                    <div class="text-center">
+                        <button type="button" class="btn btn-dark btn-block" id="theme-delete-form-button">
+                            Удалить
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

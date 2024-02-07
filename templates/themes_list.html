@@ -1,0 +1,40 @@
+{% extends "admin_base.html" %}
+{% block admin_head %}
+    <link rel="stylesheet" href="/static/css/themes_list.css" />
+{% endblock admin_head %}
+{% block admin_content %}
+
+<div class="admin-content-btn-add">
+    <button
+        class="btn btn-success"
+        type="button"
+        title="Добавление новой темы"
+        data-bs-toggle="modal"
+        data-bs-target="#modal-theme-add"
+        id="btn-add-theme"
+        onclick="clearAddThemeForm()"
+    >
+        <i class="fa-solid fa-plus"></i>
+    </button>
+</div>
+<table id="themes-table" class="table table-info">
+    <thead class="thead-dark">
+        <tr>
+            <th class="col-1 text-start">ID</th>
+            <th class="col-1 text-start">Профиль</th>
+            <th class="col-1 text-start">Задание</th>
+            <th class="col-3 text-start">Название темы</th>
+            <th class="col-4 text-start text-sm">Описание темы</th>
+            <th class="col-2 text-end">Действия</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+{% include "themeFormAdd.html" %}
+{% include "themeFormDelete.html" %}
+{% include "themeFormUpdate.html" %}
+{% endblock admin_content %}
+{% block admin_scripts %}
+    <-- Подключение js страницы-->
+    <script src="/static/js/themes_list.js"></script>
+{% endblock admin_scripts %}

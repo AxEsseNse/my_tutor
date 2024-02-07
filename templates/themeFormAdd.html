@@ -1,0 +1,89 @@
+<div
+    class="modal fade"
+    tabindex="-1"
+    aria-labelledby="modal-theme-add"
+    aria-hidden="true"
+    id="modal-theme-add"
+>
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <!-- Header окна создания новой темы -->
+            <div class="modal-header">
+                <h5 class="modal-title">Создание новой темы</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <!-- Форма создания новой темы -->
+            <div class="modal-body">
+                <form class="needs-validation" id="theme-add-form" novalidate>
+                    <!-- Поле выбора профиля -->
+                    <div class="input-group mb-3">
+                        <label class="input-group-text" for="theme-add-form-exam">Профиль</label>
+                        <select class="form-select" id="theme-add-form-exam">
+                            <option value="1" selected>ЕГЭ</option>
+                            <option value="2">ОГЭ</option>
+                        </select>
+                    </div>
+                    <!-- Поле выбора номера задания -->
+                    <div class="input-group mb-3">
+                        <label class="input-group-text" for="theme-add-form-exam-task-number">Номер задания</label>
+                        <select class="form-select" id="theme-add-form-exam-task-number">
+                        </select>
+                    </div>
+                    <!-- Кнопка очистки формы -->
+                    <div class="form-group text-end mb-3 mt-4">
+                        <button
+                            class="btn btn-sm btn-secondary"
+                            type="button"
+                            title="Очистить форму"
+                            id="btn-add-theme"
+                            onclick="clearAddThemeForm()"
+                        >
+                            <i class="fa-solid fa-eraser fa-lg"></i>
+                        </button>
+                    </div>
+                    <!-- Поле ввода названия темы -->
+                    <div class="form-group row mb-1">
+                        <label class="col-3 col-form-label" for="theme-add-form-title">Название</label>
+                        <div class="col-9">
+                            <textarea
+                                class="form-control"
+                                id="theme-add-form-title"
+                                style="height: 120px"
+                                placeholder="Введите описание темы"
+                                required
+                            ></textarea>
+                        </div>
+                    </div>
+                    <!-- Поле ввода описания темы -->
+                    <div class="form-group row mb-1">
+                        <label class="col-3 col-form-label" for="theme-add-form-descr">Описание</label>
+                        <div class="col-9">
+                            <textarea
+                                class="form-control"
+                                id="theme-add-form-descr"
+                                style="height: 330px"
+                                placeholder="Введите описание темы"
+                                required
+                            ></textarea>
+                        </div>
+                    </div>
+                    <!-- Поле ответа сервера -->
+                    <hr/>
+
+                    <div class="form-group row mt-2 mb-2">
+                        <label class="col-4 col-form-label" for="theme-add-form-flash-msg"><strong>Feedback</strong></label>
+                        <div class="col-8" id="theme-add-form-flash-msg"></div>
+                    </div>
+
+                    <hr />
+                    <!-- Кнопка отправки формы -->
+                    <div class="text-center">
+                        <button type="button" class="btn btn-dark btn-block" id="theme-add-form-button">
+                            Создать
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

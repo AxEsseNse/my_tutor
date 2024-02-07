@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
 
-class StudentImageResponse(BaseModel):
+class UpdateStudentImageResponse(BaseModel):
     img_path: str
     message: str

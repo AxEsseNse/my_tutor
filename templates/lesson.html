@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block head %}
+    <link rel="stylesheet" href="/static/css/lesson.css" />
+{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row flex-row">
+        <!-- Контент урока -->
+        <div class="col content-col" id="lesson-content">
+            <!-- Слайд с теорией -->
+            <div id="theory-content">
+                <div class="row">
+                    <div id="theory-title">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4 text-end">
+                        <img src="" id="theory-image">
+                    </div>
+                    <div class="col-8 text-start">
+                        <div id="theory-descr"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- Слайд с практикой -->
+            <div id="practice-content">
+                <div class="row">
+                    <div id="practice-title">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4 text-end" id="practice-image-field">
+                        <img src="" id="practice-image">
+                    </div>
+                    <div class="col-8 text-start" id="practice-descr">
+                        <div id="practice">
+                            <div id="practice-descr-field"></div>
+                            <div id="practice-answer-field">
+                                <input
+                                    class="answer-input"
+                                    type="text"
+                                    id="practice-answer"
+                                    value=""
+                                    placeholder="Введите сюда ваш ответ"
+                                />
+                                <button type="button" class="lesson-button" id="practice-answer-button">
+                                    Проверить
+                                </button>
+                                <button type="button" class="lesson-button" id="practice-tip-button" onclick="turnTip()">
+                                    Показать решение
+                                </button>
+                            </div>
+                            <div id="practice-tip-field">
+                                <div class="text-center">
+                                    <img src="" id="practice-tip-image">
+                                </div>
+                                <div id="practice-tip-descr"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- Меню урока -->
+        <div class="col menu-col" id="lesson-menu">
+            <div class="row align-items-center" id="lesson-header">
+                <div class="col-3" id="lesson-exam">
+                    <button class="exam-btn" id="lesson-exam-btn">
+                    </button>
+                </div>
+                <div class="col-9" id="lesson-exam-task-id">
+                </div>
+            </div>
+            <hr/>
+            <div id="lesson-title">
+            </div>
+            <hr/>
+		    <div class="menu-list">
+                <ul id="lesson-list">
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+{% block scripts %}
+    <script src="/static/js/lesson.js"></script>
+{% endblock %}

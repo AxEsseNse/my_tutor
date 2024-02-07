@@ -4,7 +4,7 @@ from fastapi import Depends, HTTPException
 from pydantic import ValidationError
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from my_tutor.exceptions import StudentAlreadyExistError, StudentNotFoundError
+from my_tutor.exceptions import StudentAlreadyExistError, UserNotFoundError
 from my_tutor.repositories import UserRepository, StudentRepository
 from my_tutor.routers import admin_router
 from my_tutor.schemes import AddStudentRequest, AddStudentResponse
@@ -24,7 +24,7 @@ async def add_student(student_data: AddStudentRequest, session: AsyncSession = D
             return await student_repository.add_student(session=session, student_data=student_data, user_id=user_id)
     except ValidationError as e:
         raise HTTPException(HTTPStatus.BAD_REQUEST, str(e))
-    except StudentNotFoundError as e:
+    except UserNotFoundError as e:
         raise HTTPException(HTTPStatus.BAD_REQUEST, e.message)
     except StudentAlreadyExistError as e:
         raise HTTPException(HTTPStatus.BAD_REQUEST, e.message)

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block head %}
+    <link rel="stylesheet" href="/static/css/tutor_base.css" />
+    {% block tutor_head %}{% endblock tutor_head %}
+{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-2 tutor-menu">
+		    <div class="list_menu">
+                <ul>
+                    <li><a href="">Мой профиль</a></li>
+                    <li><a href="">Мое обучение</a></li>
+                    <li><a href="">Прогресс обучения</a></li>
+                    <li><a href="">Учебный материал</a></li>
+                    <li><a href="">Домашняя работа</a></li>
+                    <li><a href="">Пробники</a></li>
+                    <li><a href="">Результаты</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-10" id="tutor-content">
+            {% block tutor_content %}{% endblock tutor_content %}
+        </div>
+    </div>
+</div>
+{% endblock content %}
+{% block scripts %}
+    {% block tutor_scripts %}{% endblock tutor_scripts %}
+{% endblock %}

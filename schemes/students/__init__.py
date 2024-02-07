@@ -1,5 +1,5 @@
-from .change_primary_info import ChangeStudentPrimaryInfoRequest, StudentPrimaryInfoResponse
-from .change_contact_info import ChangeStudentContactInfoRequest, StudentContactInfoResponse
-from .change_image import StudentImageResponse
+from .update_primary_info import UpdateStudentPrimaryInfoRequest, UpdateStudentPrimaryInfoResponse
+from .update_contact_info import UpdateStudentContactInfoRequest, UpdateStudentContactInfoResponse
+from .update_image import UpdateStudentImageResponse
 from .add_student import AddStudentRequest, AddStudentResponse
 from .delete_student import DeleteStudentRequest, DeleteStudentResponse

@@ -1,0 +1,112 @@
+{% extends "tutor_base.html" %}
+{% block tutor_head %}
+    <link rel="stylesheet" href="/static/css/tutor_profile.css" />
+{% endblock tutor_head %}
+{% block tutor_content %}
+<div class="container-fluid" id="tutor-data">
+    <div class="row">
+        <!-- Изображение пользователя -->
+        <div class="col-3 text-end">
+            <img width="300" height="300" class="rounded-circle" id="tutor-img">
+        </div>
+        <div class="col-1 text-start" id="tutor-image-btn">
+            <button
+                class="btn btn-sm btn-secondary align-top align-middle"
+                type="button"
+                title="Изменить аватар"
+                data-bs-toggle="modal"
+                data-bs-target="#modal-tutor-update-img"
+                id="btn-update-img"
+                onclick="fillUpdateImageForm()"
+            ><i class="fa-solid fa-image text-dark"></i></i>
+            </button>
+        </div>
+        <!-- Личная информация преподавателя -->
+        <div class="col-4 tutor-info" id="tutor-info">
+            <div class="row">
+                <div class="col-10 tutor-profile-title">
+                    Личная информация
+                </div>
+                <div class="col-2 text-center">
+                    <button
+                        class="btn btn-sm btn-secondary"
+                        type="button"
+                        title="Изменить личную информацию"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modal-tutor-update-primary-info"
+                        id="btn-update-primary"
+                        onclick="fillUpdatePrimaryInfoForm()"
+                    >
+                        <i class="fa-solid fa-user-pen text-dark"></i>
+                    </button>
+                </div>
+            </div>
+            <hr id="hr-under-info"/>
+            <div id="tutor-login">
+                <i class="fa-solid fa-user"></i>
+                -
+            </div>
+            <div id="tutor-first-name">
+                -
+            </div>
+            <div id="tutor-second-name">
+                -
+            </div>
+            <div id="tutor-gender">
+                <i class="fa-solid fa-venus-mars"></i>
+                -
+            </div>
+            <div title="Дата рождения"  id="tutor-birthday">
+                <i class="fa-solid fa-calendar-days"></i>
+                -
+            </div>
+        </div>
+        <!-- Контактные данные преподавателя -->
+        <div class="col-4">
+            <div class="row">
+                <div class="col-10 tutor-profile-title">
+                    Контактные данные
+                </div>
+                <div class="col-2 text-center">
+                    <button
+                        class="btn btn-sm btn-secondary"
+                        type="button"
+                        title="Изменить контактные данные"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modal-tutor-update-contact-info"
+                        id="btn-update-contact"
+                        onclick="fillUpdateContactInfoForm()"
+                    >
+                        <i class="fa-solid fa-mobile text-dark"></i>
+                    </button>
+                </div>
+            </div>
+            <hr id="hr-under-contact"/>
+            <div id="tutor-discord">
+                <i class="fa-brands fa-discord"></i>
+                -
+            </div>
+            <div id="tutor-phone">
+                <i class="fa-solid fa-phone"></i>
+                -
+            </div>
+            <div id="tutor-telegram">
+                <i class="fa-brands fa-telegram"></i>
+                -
+            </div>
+            <div id="tutor-whatsapp">
+                <i class="fa-brands fa-whatsapp"></i>
+                -
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include "tutorFormUpdatePrimaryInfo.html" %}
+{% include "tutorFormUpdateContactInfo.html" %}
+{% include "tutorFormUpdateImage.html" %}
+{% endblock tutor_content %}
+{% block tutor_scripts %}
+    <!-- Подключение js страницы-->
+    <script src="/static/js/tutor_profile.js"></script>
+{% endblock tutor_scripts %}

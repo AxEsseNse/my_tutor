@@ -7,11 +7,10 @@ from sqlalchemy import and_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from my_tutor.exceptions import UserNotFoundError, UserNotVerifyError, UserAlreadyExistError
-from my_tutor.models import TokenModel, UserModel, RoleModel, StudentModel
+from my_tutor.models import TokenModel, UserModel, RoleModel, StudentModel, TutorModel
 from my_tutor.schemes import UserAuthorizationRequest, AddUserRequest, AddUserResponse, UpdateUserPasswordRequest, UpdateUserPasswordResponse, DeleteUserRequest, DeleteUserResponse
 from my_tutor.domain import User, UserInfo, UserLogin
 
-from sqlalchemy.orm import joinedload
 AUTH_TOKEN_LIFETIME = 604800
 TEMP_ROLES = {
     'admin': 1,
@@ -24,6 +23,7 @@ RUS_ROLES = {
     3: "Студент"
 }
 
+
 class UserRepository:
     _user = User
     _user_login = UserLogin
@@ -33,13 +33,11 @@ class UserRepository:
     _info_domain = UserInfo
     _user_model = UserModel
     _role_model = RoleModel
-    _student_model = StudentModel
     _token_model = TokenModel
+    _tutor_model = TutorModel
+    _student_model = StudentModel
     _salt_len = 13
     _default_image_path = "/storage/users/no_login.png"
-
-    async def _get_new_user_id(self, session: AsyncSession) -> int:
-        return await session.scalar(self._user_model.id_seq.next_value())
 
     def _to_user_info(self, user_model: UserModel, img_path: str, name: str) -> UserInfo:
         return self._info_domain(
@@ -91,7 +89,12 @@ class UserRepository:
 
         return [self._to_user(user_model=user_model) for user_model in users_models]
 
-    async def get_users_without_profile(self, session: AsyncSession) -> list[UserLogin]:
+    async def get_tutors_without_profile(self, session: AsyncSession) -> list[UserLogin]:
+        users_models = (await session.execute(select(self._user_model).filter_by(role_id=2, have_profile=False).order_by(self._user_model.login))).scalars().all()
+
+        return [self._to_user_login(user_model=user_model) for user_model in users_models]
+
+    async def get_students_without_profile(self, session: AsyncSession) -> list[UserLogin]:
         users_models = (await session.execute(select(self._user_model).filter_by(role_id=3, have_profile=False).order_by(self._user_model.login))).scalars().all()
 
         return [self._to_user_login(user_model=user_model) for user_model in users_models]
@@ -116,7 +119,6 @@ class UserRepository:
         role = TEMP_ROLES[user_data.role]
 
         new_user = self._user_model(
-            user_id=await self._get_new_user_id(session),
             login=user_data.login,
             secret=salted_hash,
             role_id=role,
@@ -171,7 +173,12 @@ class UserRepository:
         if not user_model:
             raise UserNotFoundError
 
-        if user_model.role_id == 3:
+        if user_model.role_id == 2:
+            tutor_model = (await session.execute(
+                select(self._tutor_model).filter_by(user_id=token_model.user_id))).scalars().first()
+            img_path = tutor_model.img_path
+            name = f"{tutor_model.second_name} {tutor_model.first_name}"
+        elif user_model.role_id == 3:
             student_model = (await session.execute(
                 select(self._student_model).filter_by(user_id=token_model.user_id))).scalars().first()
             img_path = student_model.img_path
@@ -181,14 +188,6 @@ class UserRepository:
             name = user_model.login
 
         return self._to_user_info(user_model=user_model, img_path=img_path, name=name)
-
-
-
-
-
-
-
-
 
     async def get_user_id(self, session: AsyncSession, token: str) -> int:
         token_model = (await session.execute(select(self._token_model).filter_by(token=token))).scalars().first()

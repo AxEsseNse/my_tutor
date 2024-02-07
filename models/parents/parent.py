@@ -5,7 +5,7 @@ from my_tutor.models import Base
 class ParentModel(Base):
     __tablename__ = "parents"
 
-    id_seq = Sequence("parents_parent_id_seq")
+    parent_id_seq = Sequence("parents_parent_id_seq")
 
     parent_id = Column(Integer, primary_key=True)
     student_id = Column(Integer, ForeignKey(column="students.student_id", ondelete="CASCADE"), nullable=False)
