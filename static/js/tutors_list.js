@@ -93,7 +93,7 @@ class AddTutorForm {
             'Content-Type': 'application/json',
             'My-Tutor-Auth-Token': token
             },
-            body: JSON.stringify(newStudent),
+            body: JSON.stringify(newTutor),
         })
         .then(response => {
             if (!response.ok) {

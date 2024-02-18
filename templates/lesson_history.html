@@ -1,0 +1,35 @@
+{% extends "student_base.html" %}
+{% block student_head %}
+    <link rel="stylesheet" href="/static/css/lesson_history.css" />
+{% endblock student_head %}
+{% block student_content %}
+<div id="content-title">
+    История моих занятий
+</div>
+<table id="lessons-table" class="table table-info">
+    <thead class="thead-dark">
+        <tr>
+            {% if user.role == "Студент" %}
+                <th class="col-2 text-center small">Дата</th>
+                <th class="col-2 text-start small">Преподаватель</th>
+                <th class="col-1 text-start small">Профиль</th>
+                <th class="col-1 text-start small">№ Задания</th>
+                <th class="col-4 text-start small">Тема</th>
+                <th class="col-2 text-start small">Статус оплаты</th>
+            {% elif user.role == "Преподаватель" %}
+                <th class="col-2 text-center small">Дата</th>
+                <th class="col-2 text-start small">Студент</th>
+                <th class="col-1 text-start small">Профиль</th>
+                <th class="col-1 text-start small">№ Задания</th>
+                <th class="col-4 text-start small">Тема</th>
+                <th class="col-2 text-start small">Заметка</th>
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+{% endblock student_content %}
+{% block student_scripts %}
+    <!-- Подключение js страницы-->
+    <script src="/static/js/lesson_history.js"></script>
+{% endblock student_scripts %}

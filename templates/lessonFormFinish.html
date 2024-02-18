@@ -1,0 +1,51 @@
+<div
+    class="modal fade bd-example-modal-lg"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="modal-lesson-finish"
+    aria-hidden="true"
+    id="modal-lesson-finish"
+>
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <!-- Header окна завершения урока -->
+            <div class="modal-header">
+                <h5 class="modal-title">Завершение урока</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <!-- Форма завершения урока -->
+            <div class="modal-body">
+                <form class="needs-validation" id="lesson-finish-form" novalidate>
+                    <!-- ID завершаемого урока -->
+                    <div class="form-group row mt-2 mb-2">
+                        <label class="col-3 col-form-label" for="lesson-finish-form-lesson-id">ID урока</label>
+                        <div class="col-9">
+                            <input class="form-control" type="text" id="lesson-finish-form-lesson-id" disabled />
+                        </div>
+                    </div>
+                    <!-- Заметка завершаемого урока -->
+                    <div class="form-group row mb-1">
+                        <label class="col-3 col-form-label" for="lesson-finish-form-note">Заметка</label>
+                        <div class="col-9">
+                            <textarea
+                                class="form-control"
+                                id="lesson-finish-form-note"
+                                style="height: 330px"
+                                placeholder="Заметок нет"
+                                required
+                            ></textarea>
+                        </div>
+                    </div>
+
+                    <hr id="lesson-finish-hr"/>
+                    <!-- Кнопка отправки формы -->
+                    <div class="text-center">
+                        <button type="button" class="btn btn-dark btn-block" id="lesson-finish-form-button">
+                            Завершить урок
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

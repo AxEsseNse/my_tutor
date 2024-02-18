@@ -42,7 +42,7 @@
 
 .exam-btn {
   display: inline-block;
-  width: 60px;
+  width: 50px;
   height: 50px;
   margin-top: 2px;
   margin-bottom: 2px;
@@ -58,7 +58,31 @@
   white-space: nowrap;
 }
 
+.lesson-end-btn {
+  display: inline-block;
+  width: 35px;
+  height: 35px;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  margin-right: 2px;
+  background-color: #80C4C3;
+  border: 3px solid #14A9A5;
+  border-radius: 30px;
+  text-align: center;
+  vertical-align: middle;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+.lesson-end-btn:hover {
+    background-color: #F6E6AE;
+    border-color: #F6E6AE;
+    outline: 0;
+}
+
+
 #lesson-exam-task-id {
+    margin-left: 10px;
     font-size: 24px;
 }
 
@@ -249,4 +273,9 @@ hr {
 #practice-tip-descr {
     margin-top: 30px;
     margin-bottom: 30px;
+}
+
+#lesson-finish-hr {
+    margin-top: 10px;
+    margin-bottom: 10px;
 }

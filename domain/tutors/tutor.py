@@ -24,3 +24,8 @@ class TutorInfo(BaseModel):
     phone: str
     telegram: str
     whatsapp: str
+
+
+class TutorOption(BaseModel):
+    id: int
+    name: str

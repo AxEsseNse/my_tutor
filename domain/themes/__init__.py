@@ -1,2 +1,2 @@
-from .theme import Theme
+from .theme import Theme, ThemeOption
 from .lesson import Lesson, MaterialTheory, MaterialPractice, MaterialPracticeTip

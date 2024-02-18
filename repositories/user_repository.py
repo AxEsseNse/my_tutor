@@ -41,6 +41,7 @@ class UserRepository:
 
     def _to_user_info(self, user_model: UserModel, img_path: str, name: str) -> UserInfo:
         return self._info_domain(
+            user_id=user_model.user_id,
             login=user_model.login,
             img_path=img_path,
             name=name,
@@ -176,13 +177,25 @@ class UserRepository:
         if user_model.role_id == 2:
             tutor_model = (await session.execute(
                 select(self._tutor_model).filter_by(user_id=token_model.user_id))).scalars().first()
-            img_path = tutor_model.img_path
-            name = f"{tutor_model.second_name} {tutor_model.first_name}"
+
+            if not tutor_model:
+                img_path = self._default_image_path
+                name = user_model.login
+            else:
+                img_path = tutor_model.img_path
+                name = f"{tutor_model.second_name} {tutor_model.first_name}"
+
         elif user_model.role_id == 3:
             student_model = (await session.execute(
                 select(self._student_model).filter_by(user_id=token_model.user_id))).scalars().first()
-            img_path = student_model.img_path
-            name = f"{student_model.second_name} {student_model.first_name}"
+
+            if not student_model:
+                img_path = self._default_image_path
+                name = user_model.login
+            else:
+                img_path = student_model.img_path
+                name = f"{student_model.second_name} {student_model.first_name}"
+
         else:
             img_path = self._default_image_path
             name = user_model.login
@@ -196,6 +209,17 @@ class UserRepository:
             raise UserNotFoundError
 
         return token_model.user_id
+
+    async def get_user_by_token(self, session: AsyncSession, token: str) -> UserModel:
+        token_model = (await session.execute(select(self._token_model).filter_by(token=token))).scalars().first()
+
+        if not token_model:
+            raise UserNotFoundError
+
+        user_model = (
+            await session.execute(select(self._user_model).filter_by(user_id=token_model.user_id))).scalars().first()
+
+        return user_model
 
     async def get_user_id_by_login(self, session: AsyncSession, login: str) -> int:
         user_model = (await session.execute(select(self._user_model).filter_by(login=login))).scalars().first()

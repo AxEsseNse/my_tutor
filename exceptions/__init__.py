@@ -3,3 +3,4 @@ from .students import StudentNotFoundError, StudentSaveImageError, StudentAlread
 from .parents import ParentAlreadyExistError, ParentNotFoundError
 from .themes import ThemeNotFoundError, ThemeAlreadyExistError, ThemeMaterialNotFoundError
 from .tutors import TutorAlreadyExistError, TutorNotFoundError, TutorSaveImageError
+from .lessons import LessonAlreadyExistError, LessonNotFoundError

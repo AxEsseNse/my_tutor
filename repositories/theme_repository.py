@@ -1,4 +1,4 @@
-from sqlalchemy import select
+from sqlalchemy import select, desc
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm.attributes import flag_modified
 
@@ -20,7 +20,7 @@ from my_tutor.schemes import (
     UpdateThemeMaterialPracticeRequest,
     UpdateThemeMaterialResponse
 )
-from my_tutor.domain import Theme, Lesson, MaterialTheory, MaterialPractice, MaterialPracticeTip
+from my_tutor.domain import Theme, Lesson, MaterialTheory, MaterialPractice, MaterialPracticeTip, ThemeOption
 RUS_EXAMS = {
     1: "ЕГЭ",
     2: "ОГЭ"
@@ -33,6 +33,7 @@ class ThemeRepository:
     _material_theory = MaterialTheory
     _material_practice_tip = MaterialPracticeTip
     _material_practice = MaterialPractice
+    _theme_option = ThemeOption
     _theme_model = ThemeModel
     _add_theme_response = AddThemeResponse
     _delete_theme_response = DeleteThemeResponse
@@ -59,6 +60,13 @@ class ThemeRepository:
             title=theme_model.title,
             material=theme_model.material,
             message="Данные урока успешно получены"
+        )
+
+    def _to_theme_option(self, theme_model: ThemeModel) -> ThemeOption:
+
+        return self._theme_option(
+            id=theme_model.theme_id,
+            name=f"{RUS_EXAMS[theme_model.exam_id]}-{theme_model.exam_task_number} {theme_model.title}"
         )
 
     def _to_add_theme_response(self, theme_model: ThemeModel) -> AddThemeResponse:
@@ -133,6 +141,11 @@ class ThemeRepository:
 
         print(theme_model)
         return self._to_lesson(theme_model=theme_model)
+
+    async def get_themes_options(self, session: AsyncSession) -> list[ThemeOption]:
+        themes_models = (await session.execute(select(self._theme_model).order_by(desc(self._theme_model.exam_id), self._theme_model.exam_task_number, self._theme_model.title))).scalars().all()
+
+        return [self._to_theme_option(theme_model=theme_model) for theme_model in themes_models]
 
     async def add_theme(self, session: AsyncSession, theme_data: AddThemeRequest) -> AddThemeResponse:
         theme_model = (

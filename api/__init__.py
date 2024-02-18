@@ -38,3 +38,11 @@ from .tutors import (
     update_tutor,
     update_tutor_image
 )
+from .lessons import (
+    get_lessons,
+    add_lesson,
+    delete_lesson,
+    update_lesson,
+    get_lesson_options,
+    lesson_websocket
+)

@@ -1,0 +1,100 @@
+<div
+    class="modal fade"
+    tabindex="-1"
+    aria-labelledby="modal-lesson-add"
+    aria-hidden="true"
+    id="modal-lesson-add"
+>
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <!-- Header окна создания нового профиля студента -->
+            <div class="modal-header">
+                <h5 class="modal-title">Создание урока</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <!-- Форма создания нового профиля студента -->
+            <div class="modal-body">
+                <form class="needs-validation" id="lesson-add-form" novalidate>
+                    <!-- Поле выбора преподавателя -->
+                    <div class="input-group mt-2 mb-2">
+                        <label class="input-group-text" for="lesson-add-form-tutor">Преподаватель</label>
+                        <select class="form-select" id="lesson-add-form-tutor">
+                        </select>
+                    </div>
+                    <!-- Поле выбора студента -->
+                    <div class="input-group mt-2 mb-2">
+                        <label class="input-group-text" for="lesson-add-form-student">Студент</label>
+                        <select class="form-select" id="lesson-add-form-student">
+                        </select>
+                    </div>
+                    <!-- Поле выбора темы урока -->
+                    <div class="input-group mt-2 mb-2">
+                        <label class="input-group-text" for="lesson-add-form-theme">Тема</label>
+                        <select class="form-select" id="lesson-add-form-theme">
+                        </select>
+                    </div>
+                    <!-- Кнопка очистки формы -->
+                    <div class="form-group text-end mb-3 mt-4">
+                        <button
+                            class="btn btn-sm btn-secondary"
+                            type="button"
+                            title="Очистить форму"
+                            id="btn-add-lesson"
+                            onclick="clearAddLessonForm()"
+                        >
+                            <i class="fa-solid fa-eraser fa-lg"></i>
+                        </button>
+                    </div>
+                    <!-- Поле ввода даты урока -->
+                    <div class="form-group row mb-1">
+                        <label class="col-6 col-form-label" for="lesson-add-form-date">Дата урока</label>
+                        <div class="col-6">
+                            <input type="date" class="form-control" value="2024-01-09" id="lesson-add-form-date" required />
+                        </div>
+                    </div>
+                    <!-- Поле ввода времени урока -->
+                    <div class="form-group row mb-1">
+                        <label class="col-6 col-form-label" for="lesson-add-form-hour">Время урока</label>
+                        <div class="col-3">
+                            <input
+                                type="number"
+                                id="lesson-add-form-hour"
+                                class="form-control"
+                                min="0"
+                                max="23"
+                                placeholder="0"
+                                required
+                            />
+                        </div>
+                        <div class="col-3">
+                            <input
+                                type="number"
+                                id="lesson-add-form-minute"
+                                class="form-control"
+                                min="0"
+                                max="59"
+                                placeholder="0"
+                                required
+                            />
+                        </div>
+                    </div>
+                    <!-- Поле ответа сервера -->
+                    <hr/>
+
+                    <div class="form-group row mt-2 mb-2">
+                        <label class="col-4 col-form-label" for="lesson-add-form-flash-msg"><strong>Feedback</strong></label>
+                        <div class="col-8" id="lesson-add-form-flash-msg"></div>
+                    </div>
+
+                    <hr />
+                    <!-- Кнопка отправки формы -->
+                    <div class="text-center">
+                        <button type="button" class="btn btn-dark btn-block" id="lesson-add-form-button">
+                            Создать
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

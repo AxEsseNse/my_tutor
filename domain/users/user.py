@@ -12,7 +12,9 @@ class UserLogin(BaseModel):
 
 
 class UserInfo(BaseModel):
+    user_id: int
     login: str
     img_path: str
     name: str
     role: str
+    current_lesson_id: int | None = None

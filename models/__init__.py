@@ -4,3 +4,4 @@ from .students import StudentModel
 from .parents import ParentModel
 from .themes import ThemeModel
 from .tutors import TutorModel
+from .lessons import LessonModel

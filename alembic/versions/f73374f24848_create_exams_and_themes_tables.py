@@ -57,17 +57,17 @@ def upgrade() -> None:
         {
             "type": "theory",
             "title": "Вызов исполнителя Черепаха",
-            "image_path": "storage/lessons/ege/6/theory1.jpg",
+            "image_path": "/storage/lessons/ege/6/theory1.jpg",
             "descr": "Чтобы команды для работы с черепахой работали - необходимо импортировать сам модуль Черепаха"
         },
         {
             "id": ege_first_theme_practice_material_id,
             "type": "practice",
             "title": "Знание синтаксиса исполнителя",
-            "image_path": "storage/lessons/ege/6/practice1.jpg",
+            "image_path": "/storage/lessons/ege/6/practice1.jpg",
             "descr": "Введите в поле ниже команду для импорта модуля Черепаха в программу",
             "answer": "исполнитель Черепаха",
-            "tip": {"image_path": "storage/lessons/ege/6/practice1tip.jpg",
+            "tip": {"image_path": "/storage/lessons/ege/6/practice1tip.jpg",
                     "descr": "Если на экзамене вдруг забыл как импортировать модуль - зайди в справочный центр"
                     }
         }
@@ -93,17 +93,17 @@ def upgrade() -> None:
         {
             "type": "theory",
             "title": "Матрица. Симметричная и несимметричная. Понятие главной диагонали",
-            "image_path": "storage/lessons/oge/4/theory1.jpg",
+            "image_path": "/storage/lessons/oge/4/theory1.jpg",
             "descr": "Матрицы бывают двух видов. Симметричные и несимметричные."
         },
         {
             "id": oge_first_theme_practice_material_id,
             "type": "practice",
             "title": "Определение симметричности матрицы",
-            "image_path": "storage/lessons/oge/4/practice1.jpg",
+            "image_path": "/storage/lessons/oge/4/practice1.jpg",
             "descr": "Введите в поле ниже какая на картинке представлена матрица",
             "answer": "несимметричная",
-            "tip": {"image_path": "storage/lessons/ege/6/practice1tip.jpg",
+            "tip": {"image_path": "/storage/lessons/ege/6/practice1tip.jpg",
                     "descr": "Сравнивай значения, находящиеся напротив друг друга относительно главной диагонали"
                     }
             }

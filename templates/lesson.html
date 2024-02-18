@@ -59,18 +59,32 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
         <!-- Меню урока -->
         <div class="col menu-col" id="lesson-menu">
             <div class="row align-items-center" id="lesson-header">
-                <div class="col-3" id="lesson-exam">
+                <div class="col-2" id="lesson-exam">
                     <button class="exam-btn" id="lesson-exam-btn">
                     </button>
                 </div>
-                <div class="col-9" id="lesson-exam-task-id">
+                <div class="col-7" id="lesson-exam-task-id">
                 </div>
+                {% if user.role == "Преподаватель" %}
+                <div class="col-2" id="lesson-end">
+                    <button
+                        class="lesson-end-btn"
+                        type="button"
+                        title="Завершить урок"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modal-lesson-finish"
+                        id="lesson-end-btn"
+                        onclick="fillFinishLessonForm()"
+                    >
+                        <i class="fa-solid fa-flag fa-xs"></i>
+                    </button>
+                </div>
+                {% endif %}
             </div>
             <hr/>
             <div id="lesson-title">
@@ -83,6 +97,9 @@
         </div>
     </div>
 </div>
+{% if user.role == "Преподаватель" %}
+    {% include "lessonFormFinish.html" %}
+{% endif %}
 {% endblock content %}
 {% block scripts %}
     <script src="/static/js/lesson.js"></script>

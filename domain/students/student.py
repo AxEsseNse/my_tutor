@@ -26,3 +26,8 @@ class StudentInfo(BaseModel):
     phone: str
     telegram: str
     whatsapp: str
+
+
+class StudentOption(BaseModel):
+    id: int
+    name: str

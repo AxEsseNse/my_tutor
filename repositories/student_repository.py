@@ -20,7 +20,7 @@ from my_tutor.schemes import (
     UpdateStudentContactInfoResponse,
     UpdateStudentImageResponse
 )
-from my_tutor.domain import StudentInfo, Student
+from my_tutor.domain import StudentInfo, Student, StudentOption
 
 
 user_repository = UserRepository()
@@ -42,9 +42,10 @@ MONTHS = (
 
 class StudentRepository:
     _student = Student
+    _student_option = StudentOption
+    _info_domain = StudentInfo
     _user_model = UserModel
     _student_model = StudentModel
-    _info_domain = StudentInfo
     _add_student_response = AddStudentResponse
     _delete_student_response = DeleteStudentResponse
     _update_student_primary_info_response = UpdateStudentPrimaryInfoResponse
@@ -68,7 +69,6 @@ class StudentRepository:
             whatsapp=student_model.whatsapp
         )
 
-
     def _to_student_info(self, student_model: StudentModel, login: str) -> StudentInfo:
 
         return self._info_domain(
@@ -83,6 +83,13 @@ class StudentRepository:
             phone=student_model.phone,
             telegram=student_model.telegram,
             whatsapp=student_model.whatsapp
+        )
+
+    def _to_student_option(self, student_model: StudentModel) -> StudentOption:
+
+        return self._student_option(
+            id=student_model.student_id,
+            name=f"{student_model.second_name} {student_model.first_name}"
         )
 
     def _to_add_student_response(self, student_model: StudentModel, student_login: str) -> AddStudentResponse:
@@ -133,9 +140,6 @@ class StudentRepository:
             message="Изображение успешно изменено"
         )
 
-    async def _get_new_student_id(self, session: AsyncSession) -> int:
-        return await session.scalar(self._student_model.id_seq.next_value())
-
     async def _get_student(self, session: AsyncSession, student_id: int):
         student_model = (await session.execute(select(self._student_model).filter_by(student_id=student_id))).scalars().first()
 
@@ -157,6 +161,11 @@ class StudentRepository:
 
         return self._to_student_info(student_model=student_model, login=login)
 
+    async def get_students_options(self, session: AsyncSession) -> list[StudentOption]:
+        students_models = (await session.execute(select(self._student_model).order_by(self._student_model.second_name, self._student_model.first_name))).scalars().all()
+
+        return [self._to_student_option(student_model=student_model) for student_model in students_models]
+
     async def add_student(self, session: AsyncSession, student_data: AddStudentRequest, user_id: int) -> AddStudentResponse:
         student_model = (
             await session.execute(select(self._student_model).filter_by(user_id=user_id))).scalars().first()
@@ -169,7 +178,6 @@ class StudentRepository:
 
         user_model.have_profile = True
         new_student = self._student_model(
-            student_id=await self._get_new_student_id(session),
             user_id=user_id,
             first_name=student_data.first_name,
             second_name=student_data.second_name,

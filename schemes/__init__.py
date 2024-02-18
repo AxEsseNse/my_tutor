@@ -53,3 +53,13 @@ from .tutors import (
     UpdateTutorContactInfoResponse,
     UpdateTutorImageResponse
 )
+from .lessons import (
+    AddLessonRequest,
+    AddLessonResponse,
+    DeleteLessonRequest,
+    DeleteLessonResponse,
+    FinishLessonRequest,
+    FinishLessonResponse,
+    PaidLessonRequest,
+    PaidLessonResponse
+)

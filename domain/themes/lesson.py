@@ -30,22 +30,3 @@ class Lesson(BaseModel):
     title: str
     material: List[MaterialPractice | MaterialTheory]
     message: str
-
-
-
-__material_theory = {
-    'type': 'theory',
-    'title': 'Метод триад',
-    'image_path': '/storage/themes/oge10/triada.jpg',
-    'descr': 'Метод триад очень легок в освоении и чрезвычайно полезен на практике'
-}
-
-__material_practice = {
-    'type': 'practice',
-    'title': 'Задача № 4',
-    'image_path': '/storage/themes/oge10/practice4.jpg',
-    'descr': 'Найдите наименьшее число из представленных на изображении',
-    'answer': '79',
-    'tip_image_path': '/storage/themes/oge10/practice4tip.jpg',
-    'tip_descr': 'Нужно перевести все числа в десятичную систему и сравнить',
-}

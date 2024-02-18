@@ -23,3 +23,4 @@ async def delete_theme(theme_id: int, theme_data: DeleteThemeRequest, session: A
             return await theme_repository.delete_theme(session, theme_data=theme_data)
     except ThemeNotFoundError as e:
         raise HTTPException(HTTPStatus.NOT_FOUND, e.message)
+    

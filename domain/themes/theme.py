@@ -7,3 +7,8 @@ class Theme(BaseModel):
     exam_task_number: int
     title: str
     descr: str
+
+
+class ThemeOption(BaseModel):
+    id: int
+    name: str
