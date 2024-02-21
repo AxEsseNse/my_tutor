@@ -44,5 +44,7 @@ from .lessons import (
     delete_lesson,
     update_lesson,
     get_lesson_options,
-    lesson_websocket
+    lesson_websocket,
+    start_lesson,
+    get_lesson_status
 )

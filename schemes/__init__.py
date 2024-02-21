@@ -61,5 +61,7 @@ from .lessons import (
     FinishLessonRequest,
     FinishLessonResponse,
     PaidLessonRequest,
-    PaidLessonResponse
+    PaidLessonResponse,
+    StartLessonResponse,
+    GetLessonStatusResponse
 )

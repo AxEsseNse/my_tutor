@@ -10,10 +10,17 @@ function fillFinishLessonForm() {
 }
 
 class LessonController {
-    constructor(wsConnection) {
+    constructor(wsConnection, lessonId) {
         this.wsConnection = wsConnection
 
-        this.lessonId = 1
+        this.studentReadyButton = document.getElementById('student-ready-button')
+        this.studentReadyStatus = document.getElementById('student-ready-status')
+        this.tutorReadyButton = document.getElementById('tutor-ready-button')
+        this.tutorReadyStatus = document.getElementById('tutor-ready-status')
+        this.startLessonStatus = document.getElementById('start-status')
+
+        this.lessonId = lessonId
+        this.lessonStarted = false
         this.menuCardCounter = 0;
         this.practiceAnswer = ''
         this.currentPracticeCardAnswer = ''
@@ -28,6 +35,8 @@ class LessonController {
         this.examField = document.getElementById('lesson-exam-btn')
         this.examItemIdField = document.getElementById('lesson-exam-task-id')
         this.titleField = document.getElementById('lesson-title')
+
+        this.startField = document.getElementById('start-content')
 
         this.theoryField = document.getElementById('theory-content')
         this.theoryTitle = document.getElementById('theory-title')
@@ -44,6 +53,130 @@ class LessonController {
         this.practiceTipField = document.getElementById('practice-tip-field')
         this.practiceTipImage = document.getElementById('practice-tip-image')
         this.practiceTipDescr = document.getElementById('practice-tip-descr')
+    }
+
+    studentReady(wsMessage = false) {
+        if (wsMessage == false) {
+            this.wsConnection.send('studentReady')
+        }
+
+        this.studentReadyButton.innerText = 'Готов'
+        this.studentReadyButton.disabled = true
+        this.studentReadyButton.classList.remove('ready-button-waiting');
+        this.studentReadyButton.classList.add('ready-button-ready')
+        this.studentReadyStatus.innerHTML = '<i class="fa-solid fa-check"></i>'
+        this.studentReadyStatus.classList.remove('ready-status-not-ready');
+        this.studentReadyStatus.classList.add('ready-status-ready')
+
+        this.tutorReadyButton.classList.remove('ready-button-not-ready');
+        this.tutorReadyButton.classList.add('ready-button-waiting')
+
+        this.startLessonStatus.innerText = 'Ожидание преподавателя'
+        this.startLessonStatus.classList.remove('start-status-waiting-student');
+        this.startLessonStatus.classList.add('start-status-waiting-tutor')
+
+        if (userRole == "Преподаватель") {
+            this.tutorReadyButton.disabled = false
+        }
+    }
+
+    isStudentReady() {
+        if (this.studentReadyButton.innerText == 'Готов') {
+            this.wsConnection.send('studentReady')
+        }
+    }
+
+    tutorReady(wsMessage = false) {
+        if (wsMessage == false) {
+            this.wsConnection.send('tutorReady')
+        }
+
+        this.tutorReadyButton.innerText = 'Готов'
+        this.tutorReadyButton.disabled = true
+        this.tutorReadyButton.classList.remove('ready-button-waiting');
+        this.tutorReadyButton.classList.add('ready-button-ready')
+        this.tutorReadyStatus.innerHTML = '<i class="fa-solid fa-check"></i>'
+        this.tutorReadyStatus.classList.remove('ready-status-not-ready');
+        this.tutorReadyStatus.classList.add('ready-status-ready')
+
+        this.startLessonStatus.innerText = 'Загрузка материала урока...'
+        this.startLessonStatus.classList.remove('start-status-waiting-tutor');
+        this.startLessonStatus.classList.add('start-status-get-material')
+
+        this.requestToStartLesson()
+        .then((is_started) => {
+            if (is_started) {
+                setTimeout(() => {
+                    this.loadLesson();
+                }, 3000);
+            }
+        })
+    }
+
+    requestToStartLesson() {
+        let token = getCookie('My-Tutor-Auth-Token')
+
+        if (token == undefined) {
+            console.error('Токен не найден');
+            return Promise.reject('Токен не найден');
+        }
+
+        return fetch(`/api/lessons/${this.lessonId}/start/`, {
+            method: 'PUT',
+            headers: {
+                'My-Tutor-Auth-Token': token
+            }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    if (!(response.status == 400)) {
+                        return Promise.reject(response.text())
+                    }
+                }
+                return Promise.resolve(response.text())
+            })
+            .then(text => {
+                return JSON.parse(text)
+            })
+            .then(response => {
+                return response.is_started
+            })
+            .catch(error => {
+                console.log(error)
+        })
+    }
+
+    getLessonStatus() {
+        let token = getCookie('My-Tutor-Auth-Token')
+
+        if (token == undefined) {
+            console.error('Токен не найден');
+            return Promise.reject('Токен не найден');
+        }
+
+        return fetch(`/api/lessons/${this.lessonId}/status/`, {
+            method: 'GET',
+            headers: {
+                'My-Tutor-Auth-Token': token
+            }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    if (!(response.status == 400)) {
+                        return Promise.reject(response.text())
+                    }
+                }
+                return Promise.resolve(response.text())
+            })
+            .then(text => {
+                return JSON.parse(text)
+            })
+            .then(response => {
+                return response.status
+            })
+            .catch(error => {
+                console.log(error)
+        })
     }
 
     loadLesson() {
@@ -65,6 +198,7 @@ class LessonController {
         .then(response => response.json())
         .then(theme => {
             console.log('Данные урока с сервера получены')
+            this.startField.style.display = 'none'
             this.fillThemeMenu(theme)
         })
         .catch(error => {
@@ -226,6 +360,15 @@ class LessonController {
 
     processAction(action, data) {
         switch (action) {
+            case 'studentReady':
+                this.studentReady(true)
+                break
+            case 'isStudentReady':
+                this.isStudentReady()
+                break
+            case 'tutorReady':
+                this.tutorReady(true)
+                break
             case 'fillContent':
                 this.fillContent(data.data, data.menuCardId, true)
                 break
@@ -318,28 +461,33 @@ class WSConnection {
     }
 
     run() {
-        this.connectToServer(this, this.controller)
-        setInterval(this.connectToServer, 3000, this, this.controller)
+        return new Promise((resolve, reject) => {
+            this.connectToServer(this, this.controller, resolve, reject);
+            setInterval(this.connectToServer, 3000, this, this.controller, resolve, reject);
+        });
     }
 
-    connectToServer(self) {
+    connectToServer(self, controller, resolve, reject) {
         if (self.socket !== null && self.socket.readyState === WebSocket.OPEN) {
-            return
+            resolve();
+            return;
         }
 
         self.socket = new WebSocket(self.url)
 
         self.socket.onopen = () => {
-            console.info('WebSocket: connected')
-            self.connectionList.push(self.socket)
+            console.info('WebSocket: connected');
+            self.connectionList.push(self.socket);
             if (self.connectionList.length > 1) {
-                window.location.reload()
+                window.location.reload();
             }
-        }
+            resolve(); // Resolve the promise when the WebSocket is connected
+        };
 
         self.socket.onerror = () => {
-            self.socket.close()
-        }
+            self.socket.close();
+            reject(new Error('WebSocket: error'));
+        };
 
         self.socket.onclose = () => {
             self.connectionList = arrayRemove(self.connectionList, self.socket)
@@ -366,10 +514,24 @@ class WSConnection {
 }
 
 document.addEventListener('DOMContentLoaded', function (event) {
+    const startField = document.getElementById('start-content');
     const practiceTipButton = document.getElementById('practice-tip-button');
+    const studentReadyButton = document.getElementById('student-ready-button')
+    const tutorReadyButton = document.getElementById('tutor-ready-button')
 
     if (userRole == "Студент") {
         practiceTipButton.style.display = 'none';
+    }
+
+    if (userRole == "Преподаватель") {
+        studentReadyButton.disabled = true
+    }
+
+    studentReadyButton.onclick = () => {
+        lessonController.studentReady()
+    }
+    tutorReadyButton.onclick = () => {
+        lessonController.tutorReady()
     }
 
     const urlSegments = window.location.href.split('/');
@@ -377,16 +539,25 @@ document.addEventListener('DOMContentLoaded', function (event) {
     const url = `ws://${window.location.host}/api/lessons/ws/${lessonId}/`
 
     const wsConnection = new WSConnection(url)
-    const lessonController = new LessonController(wsConnection)
-    wsConnection.setController(lessonController)
-
-    lessonController
-    .loadLesson()
-    .then(() => {
-        wsConnection.run()
+    const lessonController = new LessonController(wsConnection, lessonId)
+    lessonController.getLessonStatus()
+    .then((status) => {
+        console.log(status)
+        if (status == 'STARTED') {
+            let lessonStar = true
+            lessonController.lessonStarted = true
+            lessonController.loadLesson()
+        } else {
+            startField.style.display = 'block'
+        }
     })
-    .catch(error => {
-        console.error(error)
+
+    wsConnection.setController(lessonController)
+    wsConnection.run()
+    .then(() => {
+        if (lessonController.lessonStarted == false && userRole == "Преподаватель") {
+            wsConnection.send('isStudentReady')
+        }
     })
 
     const practiceAnswerInput = document.getElementById('practice-answer')

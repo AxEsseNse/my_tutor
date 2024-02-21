@@ -13,9 +13,12 @@ from my_tutor.schemes import (
     FinishLessonRequest,
     FinishLessonResponse,
     PaidLessonRequest,
-    PaidLessonResponse
+    PaidLessonResponse,
+    StartLessonResponse,
+    GetLessonStatusResponse
 )
 from my_tutor.domain import StudentLesson, TutorLesson
+from my_tutor.constants import LessonStatus
 RUS_EXAMS = {
     1: "ЕГЭ",
     2: "ОГЭ"
@@ -31,6 +34,14 @@ class LessonRepository:
     _delete_lesson_response = DeleteLessonResponse
     _finish_lesson_response = FinishLessonResponse
     _paid_lesson_response = PaidLessonResponse
+    _start_lesson_response = StartLessonResponse
+    _get_lesson_status_response = GetLessonStatusResponse
+
+    def _to_get_lesson_status_response(self, lesson_model: LessonModel) -> GetLessonStatusResponse:
+
+        return self._get_lesson_status_response(
+            status=lesson_model.status
+        )
 
     def _to_student_lesson(self, lesson_model: LessonModel) -> StudentLesson:
 
@@ -74,6 +85,11 @@ class LessonRepository:
             message="Урок успешно удален"
         )
 
+    def _to_start_lesson_response(self) -> StartLessonResponse:
+        return self._start_lesson_response(
+            is_started=True
+        )
+
     def _to_finish_lesson_response(self, lesson_model: LessonModel) -> FinishLessonResponse:
 
         return self._finish_lesson_response(
@@ -95,19 +111,28 @@ class LessonRepository:
             message="Урок оплачен"
         )
 
+    async def get_lesson_status(self, session: AsyncSession, lesson_id: int) -> GetLessonStatusResponse:
+        lesson_model = (
+            await session.execute(select(self._lesson_model).filter_by(lesson_id=lesson_id))).scalars().first()
+
+        if not lesson_model:
+            raise LessonNotFoundError
+
+        return self._to_get_lesson_status_response(lesson_model=lesson_model)
+
     async def get_current_user_lesson(self, session: AsyncSession, student_id: int | None = None, tutor_id: int | None = None) -> int | None:
         current_datetime = datetime.utcnow()
 
         if student_id:
             query = select(self._lesson_model).filter(
                 self._lesson_model.student_id == student_id,
-                self._lesson_model.is_completed.is_(False),
+                self._lesson_model.status != LessonStatus.FINISHED,
                 self._lesson_model.date < current_datetime
             )
         elif tutor_id:
             query = select(self._lesson_model).filter(
                 self._lesson_model.tutor_id == tutor_id,
-                self._lesson_model.is_completed.is_(False),
+                self._lesson_model.status != LessonStatus.FINISHED,
                 self._lesson_model.date < current_datetime
             )
         else:
@@ -187,6 +212,18 @@ class LessonRepository:
 
         return delete_lesson_response
 
+    async def start_lesson(self, session: AsyncSession, lesson_id: int) -> StartLessonResponse:
+        lesson_model = (
+            await session.execute(select(self._lesson_model).filter_by(lesson_id=lesson_id))).scalars().first()
+
+        if not lesson_model:
+            raise LessonNotFoundError
+
+        lesson_model.status = LessonStatus.STARTED
+        session.add(lesson_model)
+
+        return self._to_start_lesson_response()
+
     async def finish_lesson(self, session: AsyncSession, lesson_data: FinishLessonRequest) -> FinishLessonResponse:
         lesson_model = (
             await session.execute(select(self._lesson_model).filter_by(lesson_id=lesson_data.lesson_id))).scalars().first()
@@ -195,7 +232,7 @@ class LessonRepository:
             raise LessonNotFoundError
 
         lesson_model.note = lesson_data.note
-        lesson_model.is_completed = True
+        lesson_model.status = LessonStatus.FINISHED
         session.add(lesson_model)
 
         return self._to_finish_lesson_response(lesson_model=lesson_model)
@@ -234,7 +271,7 @@ class LessonRepository:
 
         query = select(self._lesson_model).filter(
             self._lesson_model.lesson_id == lesson_id,
-            self._lesson_model.is_completed.is_(False),
+            self._lesson_model.status != LessonStatus.FINISHED,
             self._lesson_model.date < current_datetime
         )
 

@@ -1,6 +1,7 @@
-from sqlalchemy import Integer, Column, String, ForeignKey, Sequence, DateTime, Boolean, text
+from sqlalchemy import Integer, Column, String, ForeignKey, Sequence, DateTime, Boolean, text, Enum
 from sqlalchemy.orm import relationship
 from my_tutor.models import Base
+from my_tutor.constants import LessonStatus
 
 
 class LessonModel(Base):
@@ -14,7 +15,7 @@ class LessonModel(Base):
     theme_id = Column(Integer, ForeignKey(column="themes.theme_id"), nullable=False)
     date = Column(DateTime, nullable=False)
     note = Column(String, default='Заметок нет', server_default=text("'Заметок нет'"))
-    is_completed = Column(Boolean, default=False, nullable=False)
+    status = Column(Enum(LessonStatus, name='lesson_status'), default=LessonStatus.CREATED, nullable=False)
     is_paid = Column(Boolean, default=False, nullable=False)
 
     tutor = relationship("TutorModel", uselist=False)

@@ -7,6 +7,47 @@
     <div class="row flex-row">
         <!-- Контент урока -->
         <div class="col content-col" id="lesson-content">
+            <!-- Cлайд начала работы -->
+            <div id="start-content">
+                <div class="row">
+                    <div id="start-title">
+                        Подтвердите готовность к уроку.
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4 text-end">
+                        <div class="ready-field">
+                            Студент
+                        </div>
+                        <div class="ready-field">
+                            Преподаватель
+                        </div>
+                    </div>
+                    <div class="col-8 text-start">
+                        <div class="ready-field">
+                            <button type="button" class="ready-button ready-button-waiting" id="student-ready-button">
+                                Подтвердить
+                            </button>
+                            <button type="button" class="ready-status ready-status-not-ready" id="student-ready-status" disabled>
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                        <div class="ready-field">
+                            <button type="button" class="ready-button ready-button-not-ready" id="tutor-ready-button" disabled>
+                                Начать урок
+                            </button>
+                            <button type="button" class="ready-status ready-status-not-ready" id="tutor-ready-status" disabled>
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                        <div class="ready-field">
+                            <button type="button" class="start-status start-status-waiting-student" id="start-status" disabled>
+                                Ожидание ученика
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <!-- Слайд с теорией -->
             <div id="theory-content">
                 <div class="row">

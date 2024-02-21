@@ -1,5 +1,3 @@
-from functools import partial
-
 from fastapi import Request, Depends, HTTPException
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import RedirectResponse
@@ -99,28 +97,6 @@ async def get_lesson(request: Request, lesson_id: int, access: LessonAccess = De
         case LessonAccess.ERROR:
             raise HTTPException(status_code=403, detail="В данный момент ресурс не доступен")
 
-
-# async def get_lesson(
-#         request: Request,
-#         lesson_id: int,
-#         user=Depends(get_autorized_user_for_lesson),
-#         is_available=Depends(is_available_lesson)):
-#
-#     if not user:
-#         raise HTTPException(status_code=401, detail="Не авторизован")
-#
-#     if not is_available:
-#         raise HTTPException(status_code=403, detail="В данный момент ресурс не доступен")
-#
-#     return templates.TemplateResponse(
-#         "lesson.html",
-#         {
-#             "request": request,
-#             "title": "Урок",
-#             "user": user,
-#             "lesson_id": lesson_id
-#         }
-#     )
 
 
 async def tutor_profile(request: Request, authorized_user=Depends(get_authorized_user)):
