@@ -46,5 +46,6 @@ from .lessons import (
     get_lesson_options,
     lesson_websocket,
     start_lesson,
-    get_lesson_status
+    get_lesson_status,
+    get_lesson_material
 )

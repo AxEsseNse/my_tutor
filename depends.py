@@ -32,7 +32,6 @@ async def get_authorized_user(
         return None
     async with session.begin():
         is_valid_token = await user_repository.valid_token(session=session, token=token)
-
         if not is_valid_token:
             #print('DEPEND token ne validniy')
             return None
@@ -52,6 +51,7 @@ async def get_authorized_user(
                     student_id=student_id
                 )
                 user.current_lesson_id = current_lesson_id
+            print(current_lesson_id)
         except Exception as e:
             print('DEPEND oshibka get user info?', e)
             return None

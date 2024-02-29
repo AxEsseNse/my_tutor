@@ -162,41 +162,51 @@
 
 #lesson-exam {
     font-size: 34px;
+    display: none;
 }
 
 .exam-btn {
-  display: inline-block;
-  width: 50px;
-  height: 50px;
-  margin-top: 2px;
-  margin-bottom: 2px;
-  font-size: 18px;
-  color: black;
-  font-weight: 600;
-  background-color: #4A918B;
-  border: 3px solid black;
-  border-radius: 10px;
-  text-align: center;
-  vertical-align: middle;
-  text-decoration: none;
-  white-space: nowrap;
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    font-size: 18px;
+    color: black;
+    font-weight: 600;
+    background-color: #4A918B;
+    border: 3px solid black;
+    border-radius: 10px;
+    text-align: center;
+    vertical-align: middle;
+    text-decoration: none;
+    white-space: nowrap;
 }
 
+#lesson-timer {
+    width: 75px;
+    margin-top: 35px;
+    margin-left: 28px;
+    color: #9510CC;
+    display: none;
+    font-size: 25px;
+    font-weight: 400;
+}
 .lesson-end-btn {
-  display: inline-block;
-  width: 35px;
-  height: 35px;
-  margin-top: 2px;
-  margin-bottom: 2px;
-  margin-right: 2px;
-  background-color: #80C4C3;
-  border: 3px solid #14A9A5;
-  border-radius: 30px;
-  text-align: center;
-  vertical-align: middle;
-  text-decoration: none;
-  white-space: nowrap;
-  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    display: inline-block;
+    width: 35px;
+    height: 35px;
+    margin-top: 35px;
+    margin-bottom: 2px;
+    margin-right: 2px;
+    background-color: #80C4C3;
+    border: 3px solid #14A9A5;
+    border-radius: 30px;
+    text-align: center;
+    vertical-align: middle;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 .lesson-end-btn:hover {
     background-color: #F6E6AE;
@@ -210,12 +220,12 @@
     font-size: 24px;
 }
 
-#lesson-title, {
+#lesson-title {
     display: flex;
     align-items: center;
     justify-content: center;
     height: 100px;
-    font-size: 16px;
+    font-size: 26px;
     padding: 6px 12px;
 }
 
@@ -287,16 +297,20 @@ hr {
     border-color: #F6E6AE;
 }
 
-#theory-title,
-#practice-title,
-#start-title {
+
+#title-row {
     height: 100px;
-    padding: 10px 20px;
-    font-size: 40px;
+}
+#card-title {
+    height: 100px;
+    padding: 30px 20px;
+    font-size: 30px;
     font-family: Georgia;
     color: black;
     font-weight: 400;
     text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 #theory-image {
@@ -314,7 +328,7 @@ hr {
 #practice-descr {
     max-height: calc(100vh - 130px - 100px);
     overflow-y: auto;
-    padding: 5px 5px 30px 5px;
+    padding: 25px 5px 30px 5px;
 }
 
 #practice-image {

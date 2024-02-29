@@ -81,15 +81,18 @@ def upgrade() -> None:
         dict(exam_id=ege_exam_id, material=test_material_ege_json)
     )
 
-    # Добавление экзамена "ОГЭ" и создание первой темы этого экзамена
+    #  Добавление экзамена "ОГЭ" и создание трех тем этого экзамена
     connection.execute(
         sa.text(
             """INSERT INTO "exams" (title) VALUES ('ОГЭ')"""
         )
     )
     oge_exam_id = connection.execute(sa.text("SELECT currval('exams_exam_id_seq')")).fetchone()[0]
-    oge_first_theme_practice_material_id = connection.execute(sa.text("SELECT nextval('themes_theme_practice_material_id_seq')")).fetchone()[0]
-    test_material_oge = [
+
+    #  Создание первой темы
+    oge_first_theme_first_practice_material_id = connection.execute(sa.text("SELECT nextval('themes_theme_practice_material_id_seq')")).fetchone()[0]
+    oge_first_theme_second_practice_material_id = connection.execute(sa.text("SELECT nextval('themes_theme_practice_material_id_seq')")).fetchone()[0]
+    test_material_oge_first_theme = [
         {
             "type": "theory",
             "title": "Матрица. Симметричная и несимметричная. Понятие главной диагонали",
@@ -97,24 +100,119 @@ def upgrade() -> None:
             "descr": "Матрицы бывают двух видов. Симметричные и несимметричные."
         },
         {
-            "id": oge_first_theme_practice_material_id,
+            "id": oge_first_theme_first_practice_material_id,
             "type": "practice",
             "title": "Определение симметричности матрицы",
             "image_path": "/storage/lessons/oge/4/practice1.jpg",
             "descr": "Введите в поле ниже какая на картинке представлена матрица",
             "answer": "несимметричная",
-            "tip": {"image_path": "/storage/lessons/ege/6/practice1tip.jpg",
+            "tip": {"image_path": "/storage/lessons/oge/4/practice1tip.jpg",
                     "descr": "Сравнивай значения, находящиеся напротив друг друга относительно главной диагонали"
                     }
-            }
+        },
+        {
+            "id": oge_first_theme_second_practice_material_id,
+            "type": "practice",
+            "title": "Нахождение протяженности пути",
+            "image_path": "/storage/lessons/oge/4/practice2.jpg",
+            "descr": "Введите в поле ниже протяженность самого короткого пути из пункта B в H",
+            "answer": "14",
+            "tip": {"image_path": "/storage/lessons/oge/4/practice2tip.jpg",
+                    "descr": "Задача решена методом построения дерева"
+                    }
+        }
     ]
-    test_material_oge_json = json.dumps(test_material_oge)
+    test_material_oge_first_theme_json = json.dumps(test_material_oge_first_theme)
     connection.execute(
         sa.text(
             """INSERT INTO "themes" (exam_id, exam_task_number, title, descr, material)
                VALUES (:exam_id, 4, 'Поиск путей по таблице', 'Матрица симметричная и не симметричная. Понятие главной диагонали. Графы и Деревья', :material)"""
         ),
-        dict(exam_id=oge_exam_id, material=test_material_oge_json)
+        dict(exam_id=oge_exam_id, material=test_material_oge_first_theme_json)
+    )
+
+    #  Создание второй темы
+    oge_second_theme_first_practice_material_id = connection.execute(sa.text("SELECT nextval('themes_theme_practice_material_id_seq')")).fetchone()[0]
+    oge_second_theme_second_practice_material_id = connection.execute(sa.text("SELECT nextval('themes_theme_practice_material_id_seq')")).fetchone()[0]
+    test_material_oge_second_theme = [
+        {
+            "type": "theory",
+            "title": "Понятие IP адреса",
+            "image_path": "/storage/lessons/oge/7/theory1.jpg",
+            "descr": "Самое важное свойства IP адреса - его уникальность. Это позволяет избежать как утечки информации, так и спама"
+        },
+        {
+            "id": oge_second_theme_first_practice_material_id,
+            "type": "practice",
+            "title": "Найди корректный IP адрес",
+            "image_path": "/storage/lessons/oge/7/practice1.jpg",
+            "descr": "Введите в поле ниже правильную последовательность символов",
+            "answer": "CABD",
+            "tip": {"image_path": "/storage/lessons/oge/7/practice1tip.jpg",
+                    "descr": "Здесь есть подсказка хехе"
+                    }
+        },
+        {
+            "id": oge_second_theme_second_practice_material_id,
+            "type": "practice",
+            "title": "Найди корректный IP адрес",
+            "image_path": "/storage/lessons/oge/7/practice2.jpg",
+            "descr": "Введите в поле ниже правильную последовательность символов",
+            "answer": "DABC",
+            "tip": {"image_path": "/storage/lessons/oge/7/practice2tip.jpg",
+                    "descr": "Это тоже подсказка хыыы"
+                    }
+        }
+    ]
+    test_material_oge_second_theme_json = json.dumps(test_material_oge_second_theme)
+    connection.execute(
+        sa.text(
+            """INSERT INTO "themes" (exam_id, exam_task_number, title, descr, material)
+               VALUES (:exam_id, 7, 'IP адрес', 'Правила составления IP адреса', :material)"""
+        ),
+        dict(exam_id=oge_exam_id, material=test_material_oge_second_theme_json)
+    )
+
+    #  Создание третьей темы
+    oge_third_theme_first_practice_material_id = connection.execute(sa.text("SELECT nextval('themes_theme_practice_material_id_seq')")).fetchone()[0]
+    oge_third_theme_second_practice_material_id = connection.execute(sa.text("SELECT nextval('themes_theme_practice_material_id_seq')")).fetchone()[0]
+    test_material_oge_third_theme = [
+        {
+            "type": "theory",
+            "title": "Виды графов",
+            "image_path": "/storage/lessons/oge/9/theory1.jpg",
+            "descr": "Графы бывают двух видов. Ориентированные и нет. На картинке представлены примеры"
+        },
+        {
+            "id": oge_third_theme_first_practice_material_id,
+            "type": "practice",
+            "title": "Нахождение количества путей",
+            "image_path": "/storage/lessons/oge/9/practice1.jpg",
+            "descr": "Найди количество путей из города А в город В",
+            "answer": "3",
+            "tip": {"image_path": "/storage/lessons/oge/9/practice1tip.jpg",
+                    "descr": "Снизу изображения есть выбранный правильный ответ"
+                    }
+        },
+        {
+            "id": oge_third_theme_second_practice_material_id,
+            "type": "practice",
+            "title": "Нахождение количества путей",
+            "image_path": "/storage/lessons/oge/9/practice2.jpg",
+            "descr": "Найди количество путей из города А в город К",
+            "answer": "8",
+            "tip": {"image_path": "/storage/lessons/oge/9/practice2tip.jpg",
+                    "descr": "Пример решается как через построение дерева, так и коротким способом через граф"
+                    }
+        }
+    ]
+    test_material_oge_third_theme_json = json.dumps(test_material_oge_third_theme)
+    connection.execute(
+        sa.text(
+            """INSERT INTO "themes" (exam_id, exam_task_number, title, descr, material)
+               VALUES (:exam_id, 9, 'Ориентированный граф', 'Нахождение количества путей из одного пункта в другой, имея ориентированный граф.', :material)"""
+        ),
+        dict(exam_id=oge_exam_id, material=test_material_oge_third_theme_json)
     )
 
 

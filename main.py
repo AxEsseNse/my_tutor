@@ -3,6 +3,7 @@ from fastapi.staticfiles import StaticFiles
 from my_tutor.api import *
 from my_tutor.app_pages import main_page, login, users_list, tutors_list, students_list, themes_list, tutor_profile, student_profile, get_lesson, lesson_history
 from my_tutor.routers import api_router, admin_router, users_router, tutors_router, students_router, themes_router, lessons_router, monitoring_router
+from redis import Redis
 
 
 app = FastAPI()
@@ -28,3 +29,18 @@ api_router.include_router(themes_router)
 api_router.include_router(lessons_router)
 app.include_router(api_router)
 app.include_router(monitoring_router)
+
+
+redis = None
+
+@app.on_event("startup")
+def startup_event():
+    global redis
+    # Создание подключения к Redis (синхронно)
+    redis = Redis(host="localhost", port=6379, db=0, decode_responses=True)
+
+@app.on_event("shutdown")
+def shutdown_event():
+    # Закрытие подключения к Redis при остановке приложения
+    if redis:
+        redis.close()

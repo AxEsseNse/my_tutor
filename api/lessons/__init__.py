@@ -6,3 +6,4 @@ from .get_lesson_options import get_lesson_options
 from .websocket_lesson import lesson_websocket
 from .start_lesson import start_lesson
 from .get_lesson_status import get_lesson_status
+from .get_lesson_material import get_lesson_material

@@ -1,4 +1,4 @@
-__all__ = ["LessonAlreadyExistError", "LessonNotFoundError"]
+__all__ = ["LessonAlreadyExistError", "LessonNotFoundError", "LessonFinishError", "LessonAlreadyFinished"]
 
 
 class LessonAlreadyExistError(Exception):
@@ -7,3 +7,15 @@ class LessonAlreadyExistError(Exception):
 
 class LessonNotFoundError(Exception):
     message = "Урока с заданными параметрами в системе не найдено"
+
+
+class LessonFinishError(Exception):
+    message = "Урок не может автоматически завершиться"
+
+
+class LessonAlreadyFinished(Exception):
+    message = "Урок завершен преподавателем"
+
+
+class LessonNotStarted(Exception):
+    message = "Урок не начат"

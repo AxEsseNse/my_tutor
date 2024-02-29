@@ -64,3 +64,8 @@ function flashMsg(flashMsg, flashMsgDiv, flashMsgType, flashMsgTime = NaN) {
             break
     }
 }
+
+function setTodayDate() {
+    var today = moment().format('YYYY-MM-DD')
+    document.getElementById('lesson-add-form-date').value = today;
+}

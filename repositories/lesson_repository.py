@@ -1,9 +1,17 @@
-from sqlalchemy import select, desc
+from sqlalchemy import select, desc, or_, and_
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import selectinload
-from datetime import datetime
+from sqlalchemy.orm import selectinload, Session
+from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
 
-from my_tutor.exceptions import LessonAlreadyExistError, LessonNotFoundError
+from my_tutor.exceptions import (
+    LessonAlreadyExistError,
+    LessonNotFoundError,
+    LessonAlreadyFinished,
+    LessonNotStarted,
+    StudentAlreadyHasLesson,
+    TutorAlreadyHasLesson
+)
 from my_tutor.models import LessonModel
 from my_tutor.schemes import (
     AddLessonRequest,
@@ -19,6 +27,9 @@ from my_tutor.schemes import (
 )
 from my_tutor.domain import StudentLesson, TutorLesson
 from my_tutor.constants import LessonStatus
+
+
+moscow_tz = ZoneInfo('Europe/Moscow')
 RUS_EXAMS = {
     1: "ЕГЭ",
     2: "ОГЭ"
@@ -38,9 +49,17 @@ class LessonRepository:
     _get_lesson_status_response = GetLessonStatusResponse
 
     def _to_get_lesson_status_response(self, lesson_model: LessonModel) -> GetLessonStatusResponse:
+        if lesson_model.start_date is not None:
+            time_left = int(3300 - (datetime.now(moscow_tz) - lesson_model.start_date).total_seconds())
+
+            if time_left < 0:
+                time_left = 0
+        else:
+            time_left = 3300
 
         return self._get_lesson_status_response(
-            status=lesson_model.status
+            status=lesson_model.status,
+            time_left=time_left
         )
 
     def _to_student_lesson(self, lesson_model: LessonModel) -> StudentLesson:
@@ -98,8 +117,8 @@ class LessonRepository:
             exam=RUS_EXAMS[lesson_model.theme.exam_id],
             exam_task_number=lesson_model.theme.exam_task_number,
             theme_title=lesson_model.theme.title,
-            date=lesson_model.date,
-            message="Урок отмечен в системе как завершенный"
+            date=datetime.strftime(lesson_model.date, self._date_pattern),
+            message="Урок завершен с пометкой 'Проведен'" if lesson_model.status == LessonStatus.FINISHED else "Урок завершен с пометкой 'Отменен'"
         )
 
     def _to_paid_lesson_response(self, lesson_model: LessonModel) -> PaidLessonResponse:
@@ -121,25 +140,39 @@ class LessonRepository:
         return self._to_get_lesson_status_response(lesson_model=lesson_model)
 
     async def get_current_user_lesson(self, session: AsyncSession, student_id: int | None = None, tutor_id: int | None = None) -> int | None:
-        current_datetime = datetime.utcnow()
 
         if student_id:
             query = select(self._lesson_model).filter(
                 self._lesson_model.student_id == student_id,
-                self._lesson_model.status != LessonStatus.FINISHED,
-                self._lesson_model.date < current_datetime
+                or_(
+                    self._lesson_model.status == LessonStatus.STARTED,
+                    self._lesson_model.status == LessonStatus.CREATED
+                ),
+                self._lesson_model.date < datetime.now(moscow_tz)
             )
         elif tutor_id:
             query = select(self._lesson_model).filter(
                 self._lesson_model.tutor_id == tutor_id,
-                self._lesson_model.status != LessonStatus.FINISHED,
-                self._lesson_model.date < current_datetime
+                or_(
+                    self._lesson_model.status == LessonStatus.STARTED,
+                    self._lesson_model.status == LessonStatus.CREATED
+                ),
+                self._lesson_model.date < datetime.now(moscow_tz)
             )
         else:
             return None
 
         lesson_model = (await session.execute(query)).scalars().first()
         return lesson_model.lesson_id if lesson_model else None
+
+    async def get_lesson_theme_id(self, session: AsyncSession, lesson_id: int) -> int:
+        lesson_model = (
+            await session.execute(select(self._lesson_model).filter_by(lesson_id=lesson_id))).scalars().first()
+
+        if not lesson_model:
+            raise LessonNotFoundError
+
+        return lesson_model.theme_id
 
     async def get_student_lessons(self, session: AsyncSession, student_id: int) -> list[StudentLesson]:
         lessons_models = (await session.execute(
@@ -170,18 +203,55 @@ class LessonRepository:
         return [self._to_tutor_lesson(lesson_model=lesson_model) for lesson_model in lessons_models]
 
     async def add_lesson(self, session: AsyncSession, lesson_data: AddLessonRequest) -> AddLessonResponse:
-        lesson_datetime = datetime.strptime(lesson_data.date, self._date_pattern)
+        aware_datetime = datetime.strptime(lesson_data.date, self._date_pattern).replace(tzinfo=moscow_tz)
+
         lesson_model = (
-            await session.execute(select(self._lesson_model).filter_by(tutor_id=lesson_data.tutor_id, student_id=lesson_data.student_id, theme_id=lesson_data.theme_id, date=lesson_datetime))).scalars().first()
+            await session.execute(select(self._lesson_model).filter_by(tutor_id=lesson_data.tutor_id, student_id=lesson_data.student_id, theme_id=lesson_data.theme_id, date=aware_datetime))).scalars().first()
 
         if lesson_model:
             raise LessonAlreadyExistError
+
+        previous_hour = aware_datetime - timedelta(minutes=59)
+        next_hour = aware_datetime + timedelta(minutes=59)
+
+        tutor_lessons = (
+            await session.execute(
+                select(self._lesson_model)
+                .filter(
+                    self._lesson_model.tutor_id == lesson_data.tutor_id,
+                    and_(
+                        self._lesson_model.date >= previous_hour,
+                        self._lesson_model.date <= next_hour
+                    )
+                )
+            )
+        ).scalars().first()
+
+        if tutor_lessons:
+            raise TutorAlreadyHasLesson
+
+        student_lessons = (
+            await session.execute(
+                select(self._lesson_model)
+                .filter(
+                    self._lesson_model.student_id == lesson_data.student_id,
+                    and_(
+                        self._lesson_model.date >= previous_hour,
+                        self._lesson_model.date <= next_hour
+                    )
+                )
+            )
+        ).scalars().first()
+
+        if student_lessons:
+            raise StudentAlreadyHasLesson
 
         new_lesson = self._lesson_model(
             tutor_id=lesson_data.tutor_id,
             student_id=lesson_data.student_id,
             theme_id=lesson_data.theme_id,
-            date=datetime.strptime(lesson_data.date, self._date_pattern)
+            note="Урок не завершен",
+            date=aware_datetime
         )
 
         session.add(new_lesson)
@@ -195,7 +265,6 @@ class LessonRepository:
                 selectinload(self._lesson_model.theme)
             )
             .filter_by(lesson_id=new_lesson.lesson_id)
-            .order_by(desc(self._lesson_model.date))
         )).scalars().first()
 
         return self._to_add_lesson_response(lesson_model=new_lesson_data)
@@ -220,22 +289,49 @@ class LessonRepository:
             raise LessonNotFoundError
 
         lesson_model.status = LessonStatus.STARTED
+        lesson_model.start_date = datetime.now(moscow_tz)
         session.add(lesson_model)
 
         return self._to_start_lesson_response()
 
     async def finish_lesson(self, session: AsyncSession, lesson_data: FinishLessonRequest) -> FinishLessonResponse:
-        lesson_model = (
-            await session.execute(select(self._lesson_model).filter_by(lesson_id=lesson_data.lesson_id))).scalars().first()
+        lesson_model = (await session.execute(
+            select(self._lesson_model)
+            .options(
+                selectinload(self._lesson_model.tutor),
+                selectinload(self._lesson_model.student),
+                selectinload(self._lesson_model.theme)
+            )
+            .filter_by(lesson_id=lesson_data.lesson_id)
+        )).scalars().first()
 
         if not lesson_model:
             raise LessonNotFoundError
 
         lesson_model.note = lesson_data.note
-        lesson_model.status = LessonStatus.FINISHED
+        lesson_model.status = lesson_data.status
         session.add(lesson_model)
 
         return self._to_finish_lesson_response(lesson_model=lesson_model)
+
+    @staticmethod
+    def auto_finish_lesson(session: Session, lesson_id: int) -> bool:
+        lesson_model = session.query(LessonModel).filter_by(lesson_id=lesson_id).first()
+
+        if not lesson_model:
+            raise LessonNotFoundError
+
+        if lesson_model.status != LessonStatus.STARTED:
+            raise LessonNotStarted
+
+        if lesson_model.status == LessonStatus.FINISHED or lesson_model.status == LessonStatus.CANCELED:
+            raise LessonAlreadyFinished
+
+        lesson_model.note = "Завершен автоматически"
+        lesson_model.status = LessonStatus.FINISHED
+        session.add(lesson_model)
+
+        return True
 
     async def set_paid_status_lesson(self, session: AsyncSession, lesson_data: PaidLessonRequest) -> PaidLessonResponse:
         lesson_model = (
@@ -267,12 +363,14 @@ class LessonRepository:
         return False
 
     async def is_available_lesson(self, session: AsyncSession, lesson_id: int) -> bool:
-        current_datetime = datetime.utcnow()
 
         query = select(self._lesson_model).filter(
             self._lesson_model.lesson_id == lesson_id,
-            self._lesson_model.status != LessonStatus.FINISHED,
-            self._lesson_model.date < current_datetime
+            or_(
+                self._lesson_model.status == LessonStatus.STARTED,
+                self._lesson_model.status == LessonStatus.CREATED
+            ),
+            self._lesson_model.date < datetime.now(moscow_tz)
         )
 
         lesson_model = (await session.execute(query)).scalars().first()

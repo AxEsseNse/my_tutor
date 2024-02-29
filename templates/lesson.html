@@ -7,13 +7,33 @@
     <div class="row flex-row">
         <!-- Контент урока -->
         <div class="col content-col" id="lesson-content">
-            <!-- Cлайд начала работы -->
-            <div id="start-content">
-                <div class="row">
-                    <div id="start-title">
-                        Подтвердите готовность к уроку.
+            <!-- Строка состояния урока -->
+            <div class="row" id="title-row">
+                <div class="col-1 text-center">
+                    <div id="lesson-timer">
+                        53 : 00
                     </div>
                 </div>
+                <div class="col-10" id="card-title">
+                </div>
+                <div class="col-1 text-end" id="lesson-end">
+                    {% if user.role == "Преподаватель" %}
+                    <button
+                        class="lesson-end-btn"
+                        type="button"
+                        title="Завершить урок"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modal-lesson-finish"
+                        id="lesson-end-btn"
+                        onclick="fillFinishLessonForm()"
+                    >
+                        <i class="fa-solid fa-flag fa-xs"></i>
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+            <!-- Cлайд начала работы -->
+            <div id="start-content">
                 <div class="row">
                     <div class="col-4 text-end">
                         <div class="ready-field">
@@ -51,10 +71,6 @@
             <!-- Слайд с теорией -->
             <div id="theory-content">
                 <div class="row">
-                    <div id="theory-title">
-                    </div>
-                </div>
-                <div class="row">
                     <div class="col-4 text-end">
                         <img src="" id="theory-image">
                     </div>
@@ -65,10 +81,6 @@
             </div>
             <!-- Слайд с практикой -->
             <div id="practice-content">
-                <div class="row">
-                    <div id="practice-title">
-                    </div>
-                </div>
                 <div class="row">
                     <div class="col-4 text-end" id="practice-image-field">
                         <img src="" id="practice-image">
@@ -105,27 +117,12 @@
         <!-- Меню урока -->
         <div class="col menu-col" id="lesson-menu">
             <div class="row align-items-center" id="lesson-header">
-                <div class="col-2" id="lesson-exam">
+                <div class="col-3" id="lesson-exam">
                     <button class="exam-btn" id="lesson-exam-btn">
                     </button>
                 </div>
-                <div class="col-7" id="lesson-exam-task-id">
+                <div class="col-8" id="lesson-exam-task-id">
                 </div>
-                {% if user.role == "Преподаватель" %}
-                <div class="col-2" id="lesson-end">
-                    <button
-                        class="lesson-end-btn"
-                        type="button"
-                        title="Завершить урок"
-                        data-bs-toggle="modal"
-                        data-bs-target="#modal-lesson-finish"
-                        id="lesson-end-btn"
-                        onclick="fillFinishLessonForm()"
-                    >
-                        <i class="fa-solid fa-flag fa-xs"></i>
-                    </button>
-                </div>
-                {% endif %}
             </div>
             <hr/>
             <div id="lesson-title">
@@ -141,6 +138,9 @@
 {% if user.role == "Преподаватель" %}
     {% include "lessonFormFinish.html" %}
 {% endif %}
+<script type="text/javascript">
+        const lessonId = "{{ user.current_lesson_id }}";
+</script>
 {% endblock content %}
 {% block scripts %}
     <script src="/static/js/lesson.js"></script>

@@ -13,9 +13,10 @@ class LessonModel(Base):
     tutor_id = Column(Integer, ForeignKey(column="tutors.tutor_id"), nullable=False)
     student_id = Column(Integer, ForeignKey(column="students.student_id"), nullable=False)
     theme_id = Column(Integer, ForeignKey(column="themes.theme_id"), nullable=False)
-    date = Column(DateTime, nullable=False)
+    date = Column(DateTime(timezone=True), nullable=False)
     note = Column(String, default='Заметок нет', server_default=text("'Заметок нет'"))
     status = Column(Enum(LessonStatus, name='lesson_status'), default=LessonStatus.CREATED, nullable=False)
+    start_date = Column(DateTime(timezone=True))
     is_paid = Column(Boolean, default=False, nullable=False)
 
     tutor = relationship("TutorModel", uselist=False)

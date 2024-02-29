@@ -59,7 +59,7 @@
                                         <li><a class="dropdown-item btn btn-primary" href="/admin/users" role="button">Админ панель</a></li>
                                     {% elif user.role == "Преподаватель" %}
                                         <li><a class="dropdown-item btn btn-primary" href="/tutor-profile" role="button">Мой профиль</a></li>
-                                        <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modal-lesson-add">Создать урок</button></li>
+                                        <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modal-lesson-add" onclick="setTodayDate()">Создать урок</button></li>
                                         {% if user.current_lesson_id != None %}
                                             <li><a class="dropdown-item btn btn-primary" href="/lesson/{{user.current_lesson_id}}" role="button">Войти на урок</a></li>
                                         {% endif %}
@@ -129,6 +129,9 @@
     <!-- Подключение хз -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+    <!-- Подключение библиотеки с датами -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.34/moment-timezone-with-data-10-year-range.min.js"></script>
     <!-- Подключение базового js -->
     <script src="/static/js/base.js"></script>
     <!-- Объявление глобальных переменных -->
@@ -137,7 +140,7 @@
     </script>
     {% if user.role == "Преподаватель" %}
         <script src="/static/js/tutor_menu.js"></script>
-        {% include "lessonAdd.html" %}
+        {% include "lessonFormAdd.html" %}
     {% endif %}
     {% block scripts %}{% endblock %}
   </body>

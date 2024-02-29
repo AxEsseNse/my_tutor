@@ -11,3 +11,7 @@ class StudentSaveImageError(Exception):
 
 class StudentAlreadyExistError(Exception):
     message = "Данный пользователь уже имеет профиль студента"
+
+
+class StudentAlreadyHasLesson(Exception):
+    message = "У студента уже есть урок в заданное время"

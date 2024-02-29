@@ -64,15 +64,16 @@ class AddLessonForm {
         selectDiv.options[0].selected = true
     }
 
-    composeDateTimeString() {
-        const date = this.inputDate.value
-        const dateParts = date.split('-')
+    createMoscowDate(year, month, day, hour, minute) {
 
-        const hour = this.inputHour.value.padStart(2, '0')
-        const minute = this.inputMinute.value.padStart(2, '0')
+        return moment.tz([year, month - 1, day, hour, minute], "Europe/Moscow");
+    }
 
-        const dateTimeString = `${dateParts[2]}.${dateParts[1]}.${dateParts[0]} ${hour}:${minute}`;
-        return dateTimeString
+    isFutureDateEnough(dateTimeMoscow) {
+        const nowMoscow = moment.tz("Europe/Moscow");
+        const tenMinutesLater = nowMoscow.clone().add(9, 'minutes');
+
+        return dateTimeMoscow.isAfter(tenMinutesLater);
     }
 
     addLesson() {
@@ -92,11 +93,27 @@ class AddLessonForm {
             return
         }
 
+        const dateTime = new Date(this.inputDate.value)
+        const year = dateTime.getFullYear()
+        const month = dateTime.getMonth() + 1
+        const day = dateTime.getDate()
+        const hour = this.inputHour.value
+        const minute = this.inputMinute.value
+
+        const dateTimeMoscow = this.createMoscowDate(year, month, day, hour, minute)
+
+        if (this.isFutureDateEnough(dateTimeMoscow)) {
+            console.log("Дата урока установлена корректно.")
+        } else {
+            console.log("Дата урока должна быть больше текущей минимум на 10 минут.")
+            return
+        }
+
         const newLesson = {
             lessonTutorId: this.tutorsSelect.value,
             lessonStudentId: this.studentsSelect.value,
             lessonThemeId: this.themesSelect.value,
-            lessonDate: this.composeDateTimeString()
+            lessonDate: dateTimeMoscow.format('DD.MM.YYYY HH:mm')
         }
 
         fetch('/api/lessons/', {
@@ -109,9 +126,11 @@ class AddLessonForm {
         })
         .then(response => {
             if (!response.ok) {
+
                 if (!(response.status == 400)) {
                     return Promise.reject(response.text())
                 }
+
             }
             return Promise.resolve(response.text())
         })
@@ -121,14 +140,13 @@ class AddLessonForm {
         .then(lesson => {
             if (lesson.hasOwnProperty('tutor')) {
                 console.log(lesson.message)
-
                 flashMsg(
                     `Урок "${lesson.tutor}" с "${lesson.student}" по теме "${lesson.theme_title}" создан на "${lesson.date}"`,
                     this.flashMsg,
                     'success',
                 )
             } else {
-                flashMsg(lesson.message, this.flashMsg, 'wrong')
+                flashMsg(lesson.detail, this.flashMsg, 'wrong')
             }
         })
         .catch(error => {

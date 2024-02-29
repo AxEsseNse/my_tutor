@@ -3,6 +3,7 @@ from pydantic import BaseModel, Field
 
 class FinishLessonRequest(BaseModel):
     lesson_id: int = Field(alias="lessonId")
+    status: str
     note: str
 
 

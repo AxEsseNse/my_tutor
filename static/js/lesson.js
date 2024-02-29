@@ -9,6 +9,7 @@ function fillFinishLessonForm() {
     document.getElementById('lesson-finish-form-lesson-id').value = lessonId
 }
 
+
 class LessonController {
     constructor(wsConnection, lessonId) {
         this.wsConnection = wsConnection
@@ -31,20 +32,21 @@ class LessonController {
         this.theoryIcon = '<i class="fa-solid fa-book"></i>'
         this.practiceIcon = '<i class="fa-solid fa-keyboard"></i>'
 
+        this.lessonTimer = document.getElementById('lesson-timer')
         this.menu = document.getElementById('lesson-list')
-        this.examField = document.getElementById('lesson-exam-btn')
+        this.examField = document.getElementById('lesson-exam')
+        this.examFieldButton = document.getElementById('lesson-exam-btn')
         this.examItemIdField = document.getElementById('lesson-exam-task-id')
         this.titleField = document.getElementById('lesson-title')
 
         this.startField = document.getElementById('start-content')
+        this.cardTitle = document.getElementById('card-title')
 
         this.theoryField = document.getElementById('theory-content')
-        this.theoryTitle = document.getElementById('theory-title')
         this.theoryImage = document.getElementById('theory-image')
         this.theoryDescr = document.getElementById('theory-descr')
 
         this.practiceField = document.getElementById('practice-content')
-        this.practiceTitle = document.getElementById('practice-title')
         this.practiceImage = document.getElementById('practice-image')
         this.practiceDescr = document.getElementById('practice-descr-field')
         this.practiceAnswerField = document.getElementById('practice-answer')
@@ -103,22 +105,40 @@ class LessonController {
         this.startLessonStatus.classList.remove('start-status-waiting-tutor');
         this.startLessonStatus.classList.add('start-status-get-material')
 
-        this.requestToStartLesson()
-        .then((is_started) => {
-            if (is_started) {
-                setTimeout(() => {
-                    this.loadLesson();
-                }, 3000);
-            }
-        })
+        if (userRole == 'Преподаватель') {
+            this.startLesson()
+            .then((is_started) => {
+                if (is_started) {
+                    this.wsConnection.send('startStudentLesson')
+                    setTimeout(() => {
+                        this.loadLesson();
+                        this.cardTitle.innerText = "Добро пожаловать на урок"
+                        this.startLessonTimer(60*55)
+                    }, 3000);
+
+                }
+            })
+        }
     }
 
-    requestToStartLesson() {
+    startStudentLesson() {
+        setTimeout(() => {
+            this.loadLesson();
+            this.cardTitle.innerText = "Добро пожаловать на урок"
+            this.startLessonTimer(60*55)
+        }, 3000);
+    }
+
+    startLesson() {
         let token = getCookie('My-Tutor-Auth-Token')
 
         if (token == undefined) {
             console.error('Токен не найден');
             return Promise.reject('Токен не найден');
+        }
+
+        if (userRole == 'Студент') {
+            return Promise.rejects()
         }
 
         return fetch(`/api/lessons/${this.lessonId}/start/`, {
@@ -172,11 +192,50 @@ class LessonController {
                 return JSON.parse(text)
             })
             .then(response => {
-                return response.status
+                return response
             })
             .catch(error => {
                 console.log(error)
         })
+    }
+
+    startLessonTimer(duration) {
+        let timer = duration, minutes, seconds;
+        const lessonTimer = this.lessonTimer
+        const flashDuration = 500
+        let flashStatus = false
+
+        function updateTimerDisplay(mins, secs) {
+            minutes = parseInt(mins, 10)
+            seconds = parseInt(secs, 10)
+
+            minutes = minutes < 10 ? "0" + minutes : minutes
+            seconds = seconds < 10 ? "0" + seconds : seconds
+
+            lessonTimer.textContent = minutes + " : " + seconds
+        }
+
+        updateTimerDisplay(timer / 60, timer % 60);
+        lessonTimer.style.display = 'block'
+
+        var interval = setInterval(function () {
+            updateTimerDisplay(timer / 60, timer % 60)
+
+            if (--timer < 30000) {
+                clearInterval(interval)
+                lessonTimer.textContent = "00 : 00"
+                lessonTimer.style.color = '#F6E6AE'
+
+                const flashInterval = setInterval(function () {
+                    lessonTimer.style.visibility = flashStatus ? 'visible' : 'hidden'
+                    flashStatus = !flashStatus
+                }, flashDuration);
+                setTimeout(function () {
+                    clearInterval(flashInterval)
+                    window.location.href = '/'
+                }, 300000)
+            }
+        }, 1000)
     }
 
     loadLesson() {
@@ -189,7 +248,7 @@ class LessonController {
 
         console.log('Запрос данных урока с сервера')
 
-        return fetch(`/api/themes/${this.lessonId}/`, {
+        return fetch(`/api/lessons/${this.lessonId}/material/`, {
             method: 'GET',
             headers: {
             'My-tutor-Auth-Token': token
@@ -208,7 +267,9 @@ class LessonController {
     }
 
     fillThemeMenu(theme) {
-        this.examField.innerText = theme.exam
+        console.log(theme)
+        this.examFieldButton.innerText = theme.exam
+        this.examField.style.display = 'block'
         this.titleField.innerText = theme.title
         this.examItemIdField.innerText = `Задание № ${theme.exam_task_number}`
         this.menu.innerHTML = ''
@@ -234,8 +295,11 @@ class LessonController {
         liButton.className = 'lesson-button'
         let liButtonId = `li-button-${++this.menuCardCounter}`
         liButton.id = liButtonId
-        liButton.onclick = () => {
-            this.fillContent(card, liButtonId)
+
+        if (userRole == "Преподаватель") {
+            liButton.onclick = () => {
+                this.fillContent(card, liButtonId)
+            }
         }
 
         if (card.type === 'theory') {
@@ -271,14 +335,14 @@ class LessonController {
 
         if (card.type === 'theory') {
             this.practiceField.style.display = 'none';
-            this.theoryTitle.innerText = card.title
+            this.cardTitle.innerText = card.title
             this.theoryImage.src = card.image_path
             this.theoryDescr.innerText = card.descr
             this.theoryField.style.display = 'block';
         } else {
             this.theoryField.style.display = 'none';
             this.currentPracticeCardId = card.id
-            this.practiceTitle.innerText = card.title
+            this.cardTitle.innerText = card.title
             this.practiceImage.src = card.image_path
             this.practiceDescr.innerText = card.descr
             this.currentPracticeCardAnswer = card.answer
@@ -290,7 +354,7 @@ class LessonController {
             this.practiceAnswerButton.disabled = false;
             this.practiceAnswerButton.innerHTML = 'Проверить'
 
-            if (card.tip != null) {
+            if (card.tip != null && userRole == 'Преподаватель') {
                 this.practiceTipButton.onclick = () => {
                     this.switchTip(card.tip)
                 }
@@ -358,6 +422,10 @@ class LessonController {
         }
     }
 
+    finishLesson() {
+        window.location.href = '/';
+    }
+
     processAction(action, data) {
         switch (action) {
             case 'studentReady':
@@ -368,6 +436,9 @@ class LessonController {
                 break
             case 'tutorReady':
                 this.tutorReady(true)
+                break
+            case 'startStudentLesson':
+                this.startStudentLesson()
                 break
             case 'fillContent':
                 this.fillContent(data.data, data.menuCardId, true)
@@ -381,6 +452,9 @@ class LessonController {
             case 'switchTip':
                 this.switchTip(data, true)
                 break
+            case 'finishLesson':
+                this.finishLesson()
+                break
             default:
                 console.error('unexpected action:', action)
                 break
@@ -388,11 +462,14 @@ class LessonController {
     }
 }
 
+
 class FinishLessonForm {
-    constructor() {
+    constructor(wsConnection) {
+        this.wsConnection = wsConnection
         this.lessonId = lessonId
 
         this.inputLessonId = document.getElementById('lesson-finish-form-lesson-id')
+        this.inputStatus = document.getElementById('lesson-finish-form-status')
         this.inputNote = document.getElementById('lesson-finish-form-note')
 
         this.btnFinishLesson = document.getElementById('lesson-finish-form-button')
@@ -404,9 +481,10 @@ class FinishLessonForm {
     finishLesson() {
         const lessonData = {
             lessonId: this.inputLessonId.value,
-            note: this.inputNote,
+            status: this.inputStatus.value,
+            note: this.inputNote.value
         }
-
+        console.log(lessonData)
         let token = getCookie('My-Tutor-Auth-Token')
 
         if (token == undefined) {
@@ -435,6 +513,8 @@ class FinishLessonForm {
         .then(response => {
             if (response.hasOwnProperty('date')) {
                 console.log(response.message)
+                this.wsConnection.send('finishLesson')
+                window.location.href = '/';
             } else {
                 console.log(response.message)
             }
@@ -513,6 +593,7 @@ class WSConnection {
     }
 }
 
+
 document.addEventListener('DOMContentLoaded', function (event) {
     const startField = document.getElementById('start-content');
     const practiceTipButton = document.getElementById('practice-tip-button');
@@ -541,14 +622,19 @@ document.addEventListener('DOMContentLoaded', function (event) {
     const wsConnection = new WSConnection(url)
     const lessonController = new LessonController(wsConnection, lessonId)
     lessonController.getLessonStatus()
-    .then((status) => {
+    .then((response) => {
         console.log(status)
-        if (status == 'STARTED') {
-            let lessonStar = true
+        if (userRole == "Преподаватель") {
+            new FinishLessonForm(wsConnection)
+        }
+        if (response.status == 'STARTED') {
             lessonController.lessonStarted = true
+            lessonController.cardTitle.innerText = 'Добро пожаловать на урок'
             lessonController.loadLesson()
+            lessonController.startLessonTimer(response.time_left)
         } else {
             startField.style.display = 'block'
+            lessonController.cardTitle.innerText = 'Подтвердите готовность к уроку'
         }
     })
 

@@ -98,7 +98,6 @@ async def get_lesson(request: Request, lesson_id: int, access: LessonAccess = De
             raise HTTPException(status_code=403, detail="В данный момент ресурс не доступен")
 
 
-
 async def tutor_profile(request: Request, authorized_user=Depends(get_authorized_user)):
     return templates.TemplateResponse(
         "tutor_profile.html",
