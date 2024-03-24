@@ -21,20 +21,16 @@
             </div>
             <!-- Main menu -->
             <div class="col-8" id="header-main-menu">
-                <div class="row text-center">
-                    <div class="col-1"></div>
-                    <div class="col-2">
-                        <a href="/"><strong>Главная</strong></a>
-                    </div>
-                    <div class="col-2">
-                        <a href="/lesson"><strong>Мое обучение</strong></a>
-                    </div>
-                    <div class="col-2">
-                        <a href="/admin/users"><strong>Об обучении</strong></a>
-                    </div>
-                    <div class="col-2">
-                        <a href="/"><strong>Отзывы</strong></a>
-                    </div>
+                <div class="header-menu-row">
+                    <a href="/"><strong>Главная</strong></a>
+                    <a href="/price-list"><strong>Услуги</strong></a>
+                    <a href="/presentation"><strong>Об обучении</strong></a>
+                    <a href="/reviews"><strong>Отзывы</strong></a>
+                    {% if user.current_lesson_id != None %}
+                        <button type="button" class="lesson-enter-button" onclick="joinToLesson({{user.current_lesson_id}})">
+                            Войти на урок
+                        </button>
+                    {% endif %}
                 </div>
             </div>
             <!--User space-->
@@ -56,19 +52,15 @@
                                     <li><h6 class="dropdown-header">{{ user.role }}</h6></li>
                                     <li><hr class="dropdown-divider"></li>
                                     {% if user.role == "Администратор" %}
-                                        <li><a class="dropdown-item btn btn-primary" href="/admin/users" role="button">Админ панель</a></li>
+                                        <li><a class="dropdown-item btn btn-primary" href="/tutor-profile" role="button">Мой профиль</a></li>
+                                        <li><a class="dropdown-item btn btn-primary" href="/admin/users" role="button">Администрирование</a></li>
+                                        <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modal-lesson-add" onclick="setTodayDate()">Создать урок</button></li>
                                     {% elif user.role == "Преподаватель" %}
                                         <li><a class="dropdown-item btn btn-primary" href="/tutor-profile" role="button">Мой профиль</a></li>
                                         <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modal-lesson-add" onclick="setTodayDate()">Создать урок</button></li>
-                                        {% if user.current_lesson_id != None %}
-                                            <li><a class="dropdown-item btn btn-primary" href="/lesson/{{user.current_lesson_id}}" role="button">Войти на урок</a></li>
-                                        {% endif %}
                                     {% elif user.role == "Студент" %}
                                         <li><a class="dropdown-item btn btn-primary" href="/student-profile" role="button">Мой профиль</a></li>
-                                        <li><a class="dropdown-item btn btn-primary" href="/my-study" role="button">Мое обучение</a></li>
-                                        {% if user.current_lesson_id != None %}
-                                            <li><a class="dropdown-item btn btn-primary" href="/lesson/{{user.current_lesson_id}}" role="button">Войти на урок</a></li>
-                                        {% endif %}
+                                        <li><a class="dropdown-item btn btn-primary" href="/schedule" role="button">Расписание</a></li>
                                     {% endif %}
 
                                     <li><button class="dropdown-item" href="#">Сменить пароль</button></li>

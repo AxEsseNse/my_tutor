@@ -26,6 +26,7 @@ async def update_lesson(
         async with session.begin():
             match lesson_data:
                 case FinishLessonRequest():
+                    print(FinishLessonRequest)
                     return await lesson_repository.finish_lesson(session=session, lesson_data=lesson_data)
                 case PaidLessonRequest():
                     return await lesson_repository.set_paid_status_lesson(session=session, lesson_data=lesson_data)

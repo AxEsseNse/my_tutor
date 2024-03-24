@@ -33,14 +33,17 @@ from .themes import (
     DeleteThemeResponse,
     UpdateThemeRequest,
     UpdateThemeResponse,
-    AddThemeMaterialTheoryRequest,
-    AddThemeMaterialPracticeRequest,
-    AddThemeMaterialResponse,
-    DeleteThemeMaterialRequest,
-    DeleteThemeMaterialResponse,
-    UpdateThemeMaterialTheoryRequest,
-    UpdateThemeMaterialPracticeRequest,
-    UpdateThemeMaterialResponse
+    AddThemeTheoryCardRequest,
+    AddThemePracticeCardRequest,
+    AddThemeCardResponse,
+    DeleteThemeCardRequest,
+    DeleteThemeCardResponse,
+    UpdateThemeTheoryCardRequest,
+    UpdateThemePracticeCardRequest,
+    UpdateThemeCardResponse,
+    UpdateStudentAnswersRequest,
+    UpdateStudentAnswersResponse,
+    UploadImageResponse
 )
 from .tutors import (
     AddTutorRequest,

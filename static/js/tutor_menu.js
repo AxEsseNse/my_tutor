@@ -50,7 +50,7 @@ class AddLessonForm {
         .then(() => {
             this.setSelectOptions(this.tutors,  this.tutorsSelect)
             this.setSelectOptions(this.students,  this.studentsSelect)
-            this.setSelectOptions(this.themes,  this.themesSelect)
+            this.setThemesSelectOptions(this.themes,  this.themesSelect)
         })
     }
 
@@ -59,6 +59,16 @@ class AddLessonForm {
             const option = document.createElement('option')
             option.value = item.id
             option.innerText = item.name
+            selectDiv.append(option)
+        }
+        selectDiv.options[0].selected = true
+    }
+
+    setThemesSelectOptions(data, selectDiv) {
+        for (const item of data) {
+            const option = document.createElement('option')
+            option.value = item.id
+            option.innerText = `${item.exam} ${item.exam_task_number}. ${item.title}`
             selectDiv.append(option)
         }
         selectDiv.options[0].selected = true

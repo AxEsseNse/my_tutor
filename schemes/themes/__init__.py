@@ -10,17 +10,22 @@ from .update_theme import (
     UpdateThemeRequest,
     UpdateThemeResponse
 )
-from .add_theme_material import (
-    AddThemeMaterialTheoryRequest,
-    AddThemeMaterialPracticeRequest,
-    AddThemeMaterialResponse
+from .add_theme_card import (
+    AddThemeTheoryCardRequest,
+    AddThemePracticeCardRequest,
+    AddThemeCardResponse
 )
 from .delete_theme_material import (
-    DeleteThemeMaterialRequest,
-    DeleteThemeMaterialResponse
+    DeleteThemeCardRequest,
+    DeleteThemeCardResponse
 )
-from .update_theme_material import (
-    UpdateThemeMaterialTheoryRequest,
-    UpdateThemeMaterialPracticeRequest,
-    UpdateThemeMaterialResponse
+from .update_theme_card import (
+    UpdateThemeTheoryCardRequest,
+    UpdateThemePracticeCardRequest,
+    UpdateThemeCardResponse
 )
+from .update_theme_student_answers import (
+    UpdateStudentAnswersRequest,
+    UpdateStudentAnswersResponse
+)
+from .upload_image import UploadImageResponse

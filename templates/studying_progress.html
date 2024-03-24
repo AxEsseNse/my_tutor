@@ -1,0 +1,61 @@
+{% extends "student_base.html" %}
+{% block student_head %}
+    <link rel="stylesheet" href="/static/css/studying_progress.css" />
+{% endblock student_head %}
+{% block student_content %}
+
+<div class="container-fluid progress-content">
+    <div class="row">
+        <!-- Строка заголовка таблицы родителей -->
+        <div class="col-4">
+            <div class="hidden-content" id="title"></div>
+            <hr class="hidden-content"/>
+        </div>
+        <div class="col-8 text-end">
+            <button
+                class="btn-exam"
+                type="button"
+                title="Показать темы ОГЭ"
+                id="btn-show-oge"
+            >
+                ОГЭ
+            </button>
+            <button
+                class="btn-exam"
+                type="button"
+                title="Показать темы ЕГЭ"
+                id="btn-show-ege"
+            >
+                ЕГЭ
+            </button>
+            <button
+                class="btn-exam"
+                type="button"
+                title="Показать темы программирования"
+                id="btn-show-programming"
+            >
+                Программирование
+            </button>
+
+        </div>
+    </div>
+</div>
+<div class="text-center" id="text-start">Выберите курс, по которому желаете посмотреть прогресс</div>
+<table id="progress-table" class="table table-info hidden-content">
+    <thead class="thead-dark">
+        <tr>
+            <th class="col-1"></th>
+            <th class="col-1 text-start">№ Задания</th>
+            <th class="col-2 text-start">Тема</th>
+            <th class="col-5 text-start">Описание</th>
+            <th class="col-1 text-start">Статус</th>
+            <th class="col-2 text-start">Дата</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+{% endblock student_content %}
+{% block student_scripts %}
+    <!-- Подключение js страницы-->
+    <script src="/static/js/studying_progress.js"></script>
+{% endblock student_scripts %}

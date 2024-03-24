@@ -12,7 +12,7 @@ from my_tutor.exceptions import (
     StudentAlreadyHasLesson,
     TutorAlreadyHasLesson
 )
-from my_tutor.models import LessonModel
+from my_tutor.models import LessonModel, StudyingModel
 from my_tutor.schemes import (
     AddLessonRequest,
     AddLessonResponse,
@@ -34,12 +34,18 @@ RUS_EXAMS = {
     1: "ЕГЭ",
     2: "ОГЭ"
 }
+THEME_STATUSES = {
+    "NOT STUDIED": 1,
+    "COMPLETED": 2,
+    "IN PROGRESS": 3
+}
 
 
 class LessonRepository:
     _student_lesson = StudentLesson
     _tutor_lesson = TutorLesson
     _lesson_model = LessonModel
+    _studying_model = StudyingModel
     _date_pattern = "%d.%m.%Y %H:%M"
     _add_lesson_response = AddLessonResponse
     _delete_lesson_response = DeleteLessonResponse
@@ -165,14 +171,14 @@ class LessonRepository:
         lesson_model = (await session.execute(query)).scalars().first()
         return lesson_model.lesson_id if lesson_model else None
 
-    async def get_lesson_theme_id(self, session: AsyncSession, lesson_id: int) -> int:
+    async def get_lesson_theme_id(self, session: AsyncSession, lesson_id: int) -> (int, int):
         lesson_model = (
             await session.execute(select(self._lesson_model).filter_by(lesson_id=lesson_id))).scalars().first()
 
         if not lesson_model:
             raise LessonNotFoundError
 
-        return lesson_model.theme_id
+        return lesson_model.theme_id, lesson_model.student_id
 
     async def get_student_lessons(self, session: AsyncSession, student_id: int) -> list[StudentLesson]:
         lessons_models = (await session.execute(
@@ -267,6 +273,19 @@ class LessonRepository:
             .filter_by(lesson_id=new_lesson.lesson_id)
         )).scalars().first()
 
+        studying_model = (
+            await session.execute(select(self._studying_model).filter_by(student_id=lesson_data.student_id,
+                                                                         theme_id=lesson_data.theme_id))).scalars().first()
+
+        if not studying_model:
+            studying_model = self._studying_model(
+                student_id=lesson_data.student_id,
+                theme_id=lesson_data.theme_id,
+                date=aware_datetime,
+                theme_status_id=THEME_STATUSES["NOT STUDIED"]
+            )
+            session.add(studying_model)
+
         return self._to_add_lesson_response(lesson_model=new_lesson_data)
 
     async def delete_lesson(self, session: AsyncSession, lesson_data: DeleteLessonRequest) -> DeleteLessonResponse:
@@ -309,8 +328,27 @@ class LessonRepository:
             raise LessonNotFoundError
 
         lesson_model.note = lesson_data.note
-        lesson_model.status = lesson_data.status
+        lesson_model.status = lesson_data.lesson_status
         session.add(lesson_model)
+
+        studying_model = (
+            await session.execute(select(self._studying_model).filter_by(student_id=lesson_data.student_id,
+                                                                         theme_id=lesson_data.theme_id))).scalars().first()
+
+        if studying_model:
+            studying_model.date = lesson_model.date
+            studying_model.progress_cards = lesson_data.progress_cards
+            studying_model.theme_status_id = THEME_STATUSES[lesson_data.theme_status]
+        else:
+            studying_model = self._studying_model(
+                student_id=lesson_data.student_id,
+                theme_id=lesson_data.theme_id,
+                date=lesson_model.date,
+                theme_status_id=THEME_STATUSES[lesson_data.theme_status],
+                progress_cards=lesson_data.progress_cards
+            )
+
+        session.add(studying_model)
 
         return self._to_finish_lesson_response(lesson_model=lesson_model)
 

@@ -34,6 +34,32 @@ async def main_page(request: Request, authorized_user=Depends(get_authorized_use
     )
 
 
+async def presentation(request: Request, authorized_user=Depends(get_authorized_user)):
+    # if authorized_user is None:
+    #     return RedirectResponse(LOGIN_URL)
+    return templates.TemplateResponse(
+        "presentation.html",
+        {
+            "request": request,
+            "title": "Мой репетитор",
+            "user": authorized_user
+        }
+    )
+
+
+async def reviews(request: Request, authorized_user=Depends(get_authorized_user)):
+    # if authorized_user is None:
+    #     return RedirectResponse(LOGIN_URL)
+    return templates.TemplateResponse(
+        "reviews.html",
+        {
+            "request": request,
+            "title": "Мой репетитор",
+            "user": authorized_user
+        }
+    )
+
+
 async def users_list(request: Request, authorized_user=Depends(get_authorized_user)):
     return templates.TemplateResponse(
         "users_list.html",
@@ -70,6 +96,17 @@ async def students_list(request: Request, authorized_user=Depends(get_authorized
 async def themes_list(request: Request, authorized_user=Depends(get_authorized_user)):
     return templates.TemplateResponse(
         "themes_list.html",
+        {
+            "request": request,
+            "title": "Панель администрирования",
+            "user": authorized_user
+        }
+    )
+
+
+async def create_theme_card(request: Request, authorized_user=Depends(get_authorized_user)):
+    return templates.TemplateResponse(
+        "theme_card.html",
         {
             "request": request,
             "title": "Панель администрирования",
@@ -115,6 +152,17 @@ async def student_profile(request: Request, authorized_user=Depends(get_authoriz
         {
             "request": request,
             "title": "Профиль",
+            "user": authorized_user
+        }
+    )
+
+
+async def studying_progress(request: Request, authorized_user=Depends(get_authorized_user)):
+    return templates.TemplateResponse(
+        "studying_progress.html",
+        {
+            "request": request,
+            "title": "Мое обучение",
             "user": authorized_user
         }
     )

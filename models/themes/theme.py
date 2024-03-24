@@ -7,7 +7,7 @@ class ThemeModel(Base):
     __tablename__ = "themes"
 
     theme_id_seq = Sequence("themes_theme_id_seq")
-    theme_practice_material_id_seq = Sequence('themes_theme_practice_material_id_seq')
+    theme_card_id_seq = Sequence("themes_card_id_seq")
 
     theme_id = Column(Integer, primary_key=True)
     exam_id = Column(Integer, ForeignKey(column="exams.exam_id"), nullable=False)

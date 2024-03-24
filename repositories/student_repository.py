@@ -4,11 +4,12 @@ import os
 from fastapi import UploadFile
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 from datetime import datetime
 
 from my_tutor.repositories import UserRepository
 from my_tutor.exceptions import StudentNotFoundError, StudentSaveImageError, StudentAlreadyExistError
-from my_tutor.models import UserModel, StudentModel
+from my_tutor.models import UserModel, StudentModel, StudyingModel, ThemeStatusModel, ThemeModel
 from my_tutor.schemes import (
     AddStudentRequest,
     AddStudentResponse,
@@ -20,7 +21,7 @@ from my_tutor.schemes import (
     UpdateStudentContactInfoResponse,
     UpdateStudentImageResponse
 )
-from my_tutor.domain import StudentInfo, Student, StudentOption
+from my_tutor.domain import StudentInfo, Student, StudentOption, ThemeStudyingStatus
 
 
 user_repository = UserRepository()
@@ -44,8 +45,13 @@ class StudentRepository:
     _student = Student
     _student_option = StudentOption
     _info_domain = StudentInfo
+    _theme_studying_status = ThemeStudyingStatus
     _user_model = UserModel
     _student_model = StudentModel
+    _studying_model = StudyingModel
+    _theme_model = ThemeModel
+    _theme_status_model = ThemeStatusModel
+    _date_pattern = "%d.%m.%Y"
     _add_student_response = AddStudentResponse
     _delete_student_response = DeleteStudentResponse
     _update_student_primary_info_response = UpdateStudentPrimaryInfoResponse
@@ -90,6 +96,14 @@ class StudentRepository:
         return self._student_option(
             id=student_model.student_id,
             name=f"{student_model.second_name} {student_model.first_name}"
+        )
+
+    def _to_theme_status(self, studying_model: StudyingModel) -> ThemeStudyingStatus:
+
+        return self._theme_studying_status(
+            theme_id=studying_model.theme_id,
+            status=studying_model.theme_status.title,
+            date=datetime.strftime(studying_model.date, self._date_pattern),
         )
 
     def _to_add_student_response(self, student_model: StudentModel, student_login: str) -> AddStudentResponse:
@@ -165,6 +179,22 @@ class StudentRepository:
         students_models = (await session.execute(select(self._student_model).order_by(self._student_model.second_name, self._student_model.first_name))).scalars().all()
 
         return [self._to_student_option(student_model=student_model) for student_model in students_models]
+
+    async def get_student_progress(self, session: AsyncSession, student_id: int, exam_id: int) -> list[ThemeStudyingStatus]:
+        studying_models = (
+            await session.execute(
+                select(self._studying_model)
+                .options(selectinload(self._studying_model.theme_status))
+                .join(self._theme_model, self._studying_model.theme_id == self._theme_model.theme_id)
+                .filter(
+                    self._theme_model.exam_id == exam_id,
+                    self._studying_model.student_id == student_id
+                )
+                .order_by(self._theme_model.exam_task_number, self._theme_model.title)
+            )
+        ).scalars().all()
+
+        return [self._to_theme_status(studying_model=studying_model) for studying_model in studying_models]
 
     async def add_student(self, session: AsyncSession, student_data: AddStudentRequest, user_id: int) -> AddStudentResponse:
         student_model = (

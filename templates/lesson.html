@@ -25,7 +25,6 @@
                         data-bs-toggle="modal"
                         data-bs-target="#modal-lesson-finish"
                         id="lesson-end-btn"
-                        onclick="fillFinishLessonForm()"
                     >
                         <i class="fa-solid fa-flag fa-xs"></i>
                     </button>
@@ -96,14 +95,19 @@
                                     value=""
                                     placeholder="Введите сюда ваш ответ"
                                 />
-                                <button type="button" class="lesson-button" id="practice-answer-button">
+                                <button type="button" class="practice-answer-button" id="practice-answer-button">
                                     Проверить
                                 </button>
-                                <button type="button" class="lesson-button" id="practice-tip-button" onclick="turnTip()">
+                                <button type="button" class="lesson-button" id="practice-tip-button">
                                     Показать решение
                                 </button>
                             </div>
                             <div id="practice-tip-field">
+                                <div class="text-end">
+                                    <button type="button" class="hide-tip-student" id="practice-tip-student-button" title="Показать решение студенту">
+                                        <i class="fa-solid fa-eye-slash"></i>
+                                    </button>
+                                </div>
                                 <div class="text-center">
                                     <img src="" id="practice-tip-image">
                                 </div>

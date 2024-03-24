@@ -1,0 +1,98 @@
+#content {
+    background: #4A918B;
+}
+
+.progress-content {
+    margin-top: 20px;
+}
+#text-start {
+    margin-top: 200px;
+    font-size: 36px;
+    font-weight: 500;
+}
+#title {
+    margin-top: 6px;
+    font-size: 36px;
+}
+
+.hidden-content {
+    display: none
+}
+
+
+.btn-exam{
+    display: inline-block;
+    width: 250px;
+    height: 60px;
+    padding: 2px 8px;
+    margin-right: 10px;
+    font-size: 20px;
+    color: black;
+    font-weight: 500;
+    background-color: #14A9A5;
+    border: 5px solid #F6E6AE;
+    border-radius: 30px;
+    text-align: center;
+    vertical-align: middle;
+    text-decoration: none;
+    cursor: default;
+    white-space: nowrap;
+    user-select: none;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+.btn-exam:hover {
+    background-color: #F6E6AE;
+    border-color: #14A9A5;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem #F6E6AE;
+}
+.btn-exam:focus-visible {
+    background-color: #F6E6AE;
+    border-color: #14A9A5;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem #F6E6AE;
+}
+
+
+
+.table {
+    margin-top: 30px;
+}
+
+.table th,
+.table td{
+    background-color: #4A918B;
+}
+
+.table tr:hover td {
+    background-image: linear-gradient(to right, #4A918B, #14A9A5 20%, #14A9A5 80%, #4A918B);
+    background-size: calc(100% * 6) 100%;
+}
+
+.table tr:hover td:first-child {
+    background-position: 0 0;
+}
+
+.table tr:hover td:nth-child(2) {
+    background-position: -100% 0;
+}
+
+.table tr:hover td:nth-child(3) {
+    background-position: -200% 0;
+}
+
+.table tr:hover td:nth-child(4) {
+    background-position: -300% 0;
+}
+
+.table tr:hover td:nth-child(5) {
+    background-position: -400% 0;
+}
+
+.table tr:hover td:nth-child(6) {
+    background-position: -500% 0;
+}
+
+.table tr:hover td:nth-child(7) {
+    background-position: -600% 0;
+}

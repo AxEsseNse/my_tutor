@@ -36,25 +36,21 @@ function checkPasswords(psw, pswRe) {
     return NaN
 }
 
-function flashMsg(flashMsg, flashMsgDiv, flashMsgType, flashMsgTime = NaN) {
+function flashMsg(flashMsg, flashMsgDiv, flashMsgType, flashMsgTime = null) {
     flashMsgDiv.innerHTML = ''
     switch (flashMsgType) {
         case 'success':
-            if (!flashMsgDiv.classList.contains('axe-flash-msg-success')) {
-                flashMsgDiv.classList.add('axe-flash-msg-success')
+            if (!flashMsgDiv.classList.contains('flash-msg-success')) {
+                flashMsgDiv.classList.add('flash-msg-success')
             }
-            if (flashMsgDiv.classList.contains('axe-flash-msg-wrong')) {
-                flashMsgDiv.classList.remove('axe-flash-msg-wrong')
-            }
+            flashMsgDiv.classList.remove('flash-msg-wrong')
             flashMsgDiv.innerHTML = flashMsg
             break
         case 'wrong':
-            if (!flashMsgDiv.classList.contains('axe-flash-msg-wrong')) {
-                flashMsgDiv.classList.add('axe-flash-msg-wrong')
+            if (!flashMsgDiv.classList.contains('flash-msg-wrong')) {
+                flashMsgDiv.classList.add('flash-msg-wrong')
             }
-            if (flashMsgDiv.classList.contains('axe-flash-msg-success')) {
-                flashMsgDiv.classList.remove('axe-flash-msg-success')
-            }
+            flashMsgDiv.classList.remove('flash-msg-success')
             flashMsgDiv.innerHTML = flashMsg
             if (flashMsgTime) {
                 setTimeout(function () {
@@ -68,4 +64,8 @@ function flashMsg(flashMsg, flashMsgDiv, flashMsgType, flashMsgTime = NaN) {
 function setTodayDate() {
     var today = moment().format('YYYY-MM-DD')
     document.getElementById('lesson-add-form-date').value = today;
+}
+
+function joinToLesson(lessonId) {
+    window.location.href = `/lesson/${lessonId}`;
 }

@@ -30,11 +30,11 @@ TEST_DATE = datetime.now(moscow_tz)
 
 
 def upgrade() -> None:
-    studying_id_seq = sa.Sequence("studying_studying_id_seq")
     theme_status_id_seq = sa.Sequence("themes_statuses_theme_status_id_seq")
+    studying_id_seq = sa.Sequence("studying_studying_id_seq")
 
-    op.execute(sa.schema.CreateSequence(studying_id_seq))
     op.execute(sa.schema.CreateSequence(theme_status_id_seq))
+    op.execute(sa.schema.CreateSequence(studying_id_seq))
 
     op.create_table(
         "themes_statuses",
@@ -43,7 +43,7 @@ def upgrade() -> None:
     )
     op.create_table(
         "studying",
-        sa.Column("studying", sa.Integer(), studying_id_seq, primary_key=True,
+        sa.Column("studying_id", sa.Integer(), studying_id_seq, primary_key=True,
                   server_default=studying_id_seq.next_value()),
         sa.Column("student_id", sa.Integer(), sa.ForeignKey("students.student_id"), nullable=False),
         sa.Column("theme_id", sa.Integer(), sa.ForeignKey("themes.theme_id"), nullable=False),

@@ -23,11 +23,11 @@ depends_on: Union[str, Sequence[str], None] = None
 def upgrade() -> None:
     exam_id_seq = sa.Sequence("exams_exam_id_seq")
     theme_id_seq = sa.Sequence("themes_theme_id_seq")
-    theme_practice_material_id_seq = sa.Sequence("themes_theme_practice_material_id_seq")
+    theme_card_id_seq = sa.Sequence("themes_card_id_seq")
 
     op.execute(sa.schema.CreateSequence(exam_id_seq))
     op.execute(sa.schema.CreateSequence(theme_id_seq))
-    op.execute(sa.schema.CreateSequence(theme_practice_material_id_seq))
+    op.execute(sa.schema.CreateSequence(theme_card_id_seq))
 
     op.create_table(
         "exams",
@@ -52,16 +52,18 @@ def upgrade() -> None:
         )
     )
     ege_exam_id = connection.execute(sa.text("SELECT currval('exams_exam_id_seq')")).fetchone()[0]
-    ege_first_theme_practice_material_id = connection.execute(sa.text("SELECT nextval('themes_theme_practice_material_id_seq')")).fetchone()[0]
+    ege_first_theme_theory_material_id = connection.execute(sa.text("SELECT nextval('themes_card_id_seq')")).fetchone()[0]
+    ege_first_theme_practice_material_id = connection.execute(sa.text("SELECT nextval('themes_card_id_seq')")).fetchone()[0]
     test_material_ege = [
         {
+            "card_id": ege_first_theme_theory_material_id,
             "type": "theory",
             "title": "Вызов исполнителя Черепаха",
             "image_path": "/storage/lessons/ege/6/theory1.jpg",
             "descr": "Чтобы команды для работы с черепахой работали - необходимо импортировать сам модуль Черепаха"
         },
         {
-            "id": ege_first_theme_practice_material_id,
+            "card_id": ege_first_theme_practice_material_id,
             "type": "practice",
             "title": "Знание синтаксиса исполнителя",
             "image_path": "/storage/lessons/ege/6/practice1.jpg",
@@ -90,17 +92,19 @@ def upgrade() -> None:
     oge_exam_id = connection.execute(sa.text("SELECT currval('exams_exam_id_seq')")).fetchone()[0]
 
     #  Создание первой темы
-    oge_first_theme_first_practice_material_id = connection.execute(sa.text("SELECT nextval('themes_theme_practice_material_id_seq')")).fetchone()[0]
-    oge_first_theme_second_practice_material_id = connection.execute(sa.text("SELECT nextval('themes_theme_practice_material_id_seq')")).fetchone()[0]
+    oge_first_theme_theory_material_id = connection.execute(sa.text("SELECT nextval('themes_card_id_seq')")).fetchone()[0]
+    oge_first_theme_first_practice_material_id = connection.execute(sa.text("SELECT nextval('themes_card_id_seq')")).fetchone()[0]
+    oge_first_theme_second_practice_material_id = connection.execute(sa.text("SELECT nextval('themes_card_id_seq')")).fetchone()[0]
     test_material_oge_first_theme = [
         {
+            "card_id": oge_first_theme_theory_material_id,
             "type": "theory",
             "title": "Матрица. Симметричная и несимметричная. Понятие главной диагонали",
             "image_path": "/storage/lessons/oge/4/theory1.jpg",
             "descr": "Матрицы бывают двух видов. Симметричные и несимметричные."
         },
         {
-            "id": oge_first_theme_first_practice_material_id,
+            "card_id": oge_first_theme_first_practice_material_id,
             "type": "practice",
             "title": "Определение симметричности матрицы",
             "image_path": "/storage/lessons/oge/4/practice1.jpg",
@@ -111,7 +115,7 @@ def upgrade() -> None:
                     }
         },
         {
-            "id": oge_first_theme_second_practice_material_id,
+            "card_id": oge_first_theme_second_practice_material_id,
             "type": "practice",
             "title": "Нахождение протяженности пути",
             "image_path": "/storage/lessons/oge/4/practice2.jpg",
@@ -132,17 +136,19 @@ def upgrade() -> None:
     )
 
     #  Создание второй темы
-    oge_second_theme_first_practice_material_id = connection.execute(sa.text("SELECT nextval('themes_theme_practice_material_id_seq')")).fetchone()[0]
-    oge_second_theme_second_practice_material_id = connection.execute(sa.text("SELECT nextval('themes_theme_practice_material_id_seq')")).fetchone()[0]
+    oge_second_theme_theory_material_id = connection.execute(sa.text("SELECT nextval('themes_card_id_seq')")).fetchone()[0]
+    oge_second_theme_first_practice_material_id = connection.execute(sa.text("SELECT nextval('themes_card_id_seq')")).fetchone()[0]
+    oge_second_theme_second_practice_material_id = connection.execute(sa.text("SELECT nextval('themes_card_id_seq')")).fetchone()[0]
     test_material_oge_second_theme = [
         {
+            "card_id": oge_second_theme_theory_material_id,
             "type": "theory",
             "title": "Понятие IP адреса",
             "image_path": "/storage/lessons/oge/7/theory1.jpg",
             "descr": "Самое важное свойства IP адреса - его уникальность. Это позволяет избежать как утечки информации, так и спама"
         },
         {
-            "id": oge_second_theme_first_practice_material_id,
+            "card_id": oge_second_theme_first_practice_material_id,
             "type": "practice",
             "title": "Найди корректный IP адрес",
             "image_path": "/storage/lessons/oge/7/practice1.jpg",
@@ -153,7 +159,7 @@ def upgrade() -> None:
                     }
         },
         {
-            "id": oge_second_theme_second_practice_material_id,
+            "card_id": oge_second_theme_second_practice_material_id,
             "type": "practice",
             "title": "Найди корректный IP адрес",
             "image_path": "/storage/lessons/oge/7/practice2.jpg",
@@ -174,17 +180,19 @@ def upgrade() -> None:
     )
 
     #  Создание третьей темы
-    oge_third_theme_first_practice_material_id = connection.execute(sa.text("SELECT nextval('themes_theme_practice_material_id_seq')")).fetchone()[0]
-    oge_third_theme_second_practice_material_id = connection.execute(sa.text("SELECT nextval('themes_theme_practice_material_id_seq')")).fetchone()[0]
+    oge_third_theme_theory_material_id = connection.execute(sa.text("SELECT nextval('themes_card_id_seq')")).fetchone()[0]
+    oge_third_theme_first_practice_material_id = connection.execute(sa.text("SELECT nextval('themes_card_id_seq')")).fetchone()[0]
+    oge_third_theme_second_practice_material_id = connection.execute(sa.text("SELECT nextval('themes_card_id_seq')")).fetchone()[0]
     test_material_oge_third_theme = [
         {
+            "card_id": oge_third_theme_theory_material_id,
             "type": "theory",
             "title": "Виды графов",
             "image_path": "/storage/lessons/oge/9/theory1.jpg",
             "descr": "Графы бывают двух видов. Ориентированные и нет. На картинке представлены примеры"
         },
         {
-            "id": oge_third_theme_first_practice_material_id,
+            "card_id": oge_third_theme_first_practice_material_id,
             "type": "practice",
             "title": "Нахождение количества путей",
             "image_path": "/storage/lessons/oge/9/practice1.jpg",
@@ -195,7 +203,7 @@ def upgrade() -> None:
                     }
         },
         {
-            "id": oge_third_theme_second_practice_material_id,
+            "card_id": oge_third_theme_second_practice_material_id,
             "type": "practice",
             "title": "Нахождение количества путей",
             "image_path": "/storage/lessons/oge/9/practice2.jpg",
@@ -220,6 +228,6 @@ def downgrade() -> None:
     op.drop_table("themes")
     op.drop_table("exams")
 
-    op.execute(sa.schema.DropSequence(sa.Sequence("themes_theme_practice_material_id_seq")))
+    op.execute(sa.schema.DropSequence(sa.Sequence("themes_card_id_seq")))
     op.execute(sa.schema.DropSequence(sa.Sequence("themes_theme_id_seq")))
     op.execute(sa.schema.DropSequence(sa.Sequence("exams_exam_id_seq")))

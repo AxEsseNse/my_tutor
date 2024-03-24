@@ -381,20 +381,44 @@ hr {
     box-shadow: 0 0 0 0.2rem #F6E6AE;
 }
 
-#practice-answer-button {
+.practice-answer-button {
+    display: inline-block;
+    padding: 2px 8px;
+    color: black;
+    font-weight: 400;
+    background-color: #80C4C3;
+    border: 5px solid #14A9A5;
+    border-radius: 30px;
+    text-align: center;
+    vertical-align: middle;
+    text-decoration: none;
+    cursor: default;
+    user-select: none;
     width: 250px;
     margin-left: 30px;
     font-size: 20px;
 }
-#practice-tip-button {
-    width: 250px;
-    position: absolute;
-    right: 5px;
+.practice-answer-button-success {
+    display: inline-block;
+    padding: 2px 8px;
+    width: 45px;
+    font-weight: 400;
+    margin-left: 30px;
+    background-color: #72E179;
+    color: #F6E6AE;
+    border: 5px solid #14A9A5;
+    border-radius: 30px;
+    border-color: #F6E6AE;
+    text-align: center;
+    vertical-align: middle;
+    text-decoration: none;
+    cursor: default;
+    user-select: none;
     font-size: 20px;
 }
 
-#practice-answer-button:disabled,
-#practice-answer-button.disabled {
+.sfpractice-answer-button-success:disabled,
+.sfpractice-answer-button-wrong.disabled {
     width: 45px;
     background-color: #72E179;
     color: #F6E6AE;
@@ -402,6 +426,54 @@ hr {
     opacity: 0.65;
     cursor: not-allowed;
 }
+
+#practice-tip-button {
+    width: 250px;
+    position: absolute;
+    right: 5px;
+    font-size: 20px;
+}
+
+
+#practice-tip-student-button {
+    display: inline-block;
+    width: 100px;
+    height: 50px;
+    padding: 2px 8px;
+    margin-right: 5px;
+    margin-bottom: 15px;
+    font-size: 20px;
+    color: black;
+    font-weight: 500;
+    border: 5px solid #F6E6AE;
+    border-radius: 30px;
+    text-align: center;
+    vertical-align: middle;
+    text-decoration: none;
+    cursor: default;
+    white-space: nowrap;
+    user-select: none;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+#practice-tip-student-button:hover {
+    background-color: #F6E6AE;
+    border-color: #14A9A5;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem #F6E6AE;
+}
+#practice-tip-student-button:focus-visible {
+    background-color: #F6E6AE;
+    border-color: #14A9A5;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem #F6E6AE;
+}
+.show-tip-student {
+    background-color: #72E179;
+}
+.hide-tip-student {
+    background-color: #E68B8F;
+}
+
 
 #practice-tip-image {
     width: 90%;

@@ -1,9 +1,15 @@
+import aiofiles
+import os
+from random import choice
+
+from fastapi import UploadFile
+from pydantic import ValidationError
 from sqlalchemy import select, desc
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm.attributes import flag_modified
 
-from my_tutor.exceptions import ThemeNotFoundError, ThemeAlreadyExistError, ThemeMaterialNotFoundError
-from my_tutor.models import ThemeModel
+from my_tutor.exceptions import ThemeNotFoundError, ThemeAlreadyExistError, ThemeCardNotFoundError, LessonNotFoundError, SaveImageError
+from my_tutor.models import ThemeModel, StudyingModel, LessonModel
 from my_tutor.schemes import (
     AddThemeRequest,
     AddThemeResponse,
@@ -11,36 +17,69 @@ from my_tutor.schemes import (
     DeleteThemeResponse,
     UpdateThemeRequest,
     UpdateThemeResponse,
-    AddThemeMaterialTheoryRequest,
-    AddThemeMaterialPracticeRequest,
-    AddThemeMaterialResponse,
-    DeleteThemeMaterialRequest,
-    DeleteThemeMaterialResponse,
-    UpdateThemeMaterialTheoryRequest,
-    UpdateThemeMaterialPracticeRequest,
-    UpdateThemeMaterialResponse
+    AddThemeTheoryCardRequest,
+    AddThemePracticeCardRequest,
+    AddThemeCardResponse,
+    DeleteThemeCardRequest,
+    DeleteThemeCardResponse,
+    UpdateThemeTheoryCardRequest,
+    UpdateThemePracticeCardRequest,
+    UpdateThemeCardResponse,
+    UpdateStudentAnswersRequest,
+    UpdateStudentAnswersResponse,
+    UploadImageResponse
 )
-from my_tutor.domain import Theme, Lesson, MaterialTheory, MaterialPractice, MaterialPracticeTip, ThemeOption
+from my_tutor.domain import Theme, ThemeInfo, Lesson, CardTheory, CardPractice, CardPracticeTip, ThemeOption
+
+
 RUS_EXAMS = {
     1: "ЕГЭ",
     2: "ОГЭ"
 }
+VARIABLE_SYMBOLS = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
+                    'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
+                    'u', 'v', 'w', 'x', 'y', 'z',
+                    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
+                    'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
+                    'U', 'V', 'W', 'X', 'Y', 'Z',
+                    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 
 
 class ThemeRepository:
     _theme = Theme
+    _theme_info = ThemeInfo
     _lesson = Lesson
-    _material_theory = MaterialTheory
-    _material_practice_tip = MaterialPracticeTip
-    _material_practice = MaterialPractice
+    _material_theory = CardTheory
+    _material_practice = CardPractice
+    _material_practice_tip = CardPracticeTip
     _theme_option = ThemeOption
     _theme_model = ThemeModel
+    _lesson_model = LessonModel
+    _studying_model = StudyingModel
     _add_theme_response = AddThemeResponse
     _delete_theme_response = DeleteThemeResponse
     _update_theme_response = UpdateThemeResponse
-    _add_theme_material_response = AddThemeMaterialResponse
-    _delete_theme_material_response = DeleteThemeMaterialResponse
-    _update_theme_material_response = UpdateThemeMaterialResponse
+    _update_theme_student_answers_response = UpdateStudentAnswersResponse
+    _add_theme_card_response = AddThemeCardResponse
+    _delete_theme_card_response = DeleteThemeCardResponse
+    _update_theme_card_response = UpdateThemeCardResponse
+    _upload_image_response = UploadImageResponse
+    _default_tip_image_path = "/storage/themes/default_image/default_tip_image.jpg"
+    _default_theory_image_path = "/storage/themes/default_image/default_theory_image.jpg"
+    _default_practice_image_path = "/storage/themes/default_image/default_practice_image.jpg"
+
+    async def _get_new_theme_card_id(self, session: AsyncSession) -> int:
+        return (await session.execute(self._theme_model.theme_card_id_seq.next_value())).scalar()
+
+    def _to_theme_info(self, theme_model: ThemeModel) -> ThemeInfo:
+
+        return self._theme_info(
+            theme_id=theme_model.theme_id,
+            exam=RUS_EXAMS[theme_model.exam_id],
+            exam_task_number=theme_model.exam_task_number,
+            title=theme_model.title,
+            descr=theme_model.descr
+        )
 
     def _to_theme(self, theme_model: ThemeModel) -> Theme:
 
@@ -49,24 +88,17 @@ class ThemeRepository:
             exam=RUS_EXAMS[theme_model.exam_id],
             exam_task_number=theme_model.exam_task_number,
             title=theme_model.title,
-            descr=theme_model.descr
-        )
-
-    def _to_lesson(self, theme_model: ThemeModel) -> Lesson:
-
-        return self._lesson(
-            exam=RUS_EXAMS[theme_model.exam_id],
-            exam_task_number=theme_model.exam_task_number,
-            title=theme_model.title,
-            material=theme_model.material,
-            message="Данные урока успешно получены"
+            descr=theme_model.descr,
+            material=theme_model.material
         )
 
     def _to_theme_option(self, theme_model: ThemeModel) -> ThemeOption:
 
         return self._theme_option(
             id=theme_model.theme_id,
-            name=f"{RUS_EXAMS[theme_model.exam_id]}-{theme_model.exam_task_number} {theme_model.title}"
+            exam=RUS_EXAMS[theme_model.exam_id],
+            exam_task_number=theme_model.exam_task_number,
+            title=theme_model.title
         )
 
     def _to_add_theme_response(self, theme_model: ThemeModel) -> AddThemeResponse:
@@ -98,54 +130,73 @@ class ThemeRepository:
             message="Тема успешно изменена"
         )
 
-    def _to_add_theme_material_response(self, theme_model: ThemeModel) -> AddThemeMaterialResponse:
+    def _to_update_theme_student_answers_response(self) -> UpdateStudentAnswersResponse:
 
-        return self._add_theme_material_response(
+        return self._update_theme_student_answers_response(
+            message="Новые ответы студента успешно сохранены"
+        )
+
+    def _to_add_theme_card_response(self, theme_model: ThemeModel) -> AddThemeCardResponse:
+
+        return self._add_theme_card_response(
             exam=RUS_EXAMS[theme_model.exam_id],
             title=theme_model.title,
             message="В тему успешно добавлена карточка"
         )
 
-    def _to_delete_theme_material_response(self, theme_model: ThemeModel, card: int, type_card: str) -> DeleteThemeMaterialResponse:
+    def _to_delete_theme_card_response(self, theme_model: ThemeModel, card_position: int) -> DeleteThemeCardResponse:
 
-        return self._delete_theme_material_response(
-            exam=RUS_EXAMS[theme_model.exam_id],
-            title=theme_model.title,
-            card=card,
-            type_card=type_card,
-            message="В теме успешно удалена карточка"
+        return self._delete_theme_card_response(
+            message=f'В теме "{theme_model.title}" по профилю {RUS_EXAMS[theme_model.exam_id]} успешно удалена карточка № {card_position}'
         )
 
-    def _to_update_theme_material_response(self, theme_model: ThemeModel) -> UpdateThemeMaterialResponse:
+    def _to_update_theme_card_response(self, theme_model: ThemeModel, new_position: int) -> UpdateThemeCardResponse:
 
-        return self._update_theme_material_response(
-            exam=RUS_EXAMS[theme_model.exam_id],
-            title=theme_model.title,
-            message="В теме успешно изменена карточка"
+        return self._update_theme_card_response(
+            message=f'В теме "{theme_model.title}" по профилю {RUS_EXAMS[theme_model.exam_id]} успешно изменена карточка № {new_position}'
         )
 
-    # async def _get_new_practice_material_id(self, session: AsyncSession) -> int:
-    #
-    #     return await session.scalar(self._theme_model.practice_seq.next_value())
+    def _to_upload_image_response(self, image_path) -> UploadImageResponse:
 
-    async def get_themes(self, session: AsyncSession) -> list[Theme]:
+        return self._upload_image_response(
+            image_path=image_path
+        )
+
+    async def get_themes(self, session: AsyncSession) -> list[ThemeInfo]:
         themes_models = (await session.execute(select(self._theme_model).order_by(self._theme_model.exam_id, self._theme_model.exam_task_number, self._theme_model.title))).scalars().all()
 
-        return [self._to_theme(theme_model=theme_model) for theme_model in themes_models]
+        return [self._to_theme_info(theme_model=theme_model) for theme_model in themes_models]
 
-    async def get_theme(self, session: AsyncSession, theme_id: int) -> Lesson:
+    async def get_exam_themes(self, session: AsyncSession, exam_id: int) -> list[ThemeInfo]:
+        themes_models = (await session.execute(select(self._theme_model).filter_by(exam_id=exam_id).order_by(self._theme_model.exam_task_number, self._theme_model.title))).scalars().all()
+
+        return [self._to_theme_info(theme_model=theme_model) for theme_model in themes_models]
+
+    async def get_exam_themes_options(self, session: AsyncSession, exam_id: int) -> dict[int, ThemeOption]:
+        themes_models = (await session.execute(select(self._theme_model).filter_by(exam_id=exam_id).order_by(self._theme_model.exam_task_number, self._theme_model.title))).scalars().all()
+
+        return {theme_model.theme_id: self._to_theme_option(theme_model=theme_model) for theme_model in themes_models}
+
+    async def get_theme(self, session: AsyncSession, theme_id: int) -> Theme:
         theme_model = (await session.execute(select(self._theme_model).filter_by(theme_id=theme_id))).scalars().first()
 
         if not theme_model:
             raise ThemeNotFoundError
 
-        print(theme_model)
-        return self._to_lesson(theme_model=theme_model)
+        return self._to_theme(theme_model=theme_model)
 
     async def get_themes_options(self, session: AsyncSession) -> list[ThemeOption]:
         themes_models = (await session.execute(select(self._theme_model).order_by(desc(self._theme_model.exam_id), self._theme_model.exam_task_number, self._theme_model.title))).scalars().all()
 
         return [self._to_theme_option(theme_model=theme_model) for theme_model in themes_models]
+
+    async def get_theme_student_progress(self, session: AsyncSession, theme_id: int, student_id: int) -> dict:
+        studying_model = (await session.execute(select(self._studying_model).filter_by(theme_id=theme_id, student_id=student_id))).scalars().first()
+
+        if not studying_model:
+            raise ThemeNotFoundError
+
+        return studying_model.progress_cards if studying_model else dict()
 
     async def add_theme(self, session: AsyncSession, theme_data: AddThemeRequest) -> AddThemeResponse:
         theme_model = (
@@ -192,117 +243,205 @@ class ThemeRepository:
 
         return self._to_update_theme_response(theme_model=theme_model)
 
-    async def add_theme_material(
-            self,
-            session: AsyncSession,
-            theme_material_data: AddThemeMaterialTheoryRequest | AddThemeMaterialPracticeRequest
-    ) -> AddThemeMaterialResponse:
-        theme_model = (
-            await session.execute(select(self._theme_model).filter_by(theme_id=theme_material_data.theme_id))).scalars().first()
+    async def update_theme_student_answers(self, session: AsyncSession, lesson_data: UpdateStudentAnswersRequest) -> UpdateStudentAnswersResponse:
+        studying_model = (
+            await session.execute(select(self._studying_model).filter_by(theme_id=lesson_data.theme_id, student_id=lesson_data.student_id))).scalars().first()
+
+        if not studying_model:
+            theme_model = (
+                await session.execute(
+                    select(self._theme_model).filter_by(theme_id=lesson_data.theme_id))).scalars().first()
+
+            if not theme_model:
+                raise ThemeNotFoundError
+
+            lesson_model = (
+                await session.execute(
+                    select(self._lesson_model).filter_by(lesson_id=lesson_data.lesson_id))).scalars().first()
+
+            if not lesson_model:
+                raise LessonNotFoundError
+
+            studying_model = self._studying_model(
+                student_id=lesson_data.student_id,
+                theme_id=lesson_data.theme_id,
+                date=lesson_model.date,
+                theme_status_id="IN PROGRESS",
+                progress_cards=dict()
+            )
+
+        studying_model.progress_cards = lesson_data.student_answers
+        session.add(studying_model)
+
+        return self._to_update_theme_student_answers_response()
+
+    #async def get_theme_cards(self, session: AsyncSession, theme_id: int) -> dict[int, CardTheory | CardPractice]:
+    async def get_theme_cards(self, session: AsyncSession, theme_id: int) -> list[CardTheory | CardPractice]:
+        theme_model = (await session.execute(select(self._theme_model).filter_by(theme_id=theme_id))).scalars().first()
 
         if not theme_model:
             raise ThemeNotFoundError
 
-        if theme_material_data.type == "theory":
-            new_card = self._material_theory(
-                type="theory",
-                title=theme_material_data.title,
-                image_path=theme_material_data.image_path,
-                descr=theme_material_data.descr
-            )
-        else:
-            # practice_id = await self._get_new_practice_material_id(session=session)
-            if theme_material_data.tip:
-                new_tip = self._material_practice_tip(
-                    image_path=theme_material_data.tip_image_path,
-                    descr=theme_material_data.tip_descr
+        print(theme_model.material)
+
+        return theme_model.material
+        #return {card["card_id"]: card for card in theme_model.material}
+
+    @staticmethod
+    def create_random_image_name():
+        return "".join([choice(VARIABLE_SYMBOLS) for _ in range(5)]) + ".jpg"
+
+    async def save_image_to_file(self, path: str, image_data: UploadFile) -> UploadImageResponse:
+        exam_task_number_folder = "storage/themes/" + path
+
+        try:
+            if not os.path.exists(exam_task_number_folder):
+                os.makedirs(exam_task_number_folder)
+
+            image_path = exam_task_number_folder + self.create_random_image_name()
+            print(image_path)
+
+            async with aiofiles.open(image_path, 'wb') as file:
+                while True:
+                    image_part = image_data.file.read(1024)
+                    if not image_part:
+                        break
+                    await file.write(image_part)
+            return self._to_upload_image_response(image_path=f"/{image_path}")
+        except Exception:
+            raise SaveImageError
+
+    async def add_theme_card(
+            self,
+            session: AsyncSession,
+            theme_card_data: AddThemePracticeCardRequest | AddThemeTheoryCardRequest
+    ) -> AddThemeCardResponse:
+        theme_model = (
+            await session.execute(select(self._theme_model).filter_by(theme_id=theme_card_data.theme_id))).scalars().first()
+
+        if not theme_model:
+            raise ThemeNotFoundError
+
+        match theme_card_data:
+            case AddThemeTheoryCardRequest():
+                new_card = self._material_theory(
+                    card_id=await self._get_new_theme_card_id(session=session),
+                    type="theory",
+                    title=theme_card_data.title,
+                    descr=theme_card_data.descr,
+                    image_path=theme_card_data.image_path or self._default_theory_image_path
                 )
-            else:
-                new_tip = None
-            new_card = self._material_practice(
-                # id=practice_id,
-                type="practice",
-                title=theme_material_data.title,
-                image_path=theme_material_data.image_path,
-                descr=theme_material_data.descr,
-                answer=theme_material_data.answer,
-                tip=new_tip
-            )
-        serialized_card = new_card.dict()
-        theme_material = theme_model.material
-        theme_material.insert(theme_material_data.position, serialized_card)
-        theme_model.material = theme_material
-        flag_modified(theme_model, "material")
-        session.add(theme_model)
+            case AddThemePracticeCardRequest():
+                if theme_card_data.tip:
 
-        return self._to_add_theme_material_response(theme_model=theme_model)
+                    new_tip_data = {
+                        "image_path": theme_card_data.tip_image_path or self._default_tip_image_path
+                    }
 
-    async def delete_theme_material(
-            self,
-            session: AsyncSession,
-            theme_material_data: DeleteThemeMaterialRequest
-    ) -> DeleteThemeMaterialResponse:
-        theme_model = (
-            await session.execute(select(self._theme_model).filter_by(theme_id=theme_material_data.theme_id))).scalars().first()
+                    if theme_card_data.tip_descr:
+                        new_tip_data["descr"] = theme_card_data.tip_descr
 
-        if not theme_model:
-            raise ThemeNotFoundError
-
-        if theme_material_data.card > len(theme_model.material):
-            raise ThemeMaterialNotFoundError
-
-        type_card = theme_model.material[theme_material_data.card-1]["type"]
-
-        del theme_model.material[theme_material_data.card-1]
-        flag_modified(theme_model, "material")
-        session.add(theme_model)
-
-        return self._to_delete_theme_material_response(theme_model=theme_model, card=theme_material_data.card, type_card=type_card)
-
-    async def update_theme_material(
-            self,
-            session: AsyncSession,
-            theme_material_data: UpdateThemeMaterialTheoryRequest | UpdateThemeMaterialPracticeRequest
-    ) -> UpdateThemeMaterialResponse:
-        theme_model = (
-            await session.execute(select(self._theme_model).filter_by(theme_id=theme_material_data.theme_id))).scalars().first()
-
-        if not theme_model:
-            raise ThemeNotFoundError
-
-        if theme_material_data.position > len(theme_model.material):
-            raise ThemeMaterialNotFoundError
-
-        if theme_material_data.type == "theory":
-            new_card = self._material_theory(
-                type="theory",
-                title=theme_material_data.title,
-                image_path=theme_material_data.image_path,
-                descr=theme_material_data.descr
-            )
-        else:
-            # practice_id = await self._get_new_practice_material_id(session=session)
-
-            if theme_material_data.tip:
-                new_tip = self._material_practice_tip(
-                    image_path=theme_material_data.tip_image_path,
-                    descr=theme_material_data.tip_descr
+                    new_tip = self._material_practice_tip(**new_tip_data)
+                else:
+                    new_tip = None
+                new_card = self._material_theory(
+                    card_id=await self._get_new_theme_card_id(session=session),
+                    type="practice",
+                    title=theme_card_data.title,
+                    descr=theme_card_data.descr,
+                    image_path=theme_card_data.image_path or self._default_practice_image_path,
+                    answer=theme_card_data.answer,
+                    tip=new_tip
                 )
-            else:
-                new_tip = None
-            new_card = self._material_practice(
-                # id=practice_id,
-                type="practice",
-                title=theme_material_data.title,
-                image_path=theme_material_data.image_path,
-                descr=theme_material_data.descr,
-                answer=theme_material_data.answer,
-                tip=new_tip
-            )
+            case _:
+                raise ValidationError
+
+        print(new_card)
+        #raise ThemeNotFoundError
 
         serialized_card = new_card.dict()
-        theme_model.material[theme_material_data.position-1] = serialized_card
+        # theme_material = theme_model.material
+        # theme_material.insert(theme_material_data.position, serialized_card)
+        # theme_model.material = theme_material
+        # flag_modified(theme_model, "material")
+        # session.add(theme_model)
+        theme_model.material.insert(theme_card_data.card_position - 1, serialized_card)
         flag_modified(theme_model, "material")
         session.add(theme_model)
 
-        return self._to_update_theme_material_response(theme_model=theme_model)
+        return self._to_add_theme_card_response(theme_model=theme_model)
+
+    async def delete_theme_card(
+            self,
+            session: AsyncSession,
+            theme_card_data: DeleteThemeCardRequest
+    ) -> DeleteThemeCardResponse:
+        theme_model = (
+            await session.execute(select(self._theme_model).filter_by(theme_id=theme_card_data.theme_id))).scalars().first()
+
+        if not theme_model:
+            raise ThemeNotFoundError
+
+        if theme_card_data.card_id != theme_model.material[theme_card_data.card_position - 1]["card_id"]:
+            raise ThemeCardNotFoundError
+
+        del theme_model.material[theme_card_data.card_position - 1]
+        flag_modified(theme_model, "material")
+        session.add(theme_model)
+
+        return self._to_delete_theme_card_response(theme_model=theme_model, card_position=theme_card_data.card_position)
+
+    async def update_theme_card(
+            self,
+            session: AsyncSession,
+            theme_card_data: UpdateThemeTheoryCardRequest | UpdateThemePracticeCardRequest
+    ) -> UpdateThemeCardResponse:
+        theme_model = (
+            await session.execute(select(self._theme_model).filter_by(theme_id=theme_card_data.theme_id))).scalars().first()
+
+        if not theme_model:
+            raise ThemeNotFoundError
+
+        if theme_card_data.current_position > len(theme_model.material):
+            raise ThemeCardNotFoundError
+
+        match theme_card_data:
+            case UpdateThemeTheoryCardRequest():
+                updated_card = self._material_theory(
+                    card_id=theme_card_data.card_id,
+                    type="theory",
+                    title=theme_card_data.title,
+                    descr=theme_card_data.descr,
+                    image_path=theme_card_data.image_path
+                )
+            case UpdateThemePracticeCardRequest():
+                if theme_card_data.tip:
+
+                    new_tip_data = {
+                        "image_path": theme_card_data.tip_image_path or self._default_tip_image_path
+                    }
+
+                    if theme_card_data.tip_descr:
+                        new_tip_data["descr"] = theme_card_data.tip_descr
+
+                    new_tip = self._material_practice_tip(**new_tip_data)
+                else:
+                    new_tip = None
+                updated_card = self._material_practice(
+                    card_id=theme_card_data.card_id,
+                    type="practice",
+                    title=theme_card_data.title,
+                    descr=theme_card_data.descr,
+                    image_path=theme_card_data.image_path,
+                    answer=theme_card_data.answer,
+                    tip=new_tip
+                )
+            case _:
+                raise ValidationError
+
+        serialized_card = updated_card.dict()
+        del theme_model.material[theme_card_data.current_position - 1]
+        theme_model.material.insert(theme_card_data.new_position - 1, serialized_card)
+        flag_modified(theme_model, "material")
+        session.add(theme_model)
+        return self._to_update_theme_card_response(theme_model=theme_model, new_position=theme_card_data.new_position)
