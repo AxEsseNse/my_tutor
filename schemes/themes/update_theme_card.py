@@ -8,10 +8,10 @@ class UpdateThemePracticeCardRequest(BaseModel):
     current_position: int = Field(alias="currentPosition")
     new_position: int = Field(alias="newPosition")
     title: str
-    image_path: str = Field(alias="imagePath")
+    image_path: Optional[str] = Field(None, alias="imagePath")
     descr: str
     answer: str
-    tip: bool
+    #tip: bool
     tip_image_path: Optional[str] = Field(None, alias="tipImagePath")
     tip_descr: Optional[str] = Field(None, alias="tipDescr")
 
@@ -23,7 +23,7 @@ class UpdateThemeTheoryCardRequest(BaseModel):
     new_position: int = Field(alias="newPosition")
     title: str
     descr: str
-    image_path: str = Field(alias="imagePath")
+    image_path: Optional[str] = Field(None, alias="imagePath")
 
 
 class UpdateThemeCardResponse(BaseModel):

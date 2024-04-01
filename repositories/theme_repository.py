@@ -8,7 +8,14 @@ from sqlalchemy import select, desc
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm.attributes import flag_modified
 
-from my_tutor.exceptions import ThemeNotFoundError, ThemeAlreadyExistError, ThemeCardNotFoundError, LessonNotFoundError, SaveImageError
+from my_tutor.exceptions import (
+    ThemeNotFoundError,
+    ThemeAlreadyExistError,
+    ThemeCardNotFoundError,
+    LessonNotFoundError,
+    SaveImageError,
+    DeleteImageError
+)
 from my_tutor.models import ThemeModel, StudyingModel, LessonModel
 from my_tutor.schemes import (
     AddThemeRequest,
@@ -299,7 +306,6 @@ class ThemeRepository:
                 os.makedirs(exam_task_number_folder)
 
             image_path = exam_task_number_folder + self.create_random_image_name()
-            print(image_path)
 
             async with aiofiles.open(image_path, 'wb') as file:
                 while True:
@@ -310,6 +316,17 @@ class ThemeRepository:
             return self._to_upload_image_response(image_path=f"/{image_path}")
         except Exception:
             raise SaveImageError
+
+    async def delete_image_from_storage(self, image_path: str) -> bool:
+        try:
+            if os.path.exists(image_path[1:]):
+                if image_path in (
+                self._default_theory_image_path, self._default_practice_image_path, self._default_tip_image_path):
+                    return False
+                os.remove(image_path[1:])
+            return False
+        except Exception as e:
+            return True
 
     async def add_theme_card(
             self,
@@ -332,19 +349,11 @@ class ThemeRepository:
                     image_path=theme_card_data.image_path or self._default_theory_image_path
                 )
             case AddThemePracticeCardRequest():
-                if theme_card_data.tip:
-
-                    new_tip_data = {
-                        "image_path": theme_card_data.tip_image_path or self._default_tip_image_path
-                    }
-
-                    if theme_card_data.tip_descr:
-                        new_tip_data["descr"] = theme_card_data.tip_descr
-
-                    new_tip = self._material_practice_tip(**new_tip_data)
-                else:
-                    new_tip = None
-                new_card = self._material_theory(
+                new_tip = self._material_practice_tip(
+                    image_path=theme_card_data.tip_image_path or self._default_tip_image_path,
+                    descr=theme_card_data.tip_descr if theme_card_data.tip_descr else ""
+                )
+                new_card = self._material_practice(
                     card_id=await self._get_new_theme_card_id(session=session),
                     type="practice",
                     title=theme_card_data.title,
@@ -356,16 +365,13 @@ class ThemeRepository:
             case _:
                 raise ValidationError
 
-        print(new_card)
-        #raise ThemeNotFoundError
-
         serialized_card = new_card.dict()
-        # theme_material = theme_model.material
-        # theme_material.insert(theme_material_data.position, serialized_card)
-        # theme_model.material = theme_material
-        # flag_modified(theme_model, "material")
-        # session.add(theme_model)
-        theme_model.material.insert(theme_card_data.card_position - 1, serialized_card)
+
+        if theme_card_data.card_position == 0:
+            theme_model.material.append(serialized_card)
+        else:
+            theme_model.material.insert(theme_card_data.card_position - 1, serialized_card)
+
         flag_modified(theme_model, "material")
         session.add(theme_model)
 
@@ -384,6 +390,17 @@ class ThemeRepository:
 
         if theme_card_data.card_id != theme_model.material[theme_card_data.card_position - 1]["card_id"]:
             raise ThemeCardNotFoundError
+
+        card = theme_model.material[theme_card_data.card_position - 1]
+
+        image_path = card["image_path"]
+        tip_image_path = card["tip"]["image_path"] if card["type"] == "practice" else None
+
+        image_exists = await self.delete_image_from_storage(image_path)
+        image_tip_exists = await self.delete_image_from_storage(tip_image_path) if tip_image_path else False
+
+        if image_exists or image_tip_exists:
+            raise DeleteImageError
 
         del theme_model.material[theme_card_data.card_position - 1]
         flag_modified(theme_model, "material")
@@ -405,6 +422,13 @@ class ThemeRepository:
         if theme_card_data.current_position > len(theme_model.material):
             raise ThemeCardNotFoundError
 
+        current_image_path = theme_model.material[theme_card_data.current_position - 1]["image_path"]
+        if current_image_path != theme_card_data.image_path:
+            image_exists = await self.delete_image_from_storage(current_image_path)
+
+            if image_exists:
+                raise DeleteImageError
+
         match theme_card_data:
             case UpdateThemeTheoryCardRequest():
                 updated_card = self._material_theory(
@@ -412,27 +436,26 @@ class ThemeRepository:
                     type="theory",
                     title=theme_card_data.title,
                     descr=theme_card_data.descr,
-                    image_path=theme_card_data.image_path
+                    image_path=theme_card_data.image_path or self._default_theory_image_path
                 )
             case UpdateThemePracticeCardRequest():
-                if theme_card_data.tip:
+                current_tip_image_path = theme_model.material[theme_card_data.current_position - 1]["tip"]["image_path"]
+                if current_tip_image_path != theme_card_data.tip_image_path:
+                    image_tip_exists = await self.delete_image_from_storage(current_tip_image_path)
 
-                    new_tip_data = {
-                        "image_path": theme_card_data.tip_image_path or self._default_tip_image_path
-                    }
+                    if image_tip_exists:
+                        raise DeleteImageError
 
-                    if theme_card_data.tip_descr:
-                        new_tip_data["descr"] = theme_card_data.tip_descr
-
-                    new_tip = self._material_practice_tip(**new_tip_data)
-                else:
-                    new_tip = None
+                new_tip = self._material_practice_tip(
+                    image_path=theme_card_data.tip_image_path or self._default_tip_image_path,
+                    descr=theme_card_data.tip_descr if theme_card_data.tip_descr else ""
+                )
                 updated_card = self._material_practice(
                     card_id=theme_card_data.card_id,
                     type="practice",
                     title=theme_card_data.title,
                     descr=theme_card_data.descr,
-                    image_path=theme_card_data.image_path,
+                    image_path=theme_card_data.image_path or self._default_practice_image_path,
                     answer=theme_card_data.answer,
                     tip=new_tip
                 )

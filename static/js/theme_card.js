@@ -12,6 +12,8 @@ class Controller {
         this.currentCardId = null
         this.currentCardPosition = null
         this.currentCardAnswer = null
+        this.currentCardImagePath = null
+        this.currentCardTipImagePath = null
         this.themes = []
         this.themesSelectField = document.getElementById('theme-select')
         this.themesSelect = document.getElementById('theme-card-theme')
@@ -54,6 +56,13 @@ class Controller {
         this.theoryField = document.getElementById('card-theory-field')
         this.theoryTitle = document.getElementById('card-theory-title')
         this.theoryDescr = document.getElementById('card-theory-descr')
+
+        this.theoryImageButtonAddField = document.getElementById('card-theory-image-button-add-field')
+        this.theoryImageButtonAdd = document.getElementById('card-theory-image-button-add')
+        this.theoryImageButtonDeleteField = document.getElementById('card-theory-image-button-delete-field')
+        this.theoryImageButtonDelete = document.getElementById('card-theory-image-button-delete')
+        this.theoryImageField = document.getElementById('card-theory-image-field')
+
         this.theoryImagePreview = document.getElementById('card-theory-image-preview')
         this.theoryImage = document.getElementById('card-theory-image')
 
@@ -61,17 +70,36 @@ class Controller {
         this.practiceTitle = document.getElementById('card-practice-title')
         this.practiceDescr = document.getElementById('card-practice-descr')
         this.practiceAnswer = document.getElementById('card-practice-answer')
+
+        this.practiceImageButtonAddField = document.getElementById('card-practice-image-button-add-field')
+        this.practiceImageButtonAdd = document.getElementById('card-practice-image-button-add')
+        this.practiceImageButtonDeleteField = document.getElementById('card-practice-image-button-delete-field')
+        this.practiceImageButtonDelete = document.getElementById('card-practice-image-button-delete')
+        this.practiceImageField = document.getElementById('card-practice-image-field')
+
         this.practiceImagePreview = document.getElementById('card-practice-image-preview')
         this.practiceImage = document.getElementById('card-practice-image')
 
         this.practiceTipField = document.getElementById('card-practice-tip-field')
-        this.practiceTipButton = document.getElementById('card-practice-tip-button')
+        this.practiceTipButtonAddField = document.getElementById('card-practice-tip-button-add-field')
+        this.practiceTipButtonAdd = document.getElementById('card-practice-tip-button-add')
+        this.practiceTipButtonDeleteField = document.getElementById('card-practice-tip-button-delete-field')
+        this.practiceTipButtonDelete = document.getElementById('card-practice-tip-button-delete')
         this.practiceTipDescr = document.getElementById('card-practice-tip-descr')
+
+        this.practiceTipImageButtonAddField = document.getElementById('card-practice-tip-image-button-add-field')
+        this.practiceTipImageButtonAdd = document.getElementById('card-practice-tip-image-button-add')
+        this.practiceTipImageButtonDeleteField = document.getElementById('card-practice-tip-image-button-delete-field')
+        this.practiceTipImageButtonDelete = document.getElementById('card-practice-tip-image-button-delete')
+        this.practiceTipImageField = document.getElementById('card-practice-tip-image-field')
+
         this.practiceTipImagePreview = document.getElementById('card-practice-tip-image-preview')
         this.practiceTipImage = document.getElementById('card-practice-tip-image')
+
         //общие кнопки для редактирования и создания карточек
         this.cardPositionSelectField = document.getElementById('card-position-field')
         this.cardPositionSelect = document.getElementById('card-position')
+        this.sendCardDataButtonField = document.getElementById('send-card-data-to-server-button-field')
         this.sendCardDataButton = document.getElementById('send-card-data-to-server-button')
     }
 
@@ -107,14 +135,46 @@ class Controller {
                     this.theoryField.classList.add('hidden-field')
                 }
                 break
+            case 'practiceCardInput':
+                if (!this.practiceField.classList.contains('hidden-field')) {
+                    this.practiceField.classList.add('hidden-field')
+                }
+                break
+            // Кнопки изображения теории
+            case 'theoryCardImageButtonAddField':
+                if (!this.theoryImageButtonAddField.classList.contains('hidden-field')) {
+                    this.theoryImageButtonAddField.classList.add('hidden-field')
+                }
+                break
+            case 'theoryCardImageButtonDeleteField':
+                if (!this.theoryImageButtonDeleteField.classList.contains('hidden-field')) {
+                    this.theoryImageButtonDeleteField.classList.add('hidden-field')
+                }
+                break
+            case 'theoryCardImageField':
+                if (!this.theoryImageField.classList.contains('hidden-field')) {
+                    this.theoryImageField.classList.add('hidden-field')
+                }
+                break
             case 'theoryCardInputImage':
                 if (!this.theoryImagePreview.classList.contains('hidden-field')) {
                     this.theoryImagePreview.classList.add('hidden-field')
                 }
                 break
-            case 'practiceCardInput':
-                if (!this.practiceField.classList.contains('hidden-field')) {
-                    this.practiceField.classList.add('hidden-field')
+            // Кнопки изображения практики
+            case 'practiceCardImageButtonAddField':
+                if (!this.practiceImageButtonAddField.classList.contains('hidden-field')) {
+                    this.practiceImageButtonAddField.classList.add('hidden-field')
+                }
+                break
+            case 'practiceCardImageButtonDeleteField':
+                if (!this.practiceImageButtonDeleteField.classList.contains('hidden-field')) {
+                    this.practiceImageButtonDeleteField.classList.add('hidden-field')
+                }
+                break
+            case 'practiceCardImageField':
+                if (!this.practiceImageField.classList.contains('hidden-field')) {
+                    this.practiceImageField.classList.add('hidden-field')
                 }
                 break
             case 'practiceCardInputImage':
@@ -122,27 +182,51 @@ class Controller {
                     this.practiceImagePreview.classList.add('hidden-field')
                 }
                 break
+            // Кнопки изображения решения
+            case 'practiceCardTipImageButtonAddField':
+                if (!this.practiceTipImageButtonAddField.classList.contains('hidden-field')) {
+                    this.practiceTipImageButtonAddField.classList.add('hidden-field')
+                }
+                break
+            case 'practiceCardTipImageButtonDeleteField':
+                if (!this.practiceTipImageButtonDeleteField.classList.contains('hidden-field')) {
+                    this.practiceTipImageButtonDeleteField.classList.add('hidden-field')
+                }
+                break
+            case 'practiceCardTipImageField':
+                if (!this.practiceTipImageField.classList.contains('hidden-field')) {
+                    this.practiceTipImageField.classList.add('hidden-field')
+                }
+                break
+            case 'practiceCardInputTipImage':
+                if (!this.practiceTipImagePreview.classList.contains('hidden-field')) {
+                    this.practiceTipImagePreview.classList.add('hidden-field')
+                }
+                break
+            // Кнопки решения
+            case 'practiceCardTipButtonAddField':
+                if (!this.practiceTipButtonAddField.classList.contains('hidden-field')) {
+                    this.practiceTipButtonAddField.classList.add('hidden-field')
+                }
+                break
+            case 'practiceCardTipButtonDeleteField':
+                console.log('4')
+                if (!this.practiceTipButtonDeleteField.classList.contains('hidden-field')) {
+                    this.practiceTipButtonDeleteField.classList.add('hidden-field')
+                }
+                break
             case 'practiceCardTipInput':
                 if (!this.practiceTipField.classList.contains('hidden-field')) {
                     this.practiceTipField.classList.add('hidden-field')
                 }
                 break
-            case 'practiceCardTipInputImage':
-                if (!this.practiceTipImagePreview.classList.contains('hidden-field')) {
-                    this.practiceTipImagePreview.classList.add('hidden-field')
-                }
-                break
-            case 'showTipButton':
-                if (!this.practiceTipButton.classList.contains('hidden-field')) {
-                    this.practiceTipButton.classList.add('hidden-field')
-                }
-                break
+            // Общие кнопки + поля предпросмотра карточки
             case 'cardDataButtons':
                 if (!this.cardPositionSelectField.classList.contains('hidden-field')) {
                     this.cardPositionSelectField.classList.add('hidden-field')
                 }
-                if (!this.sendCardDataButton.classList.contains('hidden-field')) {
-                    this.sendCardDataButton.classList.add('hidden-field')
+                if (!this.sendCardDataButtonField.classList.contains('hidden-field')) {
+                    this.sendCardDataButtonField.classList.add('hidden-field')
                 }
                 break
             case 'previewCardTheory':
@@ -150,24 +234,25 @@ class Controller {
                     this.PreviewCardTheoryField.classList.add('hidden-field')
                 }
                 break
-            case 'previewCardTheoryImage':
-                if (!this.PreviewCardTheoryImage.classList.contains('hidden-field')) {
-                        this.PreviewCardTheoryImage.classList.add('hidden-field')
-                    }
             case 'previewCardPractice':
                 if (!this.PreviewCardPracticeField.classList.contains('hidden-field')) {
                     this.PreviewCardPracticeField.classList.add('hidden-field')
                 }
                 break
-            case 'previewCardPracticeImage':
-                if (!this.PreviewCardPracticeImage.classList.contains('hidden-field')) {
-                        this.PreviewCardPracticeImage.classList.add('hidden-field')
-                    }
             case 'previewCardPracticeTip':
                 if (!this.PreviewCardPracticeTipField.classList.contains('hidden-field')) {
                     this.PreviewCardPracticeTipField.classList.add('hidden-field')
                 }
                 break
+            // Изображения в предпросмотре
+            case 'previewCardTheoryImage':
+                if (!this.PreviewCardTheoryImage.classList.contains('hidden-field')) {
+                        this.PreviewCardTheoryImage.classList.add('hidden-field')
+                    }
+            case 'previewCardPracticeImage':
+                if (!this.PreviewCardPracticeImage.classList.contains('hidden-field')) {
+                        this.PreviewCardPracticeImage.classList.add('hidden-field')
+                    }
             case 'previewCardPracticeTipImage':
                 if (!this.PreviewCardPracticeTipImage.classList.contains('hidden-field')) {
                         this.PreviewCardPracticeTipImage.classList.add('hidden-field')
@@ -323,6 +408,9 @@ class Controller {
         this.hideField('updateCard')
         this.hideField('deleteCard')
         this.hideField('cardContent')
+        this.hideField('theoryCardInput')
+        this.hideField('practiceCardInput')
+        this.hideField('cardDataButtons')
         this.prepareThemesSelect(examId)
     }
 
@@ -356,7 +444,7 @@ class Controller {
                 this.createCardField.classList.remove('hidden-field')
 
                 const lastOption = document.createElement('option')
-                lastOption.value = this.cards.length + 1
+                lastOption.value = 0
                 lastOption.innerText = 'В конец темы'
                 this.cardPositionSelect.append(lastOption)
                 lastOption.selected = true
@@ -408,43 +496,34 @@ class Controller {
     }
 
     chooseCreateCard(cardType) {
+        this.currentCardImagePath = null
+        this.currentCardTipImagePath = null
+
         this.clearInputFields(cardType)
         this.clearPreviewCard(cardType)
-        this.showInputFields(cardType)
+        this.showInputFields(cardType, 'create')
         this.showPreviewCard(cardType)
         this.flashMsg.innerText = ''
     }
 
     clearInputFields(cardType) {
+
         if (cardType == 'theory') {
             this.theoryTitle.value = ''
             this.theoryDescr.value = ''
-            this.hideField('theoryCardInputImage')
-            this.theoryImage.value = ''
-            this.hideField('previewCardTheoryImage')
-
             this.sendCardDataButton.onclick = () => {
                 this.createTheoryCard()
             }
         } else {
             this.practiceTitle.value = ''
             this.practiceDescr.value = ''
-            this.hideField('practiceCardInputImage')
-            this.practiceImage.value = ''
             this.practiceAnswer.value = ''
-
-            this.practiceTipButton.classList.remove('hidden-field')
-            this.practiceTipButton.innerHTML = 'Добавить решение'
             this.practiceTipDescr.value = ''
-            this.hideField('practiceCardTipInputImage')
-            this.practiceTipImage.value = ''
-            this.hideField('previewCardPracticeImage')
-            this.hideField('previewCardPracticeTipImage')
-
             this.sendCardDataButton.onclick = () => {
                 this.createPracticeCard()
             }
         }
+
         this.sendCardDataButton.innerHTML = "Создать карточку"
     }
 
@@ -452,19 +531,15 @@ class Controller {
         this.PreviewCardTitle.innerText = ''
         if (cardType == 'theory') {
             this.PreviewCardTheoryDescr.innerText = ''
-            this.hideField('previewCardTheoryImage')
         } else {
             this.PreviewCardPracticeDescr.innerText = ''
-            this.hideField('previewCardPracticeImage')
             this.PreviewCardPracticeAnswerField.value = ''
             this.PreviewCardPracticeTipDescr.innerText = ''
-            this.hideField('previewCardPracticeTipImage')
         }
     }
 
     showPreviewCard(cardType) {
         this.cardAction.innerText = 'Предпросмотр создаваемой карточки'
-        this.PreviewCardTitle.innerText = ''
         this.cardContent.classList.remove('hidden-field')
 
         if (cardType == 'theory') {
@@ -488,16 +563,18 @@ class Controller {
     chooseUpdateCard(cardId) {
         this.currentCardId = cardId
         let cardPosition = this.cards.findIndex(card => card.card_id == cardId) + 1;
+
         this.currentCard = this.cards[cardPosition - 1]
         this.currentCardAnswer = this.currentCard['answer']
+        this.currentCardImagePath = this.currentCard['image_path']
+        this.currentCardTipImagePath = this.currentCard['tip'] ? this.currentCard['tip']['image_path'] : null;
+
         this.cardPositionSelect.value = cardPosition;
         this.currentCardPosition = cardPosition
-        this.practiceTipButton.classList.remove('hidden-field')
-        this.practiceTipButton.innerHTML = 'Изменить решение'
         this.cardAction.innerText = 'Предпросмотр изменяемой карточки'
         this.fillCardContent(this.currentCard)
         this.fillInputFields(this.currentCard)
-        this.showInputFields(this.currentCard.type)
+        this.showInputFields(this.currentCard.type, 'update')
 
         this.flashMsg.innerText = ''
         this.cardContent.classList.remove('hidden-field')
@@ -539,11 +616,12 @@ class Controller {
                 this.checkAnswer()
             }
 
-            if (card.tip != null) {
-                this.PreviewCardPracticeTipButton.onclick = () => {
-                    this.switchTip(card.tip)
-                }
+            this.PreviewCardPracticeTipButton.onclick = () => {
+                this.switchTip()
             }
+
+            this.PreviewCardPracticeTipDescr.innerText = card.tip.descr
+            this.PreviewCardPracticeTipImage.src = card.tip.image_path
 
             this.PreviewCardPracticeAnswerField.value = ''
             this.PreviewCardPracticeField.classList.remove('hidden-field')
@@ -585,7 +663,6 @@ class Controller {
             this.theoryTitle.value = card.title
             this.theoryDescr.value = card.descr
             this.theoryImagePreview.src = card.image_path
-            this.theoryImage.value = ''
             this.sendCardDataButton.onclick = () => {
                 this.updateTheoryCard()
             }
@@ -609,23 +686,110 @@ class Controller {
         this.sendCardDataButton.innerHTML = "Применить изменения"
     }
 
-    showInputFields(cardType) {
+    showInputFields(cardType, action) {
+
         if (cardType == 'theory') {
-            this.hideField('practiceCardTipInput')
             this.hideField('practiceCardInput')
+            this.hideField('practiceCardTipInput')
+
+            if (action == 'create') {
+                this.deleteTheoryCardImage()
+            } else {
+                this.showTheoryCardImageField()
+            }
+
             this.theoryField.classList.remove('hidden-field')
         } else {
             this.hideField('theoryCardInput')
-            this.hideField('practiceCardTipInput')
+
+            if (action == 'create') {
+                this.deletePracticeCardImage()
+                this.deletePracticeCardTip()
+            } else {
+                this.showPracticeCardImageField()
+                this.showPracticeCardTipField()
+                this.showPracticeCardTipImageField()
+            }
+
             this.practiceField.classList.remove('hidden-field')
         }
+
         this.cardPositionSelectField.classList.remove('hidden-field')
-        this.sendCardDataButton.classList.remove('hidden-field')
+        this.sendCardDataButtonField.classList.remove('hidden-field')
     }
 
-    showTipField() {
+    showTheoryCardImageField() {
+        this.hideField('theoryCardImageButtonAddField')
+        this.theoryImageButtonDeleteField.classList.remove('hidden-field')
+        this.theoryImageField.classList.remove('hidden-field')
+    }
+
+    deleteTheoryCardImage() {
+        this.hideField('theoryCardImageField')
+        this.hideField('theoryCardImageButtonDeleteField')
+        this.theoryImageButtonAddField.classList.remove('hidden-field')
+
+        this.hideField('theoryCardInputImage')
+        this.hideField('previewCardTheoryImage')
+        this.theoryImage.value = ''
+        this.currentCardImagePath = null
+    }
+
+    showPracticeCardImageField() {
+        this.hideField('practiceCardImageButtonAddField')
+        this.practiceImageButtonDeleteField.classList.remove('hidden-field')
+        this.practiceImageField.classList.remove('hidden-field')
+    }
+
+    deletePracticeCardImage() {
+        this.hideField('practiceCardImageField')
+        this.hideField('practiceCardImageButtonDeleteField')
+        this.practiceImageButtonAddField.classList.remove('hidden-field')
+
+        this.hideField('practiceCardInputImage')
+        this.hideField('previewCardPracticeImage')
+        this.practiceImage.value = ''
+        this.currentCardImagePath = null
+    }
+
+    showPracticeCardTipImageField() {
+        this.hideField('practiceCardTipImageButtonAddField')
+        this.practiceTipImageButtonDeleteField.classList.remove('hidden-field')
+        this.practiceTipImageField.classList.remove('hidden-field')
+    }
+
+    deletePracticeCardTipImage() {
+        this.hideField('practiceCardTipImageField')
+        this.hideField('practiceCardTipImageButtonDeleteField')
+        this.practiceTipImageButtonAddField.classList.remove('hidden-field')
+
+        this.hideField('practiceCardInputTipImage')
+        this.hideField('previewCardPracticeTipImage')
+        this.practiceTipImage.value = ''
+        this.currentCardTipImagePath = null
+    }
+
+    showPracticeCardTipField() {
+        this.hideField('practiceCardTipButtonAddField')
+        this.practiceTipButtonDeleteField.classList.remove('hidden-field')
+        this.hideField('practiceCardTipImageButtonDeleteField')
+        this.practiceTipImageButtonAddField.classList.remove('hidden-field')
+        this.hideField('practiceCardTipImageField')
+
         this.practiceTipField.classList.remove('hidden-field')
-        this.hideField('showTipButton')
+    }
+
+    deletePracticeCardTip() {
+        this.hideField('practiceCardTipButtonDeleteField')
+        this.practiceTipButtonAddField.classList.remove('hidden-field')
+        this.hideField('practiceCardTipInput')
+        this.hideField('practiceCardInputTipImage')
+        this.hideField('previewCardPracticeTipImage')
+
+        this.practiceTipDescr.value = ''
+        this.practiceTipImage.value = ''
+        this.PreviewCardPracticeTipDescr.innerText = ''
+        this.currentCardTipImagePath = null
     }
 
     uploadImage(image, path) {
@@ -690,13 +854,11 @@ class Controller {
             return
         }
 
-        let imagePath = this.currentCard.image_path
-
         if (this.theoryImage.files.length > 0) {
             const path = `${this.exams[this.currentExamId]}/${this.themes[this.currentThemeId].exam_task_number}/`
-            imagePath = await this.uploadImage(this.theoryImage.files[0], path)
+            this.currentCardImagePath = await this.uploadImage(this.theoryImage.files[0], path)
 
-            if (!imagePath) {
+            if (!this.currentCardImagePath) {
                 flashMsg('Не удалось загрузить изображение на сервер. Попробуй еще раз, либо внесите изменения в карточку, не изменяя изображение', this.flashMsg, 'wrong')
                 return
             }
@@ -705,13 +867,14 @@ class Controller {
         const updateTheoryCardData = {
             themeId: this.currentThemeId,
             cardId: this.currentCardId,
-            currentPosition: this.currentCardPosition,
-            newPosition: this.cardPositionSelect.value,
             title: this.theoryTitle.value,
             descr: this.theoryDescr.value,
-            imagePath: imagePath
+            ...(this.currentCardImagePath && { imagePath: this.currentCardImagePath}),
+            currentPosition: this.currentCardPosition,
+            newPosition: this.cardPositionSelect.value
         }
         console.log(updateTheoryCardData)
+        return
         fetch(`/api/themes/${this.currentThemeId}/cards/`, {
             method: 'PUT',
                 headers: {
@@ -769,16 +932,14 @@ class Controller {
             return
         }
 
-        let imagePath = this.currentCard.image_path
-        let tipFilled = false
+        //let tipFilled = false
         let tipDescr = null
-        let tipImagePath = this.currentCard.tip && this.currentCard.tip.image_path ? this.currentCard.tip.image_path : null;
 
         if (this.practiceImage.files.length > 0) {
             const path = `${this.exams[this.currentExamId]}/${this.themes[this.currentThemeId].exam_task_number}/`
-            imagePath = await this.uploadImage(this.practiceImage.files[0], path)
+            this.currentCardImagePath = await this.uploadImage(this.practiceImage.files[0], path)
 
-            if (!imagePath) {
+            if (!this.currentCardImagePath) {
                 flashMsg('Не удалось загрузить изображение карточки на сервер. Попробуй еще раз, либо внесите изменения в карточку, не изменяя изображение', this.flashMsg, 'wrong')
                 return
             }
@@ -786,9 +947,9 @@ class Controller {
 
         if (this.practiceTipImage.files.length > 0) {
             const path = `${this.exams[this.currentExamId]}/${this.themes[this.currentThemeId].exam_task_number}/`
-            tipImagePath = await this.uploadImage(this.practiceTipImage.files[0], path)
+            this.currentCardTipImagePath = await this.uploadImage(this.practiceTipImage.files[0], path)
 
-            if (!tipImagePath) {
+            if (!this.currentCardTipImagePath) {
                 flashMsg('Не удалось загрузить изображение решения на сервер. Попробуй еще раз, либо внесите изменения в карточку, не изменяя изображение', this.flashMsg, 'wrong')
                 return
             }
@@ -798,23 +959,25 @@ class Controller {
             tipDescr = this.practiceTipDescr.value
         }
 
-        if (!(tipDescr == null && tipImagePath == null)) {
-            tipFilled = true
-        }
+//        if (!(tipDescr == null && this.currentCardTipImagePath == null)) {
+//            tipFilled = true
+//        }
 
         const updatePracticeCardData = {
             themeId: this.currentThemeId,
             cardId: this.currentCardId,
-            currentPosition: this.currentCardPosition,
-            newPosition: this.cardPositionSelect.value,
             title: this.practiceTitle.value,
             descr: this.practiceDescr.value,
-            imagePath: imagePath,
+            ...(this.currentCardImagePath && { imagePath: this.currentCardImagePath}),
             answer: this.practiceAnswer.value,
-            tip: tipFilled,
+            //tip: tipFilled,
             ...(tipDescr && { tipDescr: tipDescr }),
-            ...(tipImagePath && { tipImagePath: tipImagePath })
+            ...(this.currentCardTipImagePath && { tipImagePath: this.currentCardTipImagePath }),
+            currentPosition: this.currentCardPosition,
+            newPosition: this.cardPositionSelect.value
         }
+
+        console.log(updatePracticeCardData)
 
         fetch(`/api/themes/${this.currentThemeId}/cards/`, {
             method: 'PUT',
@@ -857,6 +1020,8 @@ class Controller {
             cardId: this.currentCardId,
             cardPosition: this.currentCardPosition
         }
+
+        console.log(deleteCardData)
 
         fetch(`/api/themes/${this.currentThemeId}/cards/`, {
             method: 'DELETE',
@@ -939,13 +1104,11 @@ class Controller {
             return
         }
 
-        let imagePath = null
-
         if (this.theoryImage.files.length > 0) {
             const path = `${this.exams[this.currentExamId]}/${this.themes[this.currentThemeId].exam_task_number}/`
-            imagePath = await this.uploadImage(this.theoryImage.files[0], path)
+            this.currentCardImagePath = await this.uploadImage(this.theoryImage.files[0], path)
 
-            if (!imagePath) {
+            if (!this.currentCardImagePath) {
                 flashMsg('Не удалось загрузить изображение на сервер. Попробуй еще раз, либо внесите изменения в карточку, не изменяя изображение', this.flashMsg, 'wrong')
                 return
             }
@@ -955,7 +1118,7 @@ class Controller {
             themeId: this.currentThemeId,
             title: this.theoryTitle.value,
             descr: this.theoryDescr.value,
-            ...(imagePath && { imagePath: imagePath }),
+            ...(this.currentCardImagePath && { imagePath: this.currentCardImagePath}),
             cardPosition: this.cardPositionSelect.value
         }
 
@@ -985,6 +1148,7 @@ class Controller {
             this.hideField('theoryCardInput')
             this.hideField('cardDataButtons')
             this.cardAction.innerText = 'Созданная карточка'
+            this.chooseTheme(this.currentThemeId, true)
         })
         .catch(error => {
             console.log(error)
@@ -1019,16 +1183,14 @@ class Controller {
             return
         }
 
-        let imagePath = null
-        let tipFilled = false
+        //let tipFilled = false
         let tipDescr = null
-        let tipImagePath = null;
 
         if (this.practiceImage.files.length > 0) {
             const path = `${this.exams[this.currentExamId]}/${this.themes[this.currentThemeId].exam_task_number}/`
-            imagePath = await this.uploadImage(this.practiceImage.files[0], path)
+            this.currentCardImagePath = await this.uploadImage(this.practiceImage.files[0], path)
 
-            if (!imagePath) {
+            if (!this.currentCardImagePath) {
                 flashMsg('Не удалось загрузить изображение на сервер. Попробуй еще раз, либо внесите изменения в карточку, не изменяя изображение', this.flashMsg, 'wrong')
                 return
             }
@@ -1036,9 +1198,9 @@ class Controller {
 
         if (this.practiceTipImage.files.length > 0) {
             const path = `${this.exams[this.currentExamId]}/${this.themes[this.currentThemeId].exam_task_number}/`
-            tipImagePath = await this.uploadImage(this.practiceTipImage.files[0], path)
+            this.currentCardTipImagePath = await this.uploadImage(this.practiceTipImage.files[0], path)
 
-            if (!tipImagePath) {
+            if (!this.currentCardTipImagePath) {
                 flashMsg('Не удалось загрузить изображение решения на сервер. Попробуй еще раз, либо внесите изменения в карточку, не изменяя изображение', this.flashMsg, 'wrong')
                 return
             }
@@ -1048,24 +1210,24 @@ class Controller {
             tipDescr = this.practiceTipDescr.value
         }
 
-        if (!(tipDescr == null && tipImagePath == null)) {
-            tipFilled = true
-        }
+//        if (!(tipDescr == null && this.currentCardTipImagePath == null)) {
+//            tipFilled = true
+//        }
 
         const createPracticeCardData = {
             themeId: this.currentThemeId,
             title: this.practiceTitle.value,
             descr: this.practiceDescr.value,
-            ...(imagePath && { imagePath: imagePath }),
+            ...(this.currentCardImagePath && { imagePath: this.currentCardImagePath}),
             answer: this.practiceAnswer.value,
-            tip: tipFilled,
+            //tip: tipFilled,
             ...(tipDescr && { tipDescr: tipDescr }),
-            ...(tipImagePath && { tipImagePath: tipImagePath }),
+            ...(this.currentCardTipImagePath && { tipImagePath: this.currentCardTipImagePath }),
             cardPosition: this.cardPositionSelect.value
         }
 
         console.log(createPracticeCardData)
-        return
+
         fetch(`/api/themes/${this.currentThemeId}/cards/`, {
             method: 'POST',
                 headers: {
@@ -1090,6 +1252,7 @@ class Controller {
             this.hideField('theoryCardInput')
             this.hideField('cardDataButtons')
             this.cardAction.innerText = 'Созданная карточка'
+            this.chooseTheme(this.currentThemeId, true)
         })
         .catch(error => {
             console.log(error)
@@ -1132,7 +1295,7 @@ class Controller {
                             previewElement.src = self.cards[self.currentCardId]['tip']['image_path']
                         previewCardImageField.src = self.cards[self.currentCardId]['tip']['image_path']
                         } else {
-                            self.hideField('practiceCardTipInputImage')
+                            self.hideField('practiceCardInputTipImage')
                             self.hideField('previewCardPracticeTipImage')
                         }
                         break
@@ -1173,20 +1336,6 @@ document.addEventListener('DOMContentLoaded', function (event) {
     const updateCardField = document.getElementById('update-content')
     const deleteCardField = document.getElementById('delete-content')
 
-    controller.createTheoryCardButton.onclick = () => {
-        controller.chooseCreateCard('theory')
-    }
-    controller.createPracticeCardButton.onclick = () => {
-        controller.chooseCreateCard('practice')
-    }
-
-    controller.practiceTipButton.onclick = () => {
-        controller.showTipField()
-    }
-    controller.deleteCardButton.onclick = () => {
-        controller.deleteCard()
-    }
-
     chooseExam.addEventListener('change', function() {
         controller.chooseExam(this.value)
     })
@@ -1197,18 +1346,51 @@ document.addEventListener('DOMContentLoaded', function (event) {
         controller.chooseAction(this.value)
     })
 
+    // Выбор вида создаваемой карточки
+    controller.createTheoryCardButton.onclick = () => {
+        controller.chooseCreateCard('theory')
+    }
+    controller.createPracticeCardButton.onclick = () => {
+        controller.chooseCreateCard('practice')
+    }
+    // Кнопки изображения теории
+    controller.theoryImageButtonAdd.onclick = () => {
+        controller.showTheoryCardImageField()
+    }
+    controller.theoryImageButtonDelete.onclick = () => {
+        controller.deleteTheoryCardImage()
+    }
+    // Кнопки изображения практики
+    controller.practiceImageButtonAdd.onclick = () => {
+        controller.showPracticeCardImageField()
+    }
+    controller.practiceImageButtonDelete.onclick = () => {
+        controller.deletePracticeCardImage()
+    }
+    // Кнопки изображения решения
+    controller.practiceTipImageButtonAdd.onclick = () => {
+        controller.showPracticeCardTipImageField()
+    }
+    controller.practiceTipImageButtonDelete.onclick = () => {
+        controller.deletePracticeCardTipImage()
+    }
+    // Кнопки решения
+    controller.practiceTipButtonAdd.onclick = () => {
+        controller.showPracticeCardTipField()
+    }
+    controller.practiceTipButtonDelete.onclick = () => {
+        controller.deletePracticeCardTip()
+    }
+
     chooseUpdateCard.addEventListener('change', function() {
         controller.chooseUpdateCard(this.value)
     })
     chooseDeleteCard.addEventListener('change', function() {
         controller.chooseDeleteCard(this.value)
     })
-
-    controller.PreviewCardPracticeAnswerField.addEventListener('input', () => {
-        controller.PreviewCardPracticeAnswerField.classList.remove('input-answer-success')
-        controller.PreviewCardPracticeAnswerField.classList.remove('input-answer-wrong')
-        controller.PreviewCardPracticeAnswerButton.innerText = 'Проверить'
-    })
+    controller.deleteCardButton.onclick = () => {
+        controller.deleteCard()
+    }
 
     controller.PreviewCardPracticeAnswerField.addEventListener('input', () => {
         controller.PreviewCardPracticeAnswerField.classList.remove('input-answer-success')

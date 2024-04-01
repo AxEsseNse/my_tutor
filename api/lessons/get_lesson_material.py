@@ -23,8 +23,12 @@ def _to_lesson(theme: Theme, student_id: int, progress_cards: dict) -> Lesson:
 async def get_lesson_material(lesson_id: int, session: AsyncSession = Depends(get_db_session)) -> Lesson:
     try:
         theme_id, student_id = await lesson_repository.get_lesson_theme_id(session=session, lesson_id=lesson_id)
+        print(f"theme_id = {theme_id}; student_id = {student_id}")
         theme = await theme_repository.get_theme(session=session, theme_id=theme_id)
+        print(f"theme: {theme}")
+        print('xuy')
         progress_cards = await theme_repository.get_theme_student_progress(session=session, theme_id=theme_id, student_id=student_id)
+        print(f"progress_cards = {progress_cards}")
         return _to_lesson(student_id=student_id, theme=theme, progress_cards=progress_cards)
     except ThemeNotFoundError as e:
         raise HTTPException(HTTPStatus.NOT_FOUND, e.message)

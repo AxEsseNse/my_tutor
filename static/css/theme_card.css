@@ -54,7 +54,7 @@
 .label-position {
     width: 50%;
 }
-#send-card-data-to-server-button {
+#rsend-card-data-to-server-button {
     margin-left: 10px;
     width: 300px;
     height: 70px;
@@ -73,14 +73,14 @@
     user-select: none;
     transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
-#send-card-data-to-server-button:hover {
+#rsend-card-data-to-server-button:hover {
     background-color: #F6E6AE;
     border-color: #14A9A5;
     color: black;
     outline: 0;
     box-shadow: 0 0 0 0.4rem #F6E6AE;
 }
-#send-card-data-to-server-button:focus-visible {
+#rsend-card-data-to-server-button:focus-visible {
     background-color: #F6E6AE;
     border-color: #14A9A5;
     color: black;
@@ -101,17 +101,13 @@
     font-size: 28px;
 }
 
-.card-type-button {
-    margin-left: 50px;
+.custom-sand-button {
     display: inline-block;
-    width: 170px;
     padding: 2px 8px;
-    font-size: 20px;
     color: black;
     background-color: #F6E6AE;
-    font-weight: 500;
     border: 3px solid #14A9A5;
-    border-radius: 20px;
+    border-radius: 10px;
     text-align: center;
     vertical-align: middle;
     text-decoration: none;
@@ -120,18 +116,48 @@
     user-select: none;
     transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
-.card-type-button:hover {
+.custom-sand-button:hover {
     background-color: #F6E6AE;
     border-color: #14A9A5;
     outline: 0;
     box-shadow: 0 0 0 0.2rem #F6E6AE;
 }
-.card-type-button:focus-visible {
+.custom-sand-button:focus-visible {
     background-color: #F6E6AE;
     border-color: #14A9A5;
     outline: 0;
     box-shadow: 0 0 0 0.2rem #F6E6AE;
 }
+.card-type-button {
+    margin-left: 50px;
+    width: 170px;
+    font-size: 20px;
+    font-weight: 500;
+}
+.enable-add-image {
+    margin-top: 10px;
+    margin-left: 10px;
+    width: 300px;
+    font-size: 24px;
+    font-weight: 400;
+}
+.enable-add-tip {
+    margin-top: 10px;
+    margin-left: 10px;
+    width: 250px;
+    font-size: 24px;
+    font-weight: 400;
+}
+.send-card-data-button {
+    margin-left: 10px;
+    width: 300px;
+    height: 70px;
+    font-size: 26px;
+    font-weight: 400;
+}
+
+
+
 #card-add-theory-title2 {
     width: 80%;
 }
@@ -147,6 +173,15 @@
     flex-grow: 1;
 }
 
+#card-tip {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100px;
+    color: #F6E6AE;
+    font-size: 40px;
+    padding: 6px 12px;
+}
 #card-action {
     display: flex;
     align-items: center;

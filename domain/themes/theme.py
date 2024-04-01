@@ -22,8 +22,8 @@ class CardPractice(BaseModel):
     image_path: str
     descr: str
     answer: str
-    tip: CardPracticeTip | None
-
+    #tip: CardPracticeTip | None
+    tip: CardPracticeTip
 
 class Theme(BaseModel):
     theme_id: int

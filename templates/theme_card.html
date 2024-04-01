@@ -49,10 +49,10 @@
     </div>
     <!-- Поля для управления созданием карточки -->
     <div class="hidden-field mt-3" id="create-content">
-        <button type="button" class="card-type-button" id="create-theory-card-button">
+        <button type="button" class="custom-sand-button card-type-button" id="create-theory-card-button">
             Теория
         </button>
-        <button type="button" class="card-type-button" id="create-practice-card-button">
+        <button type="button" class="custom-sand-button card-type-button" id="create-practice-card-button">
             Практика
         </button>
     </div>
@@ -82,16 +82,28 @@
                 ></textarea>
             </div>
         </div>
-        <!-- Поле предпросмотра изображения карточки -->
-        <div class="form-group row mt-3 input-field">
-            <label class="col-2 col-form-label label-input-field" for="card-theory-image-preview">Изображение</label>
-            <div class="col-5">
-                <img class="image-preview" id="card-theory-image-preview" alt="Preview">
-            </div>
-            <div class="col-5">
-                <!-- Поле загрузки изображения -->
-                <div class="input-group mb-3 upload-image-field">
-                    <input type="file" class="form-control" accept="image/*" id="card-theory-image">
+        <!-- Поле изображения карточки -->
+        <div id="card-theory-image-button-add-field">
+            <button type="button" class="custom-sand-button enable-add-image" id="card-theory-image-button-add">
+                Добавить изображение
+            </button>
+        </div>
+        <div id="card-theory-image-button-delete-field">
+            <button type="button" class="custom-sand-button enable-add-image" id="card-theory-image-button-delete">
+                Удалить изображение
+            </button>
+        </div>
+        <div class="hidden-field" id="card-theory-image-field">
+            <div class="form-group row mt-3 input-field">
+                <label class="col-2 col-form-label label-input-field" for="card-theory-image-preview">Изображение</label>
+                <div class="col-5">
+                    <img class="image-preview" id="card-theory-image-preview" alt="Preview">
+                </div>
+                <div class="col-5">
+                    <!-- Поле загрузки изображения -->
+                    <div class="input-group mb-3 upload-image-field">
+                        <input type="file" class="form-control" accept="image/*" id="card-theory-image">
+                    </div>
                 </div>
             </div>
         </div>
@@ -135,25 +147,45 @@
                 />
             </div>
         </div>
-        <!-- Поле предпросмотра изображения карточки -->
-        <div class="form-group row mt-3 input-field">
-            <label class="col-2 col-form-label label-input-field" for="card-practice-image-preview">Изображение</label>
-            <div class="col-5">
-                <img class="image-preview" id="card-practice-image-preview" alt="Preview">
-            </div>
-            <!-- Поле загрузки изображения -->
-            <div class="col-5">
-                <div class="input-group mb-3 upload-image-field">
-                    <input type="file" class="form-control" accept="image/*" id="card-practice-image">
+        <!-- Поле изображения карточки -->
+        <div id="card-practice-image-button-add-field">
+            <button type="button" class="custom-sand-button enable-add-image" id="card-practice-image-button-add">
+                Добавить изображение
+            </button>
+        </div>
+        <div id="card-practice-image-button-delete-field">
+            <button type="button" class="custom-sand-button enable-add-image" id="card-practice-image-button-delete">
+                Удалить изображение
+            </button>
+        </div>
+        <div class="hidden-field" id="card-practice-image-field">
+            <div class="form-group row mt-3 input-field">
+                <label class="col-2 col-form-label label-input-field" for="card-practice-image-preview">Изображение</label>
+                <div class="col-5">
+                    <img class="image-preview" id="card-practice-image-preview" alt="Preview">
+                </div>
+                <!-- Поле загрузки изображения -->
+                <div class="col-5">
+                    <div class="input-group mb-3 upload-image-field">
+                        <input type="file" class="form-control" accept="image/*" id="card-practice-image">
+                    </div>
                 </div>
             </div>
         </div>
         <!-- Кнопка решения -->
-        <button type="button" class="btn btn-dark btn-block mt-3" id="card-practice-tip-button">
-            Добавить решение/Изменить решение
-        </button>
+        <div id="card-practice-tip-button-add-field">
+            <button type="button" class="custom-sand-button enable-add-tip" id="card-practice-tip-button-add">
+                Добавить решение
+            </button>
+        </div>
+        <div id="card-practice-tip-button-delete-field">
+            <button type="button" class="custom-sand-button enable-add-tip" id="card-practice-tip-button-delete">
+                Удалить решение
+            </button>
+        </div>
         <!-- Поле решения задачи -->
         <div class="hidden-field" id="card-practice-tip-field">
+            <div id="card-tip">Решение</div>
             <hr />
             <!-- Поле ввода решения задачи -->
             <div class="form-group row mt-3 input-field">
@@ -167,20 +199,32 @@
                     ></textarea>
                 </div>
             </div>
-            <!-- Поле предпросмотра изображения решения -->
-            <div class="form-group row mt-3 input-field">
-                <label class="col-2 col-form-label label-input-field" for="card-practice-tip-image-preview">Изображение решения</label>
-                <div class="col-5">
-                    <img class="image-preview" id="card-practice-tip-image-preview" alt="Preview">
-                </div>
-                <div class="col-5">
-                    <!-- Поле загрузки изображения решения -->
-                    <div class="input-group mb-3 upload-image-field">
-                        <input type="file" class="form-control" accept="image/*" id="card-practice-tip-image">
+            <!-- Поле изображения решения -->
+            <div id="card-practice-tip-image-button-add-field">
+                <button type="button" class="custom-sand-button enable-add-image" id="card-practice-tip-image-button-add">
+                    Добавить изображение
+                </button>
+            </div>
+            <div id="card-practice-tip-image-button-delete-field">
+                <button type="button" class="custom-sand-button enable-add-image" id="card-practice-tip-image-button-delete">
+                    Удалить изображение
+                </button>
+            </div>
+            <div class="hidden-field" id="card-practice-tip-image-field">
+                <div class="form-group row mt-3 input-field">
+                    <label class="col-2 col-form-label label-input-field" for="card-practice-tip-image-preview">Изображение решения</label>
+                    <div class="col-5">
+                        <img class="image-preview" id="card-practice-tip-image-preview" alt="Preview">
+                    </div>
+                    <div class="col-5">
+                        <!-- Поле загрузки изображения решения -->
+                        <div class="input-group mb-3 upload-image-field">
+                            <input type="file" class="form-control" accept="image/*" id="card-practice-tip-image">
+                        </div>
                     </div>
                 </div>
             </div>
-
+            <hr />
         </div>
     </div>
     <!-- Поле отправки данных на сервер -->
@@ -192,7 +236,9 @@
             </select>
         </div>
         <!-- Кнопка отправки запроса на сервер -->
-        <button type="button" class="hidden-field btn btn-primary" id="send-card-data-to-server-button">Отправить</button>
+        <div class="hidden-field" id="send-card-data-to-server-button-field">
+            <button type="button" class="custom-sand-button send-card-data-button" id="send-card-data-to-server-button">Отправить</button>
+        </div>
     </div>
     <!-- Поле ответа сервера -->
     <hr/>

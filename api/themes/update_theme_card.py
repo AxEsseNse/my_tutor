@@ -4,7 +4,7 @@ from fastapi import Depends, HTTPException
 from pydantic import ValidationError
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from my_tutor.exceptions import ThemeNotFoundError, ThemeCardNotFoundError
+from my_tutor.exceptions import ThemeNotFoundError, ThemeCardNotFoundError, DeleteImageError
 from my_tutor.repositories import ThemeRepository
 from my_tutor.routers import themes_router
 from my_tutor.schemes import UpdateThemeTheoryCardRequest, UpdateThemePracticeCardRequest, UpdateThemeCardResponse
@@ -28,9 +28,12 @@ async def update_theme_card(
 
             return await theme_repository.update_theme_card(session, theme_card_data=theme_card_data)
     except ValidationError as e:
-        print(e)
         raise HTTPException(HTTPStatus.BAD_REQUEST, str(e))
     except ThemeNotFoundError as e:
         raise HTTPException(HTTPStatus.NOT_FOUND, e.message)
     except ThemeCardNotFoundError as e:
         raise HTTPException(HTTPStatus.NOT_FOUND, e.message)
+    except DeleteImageError as e:
+        print(e)
+        print('XUY')
+        raise HTTPException(HTTPStatus.INTERNAL_SERVER_ERROR, e.message)

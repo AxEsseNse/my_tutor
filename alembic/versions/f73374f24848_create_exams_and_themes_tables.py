@@ -59,17 +59,17 @@ def upgrade() -> None:
             "card_id": ege_first_theme_theory_material_id,
             "type": "theory",
             "title": "Вызов исполнителя Черепаха",
-            "image_path": "/storage/lessons/ege/6/theory1.jpg",
+            "image_path": "/storage/themes/ege/6/theory1.jpg",
             "descr": "Чтобы команды для работы с черепахой работали - необходимо импортировать сам модуль Черепаха"
         },
         {
             "card_id": ege_first_theme_practice_material_id,
             "type": "practice",
             "title": "Знание синтаксиса исполнителя",
-            "image_path": "/storage/lessons/ege/6/practice1.jpg",
+            "image_path": "/storage/themes/ege/6/practice1.jpg",
             "descr": "Введите в поле ниже команду для импорта модуля Черепаха в программу",
             "answer": "исполнитель Черепаха",
-            "tip": {"image_path": "/storage/lessons/ege/6/practice1tip.jpg",
+            "tip": {"image_path": "/storage/themes/ege/6/practice1tip.jpg",
                     "descr": "Если на экзамене вдруг забыл как импортировать модуль - зайди в справочный центр"
                     }
         }
@@ -100,17 +100,17 @@ def upgrade() -> None:
             "card_id": oge_first_theme_theory_material_id,
             "type": "theory",
             "title": "Матрица. Симметричная и несимметричная. Понятие главной диагонали",
-            "image_path": "/storage/lessons/oge/4/theory1.jpg",
+            "image_path": "/storage/themes/oge/4/theory1.jpg",
             "descr": "Матрицы бывают двух видов. Симметричные и несимметричные."
         },
         {
             "card_id": oge_first_theme_first_practice_material_id,
             "type": "practice",
             "title": "Определение симметричности матрицы",
-            "image_path": "/storage/lessons/oge/4/practice1.jpg",
+            "image_path": "/storage/themes/oge/4/practice1.jpg",
             "descr": "Введите в поле ниже какая на картинке представлена матрица",
             "answer": "несимметричная",
-            "tip": {"image_path": "/storage/lessons/oge/4/practice1tip.jpg",
+            "tip": {"image_path": "/storage/themes/oge/4/practice1tip.jpg",
                     "descr": "Сравнивай значения, находящиеся напротив друг друга относительно главной диагонали"
                     }
         },
@@ -118,10 +118,10 @@ def upgrade() -> None:
             "card_id": oge_first_theme_second_practice_material_id,
             "type": "practice",
             "title": "Нахождение протяженности пути",
-            "image_path": "/storage/lessons/oge/4/practice2.jpg",
+            "image_path": "/storage/themes/oge/4/practice2.jpg",
             "descr": "Введите в поле ниже протяженность самого короткого пути из пункта B в H",
             "answer": "14",
-            "tip": {"image_path": "/storage/lessons/oge/4/practice2tip.jpg",
+            "tip": {"image_path": "/storage/themes/oge/4/practice2tip.jpg",
                     "descr": "Задача решена методом построения дерева"
                     }
         }
@@ -144,17 +144,17 @@ def upgrade() -> None:
             "card_id": oge_second_theme_theory_material_id,
             "type": "theory",
             "title": "Понятие IP адреса",
-            "image_path": "/storage/lessons/oge/7/theory1.jpg",
+            "image_path": "/storage/themes/oge/7/theory1.jpg",
             "descr": "Самое важное свойства IP адреса - его уникальность. Это позволяет избежать как утечки информации, так и спама"
         },
         {
             "card_id": oge_second_theme_first_practice_material_id,
             "type": "practice",
             "title": "Найди корректный IP адрес",
-            "image_path": "/storage/lessons/oge/7/practice1.jpg",
+            "image_path": "/storage/themes/oge/7/practice1.jpg",
             "descr": "Введите в поле ниже правильную последовательность символов",
             "answer": "CABD",
-            "tip": {"image_path": "/storage/lessons/oge/7/practice1tip.jpg",
+            "tip": {"image_path": "/storage/themes/oge/7/practice1tip.jpg",
                     "descr": "Здесь есть подсказка хехе"
                     }
         },
@@ -162,10 +162,10 @@ def upgrade() -> None:
             "card_id": oge_second_theme_second_practice_material_id,
             "type": "practice",
             "title": "Найди корректный IP адрес",
-            "image_path": "/storage/lessons/oge/7/practice2.jpg",
+            "image_path": "/storage/themes/oge/7/practice2.jpg",
             "descr": "Введите в поле ниже правильную последовательность символов",
             "answer": "DABC",
-            "tip": {"image_path": "/storage/lessons/oge/7/practice2tip.jpg",
+            "tip": {"image_path": "/storage/themes/oge/7/practice2tip.jpg",
                     "descr": "Это тоже подсказка хыыы"
                     }
         }
@@ -188,17 +188,17 @@ def upgrade() -> None:
             "card_id": oge_third_theme_theory_material_id,
             "type": "theory",
             "title": "Виды графов",
-            "image_path": "/storage/lessons/oge/9/theory1.jpg",
+            "image_path": "/storage/themes/oge/9/theory1.jpg",
             "descr": "Графы бывают двух видов. Ориентированные и нет. На картинке представлены примеры"
         },
         {
             "card_id": oge_third_theme_first_practice_material_id,
             "type": "practice",
             "title": "Нахождение количества путей",
-            "image_path": "/storage/lessons/oge/9/practice1.jpg",
+            "image_path": "/storage/themes/oge/9/practice1.jpg",
             "descr": "Найди количество путей из города А в город В",
             "answer": "3",
-            "tip": {"image_path": "/storage/lessons/oge/9/practice1tip.jpg",
+            "tip": {"image_path": "/storage/themes/oge/9/practice1tip.jpg",
                     "descr": "Снизу изображения есть выбранный правильный ответ"
                     }
         },
@@ -206,10 +206,10 @@ def upgrade() -> None:
             "card_id": oge_third_theme_second_practice_material_id,
             "type": "practice",
             "title": "Нахождение количества путей",
-            "image_path": "/storage/lessons/oge/9/practice2.jpg",
+            "image_path": "/storage/themes/oge/9/practice2.jpg",
             "descr": "Найди количество путей из города А в город К",
             "answer": "8",
-            "tip": {"image_path": "/storage/lessons/oge/9/practice2tip.jpg",
+            "tip": {"image_path": "/storage/themes/oge/9/practice2tip.jpg",
                     "descr": "Пример решается как через построение дерева, так и коротким способом через граф"
                     }
         }

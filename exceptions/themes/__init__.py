@@ -2,5 +2,6 @@ from .theme import (
     ThemeNotFoundError,
     ThemeAlreadyExistError,
     ThemeCardNotFoundError,
-    SaveImageError
+    SaveImageError,
+    DeleteImageError
 )

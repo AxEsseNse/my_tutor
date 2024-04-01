@@ -17,7 +17,8 @@ from .themes import (
     ThemeNotFoundError,
     ThemeAlreadyExistError,
     ThemeCardNotFoundError,
-    SaveImageError
+    SaveImageError,
+    DeleteImageError
 )
 from .tutors import (
     TutorAlreadyExistError,

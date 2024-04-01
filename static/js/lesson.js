@@ -452,8 +452,6 @@ class LessonController {
         }
     }
 
-    uploadImage()
-
     updateStudentAnswers() {
         let token = getCookie('My-Tutor-Auth-Token')
 
