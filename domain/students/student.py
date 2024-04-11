@@ -2,11 +2,12 @@ from pydantic import BaseModel
 
 
 class Student(BaseModel):
+    student_id: int
     img_path: str
     second_name: str
     first_name: str
     gender: str
-    age: int
+    birthday: str
     lesson_price: int
     discord: str
     phone: str
@@ -26,3 +27,8 @@ class StudentInfo(BaseModel):
     phone: str
     telegram: str
     whatsapp: str
+
+
+class StudentOption(BaseModel):
+    id: int
+    name: str

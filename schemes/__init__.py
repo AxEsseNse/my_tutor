@@ -5,7 +5,8 @@ from .users import (
     UpdateUserPasswordRequest,
     UpdateUserPasswordResponse,
     DeleteUserRequest,
-    DeleteUserResponse
+    DeleteUserResponse,
+    UpdateUserPasswordByAdminRequest
 )
 from .students import (
     AddStudentRequest,
@@ -16,7 +17,9 @@ from .students import (
     UpdateStudentContactInfoRequest,
     UpdateStudentPrimaryInfoResponse,
     UpdateStudentContactInfoResponse,
-    UpdateStudentImageResponse
+    UpdateStudentImageResponse,
+    UpdateStudentRequest,
+    UpdateStudentResponse
 )
 from .parents import (
     AddParentRequest,
@@ -33,14 +36,17 @@ from .themes import (
     DeleteThemeResponse,
     UpdateThemeRequest,
     UpdateThemeResponse,
-    AddThemeMaterialTheoryRequest,
-    AddThemeMaterialPracticeRequest,
-    AddThemeMaterialResponse,
-    DeleteThemeMaterialRequest,
-    DeleteThemeMaterialResponse,
-    UpdateThemeMaterialTheoryRequest,
-    UpdateThemeMaterialPracticeRequest,
-    UpdateThemeMaterialResponse
+    AddThemeTheoryCardRequest,
+    AddThemePracticeCardRequest,
+    AddThemeCardResponse,
+    DeleteThemeCardRequest,
+    DeleteThemeCardResponse,
+    UpdateThemeTheoryCardRequest,
+    UpdateThemePracticeCardRequest,
+    UpdateThemeCardResponse,
+    UpdateStudentAnswersRequest,
+    UpdateStudentAnswersResponse,
+    UploadImageResponse
 )
 from .tutors import (
     AddTutorRequest,
@@ -52,4 +58,22 @@ from .tutors import (
     UpdateTutorContactInfoRequest,
     UpdateTutorContactInfoResponse,
     UpdateTutorImageResponse
+)
+from .lessons import (
+    AddLessonRequest,
+    AddLessonResponse,
+    DeleteLessonRequest,
+    DeleteLessonResponse,
+    FinishLessonRequest,
+    FinishLessonResponse,
+    ChangeLessonPaidStatusRequest,
+    ChangeLessonPaidStatusResponse,
+    StartLessonResponse,
+    GetLessonStatusResponse,
+    CancelLessonRequest,
+    CancelLessonResponse,
+    RescheduleLessonRequest,
+    RescheduleLessonResponse,
+    UpdateNoteLessonRequest,
+    UpdateNoteLessonResponse
 )

@@ -9,5 +9,6 @@ class AddUserRequest(BaseModel):
 
 class AddUserResponse(BaseModel):
     login: str
+    have_profile: bool = False
     role: str
     message: str

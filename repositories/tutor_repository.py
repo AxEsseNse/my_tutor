@@ -20,7 +20,7 @@ from my_tutor.schemes import (
     UpdateTutorContactInfoResponse,
     UpdateTutorImageResponse
 )
-from my_tutor.domain import Tutor, TutorInfo
+from my_tutor.domain import Tutor, TutorInfo, TutorOption
 
 
 user_repository = UserRepository()
@@ -43,6 +43,7 @@ MONTHS = (
 class TutorRepository:
     _tutor = Tutor
     _info_domain = TutorInfo
+    _tutor_option = TutorOption
     _tutor_model = TutorModel
     _user_model = UserModel
     _add_tutor_response = AddTutorResponse
@@ -53,18 +54,18 @@ class TutorRepository:
     _default_male_image_path = "/storage/users/male_default_image.jpg"
     _default_female_image_path = "/storage/users/female_default_image.jpg"
 
-    def _to_tutor(self, student_model: TutorModel) -> Tutor:
+    def _to_tutor(self, tutor_model: TutorModel) -> Tutor:
 
         return self._tutor(
-            img_path=student_model.img_path,
-            second_name=student_model.second_name,
-            first_name=student_model.first_name,
-            gender=student_model.gender,
+            img_path=tutor_model.img_path,
+            second_name=tutor_model.second_name,
+            first_name=tutor_model.first_name,
+            gender=tutor_model.gender,
             age=18,
-            discord=student_model.discord,
-            phone=student_model.phone,
-            telegram=student_model.telegram,
-            whatsapp=student_model.whatsapp
+            discord=tutor_model.discord,
+            phone=tutor_model.phone,
+            telegram=tutor_model.telegram,
+            whatsapp=tutor_model.whatsapp
         )
 
     def _to_tutor_info(self, tutor_model: TutorModel, login: str) -> TutorInfo:
@@ -80,6 +81,13 @@ class TutorRepository:
             phone=tutor_model.phone,
             telegram=tutor_model.telegram,
             whatsapp=tutor_model.whatsapp
+        )
+
+    def _to_tutor_option(self, tutor_model: TutorModel) -> TutorOption:
+
+        return self._tutor_option(
+            id=tutor_model.tutor_id,
+            name=f"{tutor_model.second_name} {tutor_model.first_name}"
         )
 
     def _to_add_tutor_response(self, tutor_model: TutorModel, tutor_login: str) -> AddTutorResponse:
@@ -129,18 +137,18 @@ class TutorRepository:
             message="Изображение успешно изменено"
         )
 
-    # async def _get_student(self, session: AsyncSession, student_id: int):
-    #     student_model = (await session.execute(select(self._student_model).filter_by(student_id=student_id))).scalars().first()
-    #
-    #     if not student_model:
-    #         raise StudentNotFoundError
-    #
-    #     return student_model
+    async def get_tutor_id(self, session: AsyncSession, user_id: int) -> int:
+        tutor_model = (await session.execute(select(self._tutor_model).filter_by(user_id=user_id))).scalars().first()
+
+        if not tutor_model:
+            raise TutorNotFoundError
+
+        return tutor_model.tutor_id
 
     async def get_tutors(self, session: AsyncSession) -> list[Tutor]:
         tutors_models = (await session.execute(select(self._tutor_model).order_by(self._tutor_model.second_name, self._tutor_model.first_name))).scalars().all()
 
-        return [self._to_tutor(student_model=tutor_model) for tutor_model in tutors_models]
+        return [self._to_tutor(tutor_model=tutor_model) for tutor_model in tutors_models]
 
     async def get_tutor_info(self, session: AsyncSession, user_id: int, login: str) -> TutorInfo:
         tutor_model = (await session.execute(select(self._tutor_model).filter_by(user_id=user_id))).scalars().first()
@@ -149,6 +157,15 @@ class TutorRepository:
             raise TutorNotFoundError
 
         return self._to_tutor_info(tutor_model=tutor_model, login=login)
+
+    async def get_tutor_options(self, session: AsyncSession, user_id: int = None) -> list[TutorOption]:
+        if user_id:
+            tutors_models = (await session.execute(select(self._tutor_model).filter_by(user_id=user_id))).scalars().all()
+        else:
+            tutors_models = (await session.execute(select(self._tutor_model).order_by(self._tutor_model.second_name,
+                                                                                      self._tutor_model.first_name))).scalars().all()
+
+        return [self._to_tutor_option(tutor_model=tutor_model) for tutor_model in tutors_models]
 
     async def add_tutor(self, session: AsyncSession, tutor_data: AddTutorRequest, user_id: int) -> AddTutorResponse:
         tutor_model = (
@@ -175,7 +192,7 @@ class TutorRepository:
         )
         session.add(new_tutor)
 
-        return self._to_add_tutor_response(tutor_model=new_tutor, tutor_login=tutor_data.student_login)
+        return self._to_add_tutor_response(tutor_model=new_tutor, tutor_login=tutor_data.tutor_login)
 
     async def delete_tutor(self, session: AsyncSession, tutor_data: DeleteTutorRequest) -> DeleteTutorResponse:
         tutor_model = (

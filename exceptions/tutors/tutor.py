@@ -1,4 +1,4 @@
-__all__ = ["TutorNotFoundError", "TutorAlreadyExistError", "TutorSaveImageError"]
+__all__ = ["TutorNotFoundError", "TutorAlreadyExistError", "TutorSaveImageError", "TutorAlreadyHasLesson"]
 
 
 class TutorNotFoundError(Exception):
@@ -11,3 +11,7 @@ class TutorAlreadyExistError(Exception):
 
 class TutorSaveImageError(Exception):
     message = "Ошибка сохранения изображения"
+
+
+class TutorAlreadyHasLesson(Exception):
+    message = "У преподавателя уже есть урок в заданное время"

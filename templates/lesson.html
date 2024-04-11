@@ -7,12 +7,68 @@
     <div class="row flex-row">
         <!-- Контент урока -->
         <div class="col content-col" id="lesson-content">
-            <!-- Слайд с теорией -->
-            <div id="theory-content">
-                <div class="row">
-                    <div id="theory-title">
+            <!-- Строка состояния урока -->
+            <div class="row" id="title-row">
+                <div class="col-1 text-center">
+                    <div id="lesson-timer">
+                        53 : 00
                     </div>
                 </div>
+                <div class="col-10" id="card-title">
+                </div>
+                <div class="col-1 text-end" id="lesson-end">
+                    {% if user.role == "Преподаватель" %}
+                    <button
+                        class="lesson-end-btn"
+                        type="button"
+                        title="Завершить урок"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modal-lesson-finish"
+                        id="lesson-end-btn"
+                    >
+                        <i class="fa-solid fa-flag fa-xs"></i>
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+            <!-- Cлайд начала работы -->
+            <div id="start-content">
+                <div class="row">
+                    <div class="col-4 text-end">
+                        <div class="ready-field">
+                            Студент
+                        </div>
+                        <div class="ready-field">
+                            Преподаватель
+                        </div>
+                    </div>
+                    <div class="col-8 text-start">
+                        <div class="ready-field">
+                            <button type="button" class="ready-button ready-button-waiting" id="student-ready-button">
+                                Подтвердить
+                            </button>
+                            <button type="button" class="ready-status ready-status-not-ready" id="student-ready-status" disabled>
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                        <div class="ready-field">
+                            <button type="button" class="ready-button ready-button-not-ready" id="tutor-ready-button" disabled>
+                                Начать урок
+                            </button>
+                            <button type="button" class="ready-status ready-status-not-ready" id="tutor-ready-status" disabled>
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                        <div class="ready-field">
+                            <button type="button" class="start-status start-status-waiting-student" id="start-status" disabled>
+                                Ожидание ученика
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Слайд с теорией -->
+            <div id="theory-content">
                 <div class="row">
                     <div class="col-4 text-end">
                         <img src="" id="theory-image">
@@ -24,10 +80,6 @@
             </div>
             <!-- Слайд с практикой -->
             <div id="practice-content">
-                <div class="row">
-                    <div id="practice-title">
-                    </div>
-                </div>
                 <div class="row">
                     <div class="col-4 text-end" id="practice-image-field">
                         <img src="" id="practice-image">
@@ -43,14 +95,19 @@
                                     value=""
                                     placeholder="Введите сюда ваш ответ"
                                 />
-                                <button type="button" class="lesson-button" id="practice-answer-button">
+                                <button type="button" class="practice-answer-button" id="practice-answer-button">
                                     Проверить
                                 </button>
-                                <button type="button" class="lesson-button" id="practice-tip-button" onclick="turnTip()">
+                                <button type="button" class="lesson-button" id="practice-tip-button">
                                     Показать решение
                                 </button>
                             </div>
                             <div id="practice-tip-field">
+                                <div class="text-end">
+                                    <button type="button" class="hide-tip-student" id="practice-tip-student-button" title="Показать решение студенту">
+                                        <i class="fa-solid fa-eye-slash"></i>
+                                    </button>
+                                </div>
                                 <div class="text-center">
                                     <img src="" id="practice-tip-image">
                                 </div>
@@ -59,7 +116,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
         <!-- Меню урока -->
@@ -69,7 +125,7 @@
                     <button class="exam-btn" id="lesson-exam-btn">
                     </button>
                 </div>
-                <div class="col-9" id="lesson-exam-task-id">
+                <div class="col-8" id="lesson-exam-task-id">
                 </div>
             </div>
             <hr/>
@@ -83,6 +139,12 @@
         </div>
     </div>
 </div>
+{% if user.role == "Преподаватель" %}
+    {% include "lessonFormFinish.html" %}
+{% endif %}
+<script type="text/javascript">
+        const lessonId = "{{ user.current_lesson_id }}";
+</script>
 {% endblock content %}
 {% block scripts %}
     <script src="/static/js/lesson.js"></script>

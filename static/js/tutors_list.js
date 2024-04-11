@@ -93,7 +93,7 @@ class AddTutorForm {
             'Content-Type': 'application/json',
             'My-Tutor-Auth-Token': token
             },
-            body: JSON.stringify(newStudent),
+            body: JSON.stringify(newTutor),
         })
         .then(response => {
             if (!response.ok) {
@@ -243,6 +243,7 @@ class TutorTable {
         const tutorImage = document.createElement('img')
         tutorImage.src = tutor.img_path
         tutorImage.style.display = 'block'
+        tutorImage.style.objectFit = 'cover'
         tutorImage.classList.add('rounded-circle')
         tutorImage.width = 50
         tutorImage.height = 50

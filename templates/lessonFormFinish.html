@@ -1,0 +1,66 @@
+<div
+    class="modal fade bd-example-modal-lg"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="modal-lesson-finish"
+    aria-hidden="true"
+    id="modal-lesson-finish"
+>
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <!-- Header окна завершения урока -->
+            <div class="modal-header">
+                <h5 class="modal-title">Завершение урока</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <!-- Форма завершения урока -->
+            <div class="modal-body">
+                <form class="needs-validation" id="lesson-finish-form" novalidate>
+                    <!-- Тема урока -->
+                    <div class="form-group row mt-2 mb-2">
+                        <label class="col-3 col-form-label" for="lesson-finish-form-theme">Тема</label>
+                        <div class="col-9">
+                            <textarea class="form-control" id="lesson-finish-form-theme" disabled></textarea>
+                        </div>
+                    </div>
+                    <!-- Поле выбора статуса урока -->
+                    <div class="input-group mb-3">
+                        <label class="input-group-text" for="lesson-finish-form-lesson-status">Статус урока</label>
+                        <select class="form-select" id="lesson-finish-form-lesson-status">
+                            <option value="FINISHED" selected>Проведен</option>
+                            <option value="CANCELED">Отменен</option>
+                        </select>
+                    </div>
+                    <!-- Поле выбора статуса темы -->
+                    <div class="input-group mb-3">
+                        <label class="input-group-text" for="lesson-finish-form-theme-status">Статус темы</label>
+                        <select class="form-select" id="lesson-finish-form-theme-status">
+                            <option value="IN PROGRESS" selected>На стадии изучения</option>
+                            <option value="COMPLITED">Пройдена до конца</option>
+                        </select>
+                    </div>
+                    <!-- Заметка завершаемого урока -->
+                    <div class="form-group row mb-1">
+                        <label class="col-3 col-form-label" for="lesson-finish-form-note">Заметка</label>
+                        <div class="col-9">
+                            <textarea
+                                class="form-control"
+                                id="lesson-finish-form-note"
+                                style="height: 330px"
+                                required
+                            >Заметок нет</textarea>
+                        </div>
+                    </div>
+
+                    <hr id="lesson-finish-hr"/>
+                    <!-- Кнопка отправки формы -->
+                    <div class="text-center">
+                        <button type="button" class="btn btn-dark btn-block" id="lesson-finish-form-button">
+                            Завершить урок
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

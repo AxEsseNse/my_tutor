@@ -3,6 +3,10 @@ from .add_theme import add_theme
 from .delete_theme import delete_theme
 from .update_theme import update_theme
 from .get_theme import get_theme
-from .add_theme_material import add_theme_material
-from .delete_theme_material import delete_theme_material
-from .update_theme_material import update_theme_material
+from .add_theme_card import add_theme_card
+from .delete_theme_card import delete_theme_card
+from .update_theme_card import update_theme_card
+from .get_exam_themes import get_exam_themes, get_exam_themes_options
+from .update_theme_student_answers import update_theme_student_answers
+from .get_theme_cards import get_theme_cards
+from .upload_image import theme_upload_image

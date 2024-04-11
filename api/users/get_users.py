@@ -17,14 +17,10 @@ async def get_users(session: AsyncSession = Depends(get_db_session)) -> list[Use
 
 @admin_router.get("/users/tutors_without_profile/", response_model=list[UserLogin])
 async def get_tutors_without_profile(session: AsyncSession = Depends(get_db_session)) -> list[UserLogin]:
-    olal = await user_repository.get_tutors_without_profile(session=session)
-    print(olal)
-    return olal
+    return await user_repository.get_tutors_without_profile(session=session)
 
 
 @admin_router.get("/users/students_without_profile/", response_model=list[UserLogin])
 async def get_students_without_profile(session: AsyncSession = Depends(get_db_session)) -> list[UserLogin]:
 
-    olal = await user_repository.get_students_without_profile(session=session)
-    print(olal)
-    return olal
+    return await user_repository.get_students_without_profile(session=session)

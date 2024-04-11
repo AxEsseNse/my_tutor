@@ -18,7 +18,8 @@ from .students import (
     update_student_image,
     get_students,
     add_student,
-    delete_student
+    delete_student,
+    get_student_progress
 )
 from .themes import (
     get_themes,
@@ -26,9 +27,14 @@ from .themes import (
     delete_theme,
     update_theme,
     get_theme,
-    add_theme_material,
-    delete_theme_material,
-    update_theme_material
+    add_theme_card,
+    delete_theme_card,
+    update_theme_card,
+    get_exam_themes,
+    get_exam_themes_options,
+    update_theme_student_answers,
+    get_theme_cards,
+    theme_upload_image
 )
 from .tutors import (
     get_tutors,
@@ -37,4 +43,15 @@ from .tutors import (
     get_tutor_info,
     update_tutor,
     update_tutor_image
+)
+from .lessons import (
+    get_lessons,
+    add_lesson,
+    delete_lesson,
+    update_lesson,
+    get_lesson_options,
+    lesson_websocket,
+    start_lesson,
+    get_lesson_status,
+    get_lesson_material
 )

@@ -1,1 +1,7 @@
-from .theme import ThemeNotFoundError, ThemeAlreadyExistError, ThemeMaterialNotFoundError
+from .theme import (
+    ThemeNotFoundError,
+    ThemeAlreadyExistError,
+    ThemeCardNotFoundError,
+    SaveImageError,
+    DeleteImageError
+)

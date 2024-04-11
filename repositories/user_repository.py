@@ -6,9 +6,28 @@ from uuid import uuid4
 from sqlalchemy import and_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from my_tutor.exceptions import UserNotFoundError, UserNotVerifyError, UserAlreadyExistError
-from my_tutor.models import TokenModel, UserModel, RoleModel, StudentModel, TutorModel
-from my_tutor.schemes import UserAuthorizationRequest, AddUserRequest, AddUserResponse, UpdateUserPasswordRequest, UpdateUserPasswordResponse, DeleteUserRequest, DeleteUserResponse
+from my_tutor.exceptions import (
+    UserNotFoundError,
+    UserNotVerifyError,
+    UserAlreadyExistError
+)
+from my_tutor.models import (
+    TokenModel,
+    UserModel,
+    RoleModel,
+    StudentModel,
+    TutorModel
+)
+from my_tutor.schemes import (
+    UserAuthorizationRequest,
+    AddUserRequest,
+    AddUserResponse,
+    UpdateUserPasswordRequest,
+    UpdateUserPasswordResponse,
+    DeleteUserRequest,
+    DeleteUserResponse,
+    UpdateUserPasswordByAdminRequest
+)
 from my_tutor.domain import User, UserInfo, UserLogin
 
 AUTH_TOKEN_LIFETIME = 604800
@@ -41,6 +60,7 @@ class UserRepository:
 
     def _to_user_info(self, user_model: UserModel, img_path: str, name: str) -> UserInfo:
         return self._info_domain(
+            user_id=user_model.user_id,
             login=user_model.login,
             img_path=img_path,
             name=name,
@@ -69,10 +89,11 @@ class UserRepository:
             message="Пользователь успешно зарегистрирован"
         )
 
-    def _to_update_user_password_response(self, user_model: UserModel) -> UpdateUserPasswordResponse:
+    def _to_update_user_password_response(self, user_model: UserModel, new_password: str) -> UpdateUserPasswordResponse:
 
         return self._update_user_password_response(
             login=user_model.login,
+            new_password=new_password,
             message="Пароль пользователя успешно обновлен"
         )
 
@@ -128,19 +149,36 @@ class UserRepository:
 
         return self._to_add_user_response(user_model=new_user)
 
-    async def update_user_password(self, session: AsyncSession, user_data: UpdateUserPasswordRequest) -> UpdateUserPasswordResponse:
-        user_model = await self._get_user(session, login=user_data.login)
+    async def update_user_password(
+            self,
+            session: AsyncSession,
+            user_data: UpdateUserPasswordRequest | UpdateUserPasswordByAdminRequest
+    ) -> UpdateUserPasswordResponse:
+        user_model = (await session.execute(select(self._user_model).filter_by(user_id=user_data.user_id))).scalars().first()
+
+        if not user_model:
+            raise UserNotFoundError
+
+        if user_model.role_id != 1:
+            salt = str(user_model.secret)[: self._salt_len]
+            salted_password = salt + user_data.current_password
+            password_bytes = bytes(salted_password, encoding="utf-8")
+            password_hash = hashlib.md5(password_bytes).hexdigest()
+
+            if user_model.secret[self._salt_len:] != password_hash:
+                raise UserNotVerifyError
+        else:
+            user_model = await self._get_user(session=session, login=user_data.login)
 
         salt = self._create_salt()
-        salted_password = salt + user_data.password
+        salted_password = salt + user_data.new_password
         password_bytes = bytes(salted_password, encoding="utf-8")
         password_hash = hashlib.md5(password_bytes).hexdigest()
         salted_hash = salt + password_hash
-
         user_model.secret = salted_hash
         session.add(user_model)
 
-        return self._to_update_user_password_response(user_model=user_model)
+        return self._to_update_user_password_response(user_model=user_model, new_password=user_data.new_password)
 
     async def delete_user(self, session: AsyncSession, user_data: DeleteUserRequest) -> DeleteUserResponse:
         user_model = await self._get_user(session, login=user_data.login)
@@ -176,13 +214,25 @@ class UserRepository:
         if user_model.role_id == 2:
             tutor_model = (await session.execute(
                 select(self._tutor_model).filter_by(user_id=token_model.user_id))).scalars().first()
-            img_path = tutor_model.img_path
-            name = f"{tutor_model.second_name} {tutor_model.first_name}"
+
+            if not tutor_model:
+                img_path = self._default_image_path
+                name = user_model.login
+            else:
+                img_path = tutor_model.img_path
+                name = f"{tutor_model.second_name} {tutor_model.first_name}"
+
         elif user_model.role_id == 3:
             student_model = (await session.execute(
                 select(self._student_model).filter_by(user_id=token_model.user_id))).scalars().first()
-            img_path = student_model.img_path
-            name = f"{student_model.second_name} {student_model.first_name}"
+
+            if not student_model:
+                img_path = self._default_image_path
+                name = user_model.login
+            else:
+                img_path = student_model.img_path
+                name = f"{student_model.second_name} {student_model.first_name}"
+
         else:
             img_path = self._default_image_path
             name = user_model.login
@@ -196,6 +246,17 @@ class UserRepository:
             raise UserNotFoundError
 
         return token_model.user_id
+
+    async def get_user_by_token(self, session: AsyncSession, token: str) -> UserModel:
+        token_model = (await session.execute(select(self._token_model).filter_by(token=token))).scalars().first()
+
+        if not token_model:
+            raise UserNotFoundError
+
+        user_model = (
+            await session.execute(select(self._user_model).filter_by(user_id=token_model.user_id))).scalars().first()
+
+        return user_model
 
     async def get_user_id_by_login(self, session: AsyncSession, login: str) -> int:
         user_model = (await session.execute(select(self._user_model).filter_by(login=login))).scalars().first()

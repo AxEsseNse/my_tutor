@@ -1,0 +1,149 @@
+<div
+    class="modal fade"
+    tabindex="-1"
+    aria-labelledby="modal-student-update"
+    aria-hidden="true"
+    id="modal-student-update"
+>
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <!-- Header окна создания нового профиля студента -->
+            <div class="modal-header">
+                <h5 class="modal-title">Изменение данных студента</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <!-- Форма создания нового профиля студента -->
+            <div class="modal-body">
+                <form class="needs-validation" id="student-update-form" novalidate>
+                    <!-- Поле логина -->
+                    <div class="form-group row mb-1">
+                        <label class="col-4 col-form-label" for="student-update-form-student-id">ID</label>
+                        <div class="col-8">
+                            <input
+                                class="form-control"
+                                type="text"
+                                id="student-update-form-student-id"
+                                disabled
+                            />
+                        </div>
+                    </div>
+                    <!-- Поле ввода имени -->
+                    <div class="form-group row mb-1">
+                        <label class="col-4 col-form-label" for="student-update-form-first-name">Имя</label>
+                        <div class="col-8">
+                            <input
+                                class="form-control"
+                                type="text"
+                                id="student-update-form-first-name"
+                                required
+                            />
+                        </div>
+                    </div>
+                    <!-- Поле ввода фамилии -->
+                    <div class="form-group row mb-1">
+                        <label class="col-4 col-form-label" for="student-update-form-second-name">Фамилия</label>
+                        <div class="col-8">
+                            <input
+                                class="form-control"
+                                type="text"
+                                id="student-update-form-second-name"
+                                required
+                            />
+                        </div>
+                    </div>
+                    <!-- Поле выбора пола -->
+                    <div class="input-group mb-3">
+                        <label class="input-group-text" for="student-update-form-gender">Пол</label>
+                        <select class="form-select" id="student-update-form-gender">
+                            <option value="парень">парень</option>
+                            <option value="девушка">девушка</option>
+                        </select>
+                    </div>
+                    <!-- Поле ввода стоимости занятий -->
+                    <div class="form-group row mb-1">
+                        <label class="col-4 col-form-label" for="student-update-form-lesson-price">Стоимость</label>
+                        <div class="col-8">
+                            <input
+                                class="form-control"
+                                type="text"
+                                id="student-update-form-lesson-price"
+                                required
+                            />
+                        </div>
+                    </div>
+                    <!-- Поле ввода даты рождения -->
+                    <div class="form-group row mb-1">
+                        <label class="col-5 col-form-label" for="student-update-form-birthday">Дата рождения</label>
+                        <div class="col-2"></div>
+                        <div class="col-5">
+                            <input type="date" class="form-control" id="student-update-form-birthday" required />
+                        </div>
+                    </div>
+                    <!-- Поле ввода discord -->
+                    <div class="form-group row mb-1">
+                        <label class="col-4 col-form-label" for="student-update-form-discord">Discord</label>
+                        <div class="col-8">
+                            <input
+                                class="form-control"
+                                type="text"
+                                id="student-update-form-discord"
+                                required
+                            />
+                        </div>
+                    </div>
+                    <!-- Поле ввода телефона -->
+                    <div class="form-group row mb-1">
+                        <label class="col-4 col-form-label" for="student-update-form-phone">Телефон</label>
+                        <div class="col-8">
+                            <input
+                                class="form-control"
+                                type="text"
+                                id="student-update-form-phone"
+                                required
+                            />
+                        </div>
+                    </div>
+                    <!-- Поле ввода telegram -->
+                    <div class="form-group row mb-1">
+                        <label class="col-4 col-form-label" for="student-update-form-telegram">Telegram</label>
+                        <div class="col-8">
+                            <input
+                                class="form-control"
+                                type="text"
+                                id="student-update-form-telegram"
+                                required
+                            />
+                        </div>
+                    </div>
+                    <!-- Поле ввода whatsapp -->
+                    <div class="form-group row mb-1">
+                        <label class="col-4 col-form-label" for="student-update-form-whatsapp">WhatsApp</label>
+                        <div class="col-8">
+                            <input
+                                class="form-control"
+                                type="text"
+                                id="student-update-form-whatsapp"
+                                required
+                            />
+                        </div>
+                    </div>
+                    <!-- Поле ответа сервера -->
+                    <hr/>
+
+                    <div class="form-group row mt-2 mb-2">
+                        <label class="col-4 col-form-label" for="student-update-form-flash-msg"><strong>Feedback</strong></label>
+                        <div class="col-8" id="student-update-form-flash-msg"></div>
+                    </div>
+
+                    <hr />
+                    <!-- Кнопка отправки формы -->
+                    <div class="text-center">
+                        <button type="button" class="btn btn-dark btn-block" id="student-update-form-button">
+                            Изменить данные
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

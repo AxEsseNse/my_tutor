@@ -1,4 +1,10 @@
-__all__ = ["StudentNotFoundError", "StudentSaveImageError", "StudentAlreadyExistError"]
+__all__ = [
+    "StudentNotFoundError",
+    "StudentSaveImageError",
+    "StudentAlreadyExistError",
+    "StudentPhoneAlreadyExistError",
+    "StudentAlreadyHasLesson"
+]
 
 
 class StudentNotFoundError(Exception):
@@ -11,3 +17,11 @@ class StudentSaveImageError(Exception):
 
 class StudentAlreadyExistError(Exception):
     message = "Данный пользователь уже имеет профиль студента"
+
+
+class StudentPhoneAlreadyExistError(Exception):
+    message = "Данный номер телефона студента уже зарегистрирован в системе"
+
+
+class StudentAlreadyHasLesson(Exception):
+    message = "У студента уже есть урок в заданное время"
