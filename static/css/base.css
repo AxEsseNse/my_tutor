@@ -60,7 +60,7 @@ body {
 #header-row {
     width: 100%;
     height: 70px;
-    background: linear-gradient(#002F36, #B5F1F4 180%);
+    background: #B4B7FA;
 }
 
 #header-logo {
@@ -80,8 +80,10 @@ body {
     font-family: Georgia;
 }
 #header-main-menu a{
+    font-size: 26px;
     text-decoration: none;
-    color: #D1BC9D;
+    color: #0FA3B1;
+    transition: color 0.3s ease;
 }
 #header-main-menu a:hover{
     color:#E6E39C;
@@ -116,14 +118,10 @@ body {
     background-color: #14A9A5;
 }
 
-
 #content {
     height: calc(100vh - 130px);
+    background: #B4D8FA;
 }
-
-
-
-
 
 #footer {
     height: 60px;
@@ -174,4 +172,8 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
     background: #F6E6AE;
+}
+
+.hidden-field {
+    display: none;
 }

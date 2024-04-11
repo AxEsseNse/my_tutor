@@ -264,6 +264,7 @@ class LessonController {
 
             this.startField.style.display = 'none'
             this.studentAnswers = lesson.progress_cards
+            console.log(this.studentAnswers)
             this.themeId = lesson.theme.theme_id
             this.studentId = lesson.student_id
             this.fillThemeMenu(lesson.theme)
@@ -301,8 +302,9 @@ class LessonController {
         let liButton = document.createElement('button')
         liButton.className = 'lesson-button'
 
-        if (card.type == 'practice' && 'id' in card && card.id in this.studentAnswers) {
-            if (card.answer == this.studentAnswers[card.id]) {
+        if (card.type == 'practice' && card.card_id in this.studentAnswers) {
+
+            if (card.answer == this.studentAnswers[card.card_id]) {
                 liButton.classList.add('lesson-button-success');
             } else {
                 liButton.classList.add('lesson-button-wrong');
@@ -351,6 +353,7 @@ class LessonController {
         this.setActiveMenuItem(menuCardId)
         this.practiceTipField.style.display = 'none';
         this.practiceTipButton.innerText = 'Показать решение'
+        this.currentPracticeCardId = card.card_id
 
         if (card.type === 'theory') {
             this.practiceField.style.display = 'none';
@@ -360,7 +363,6 @@ class LessonController {
             this.theoryField.style.display = 'block';
         } else {
             this.theoryField.style.display = 'none';
-            this.currentPracticeCardId = card.id
             this.cardTitle.innerText = card.title
             this.practiceImage.src = card.image_path
             this.practiceDescr.innerText = card.descr
@@ -784,7 +786,6 @@ document.addEventListener('DOMContentLoaded', function (event) {
 
         if (response.status == 'STARTED') {
             lessonController.lessonStarted = true
-            console.log('1')
             lessonController.cardTitle.innerText = 'Добро пожаловать на урок'
             await lessonController.loadLesson()
             lessonController.startLessonTimer(response.time_left)
@@ -801,11 +802,8 @@ document.addEventListener('DOMContentLoaded', function (event) {
         if (lessonController.lessonStarted == false && userRole == "Преподаватель") {
             wsConnection.send('isStudentReady');
         }
-        console.log('2');
         if (lessonController.lessonStarted == true && userRole == "Студент") {
-            console.log('3')
             wsConnection.send('getCurrentCard');
-            console.log('4')
         }
     })
     .catch(error => {

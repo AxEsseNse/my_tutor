@@ -10,12 +10,13 @@ from my_tutor.app_pages import (
     themes_list,
     tutor_profile,
     student_profile,
-    get_lesson,
+    join_lesson,
     lesson_history,
     studying_progress,
     reviews,
     presentation,
-    create_theme_card
+    price_list,
+    theme_cards
 )
 from my_tutor.routers import (
     api_router,
@@ -37,13 +38,14 @@ app.mount("/storage", StaticFiles(directory="storage"), name="storage")
 app.add_api_route(path="/login", endpoint=login)
 app.add_api_route(path="/", endpoint=main_page)
 app.add_api_route(path="/presentation", endpoint=presentation)
+app.add_api_route(path="/price-list", endpoint=price_list)
 app.add_api_route(path="/reviews", endpoint=reviews)
 app.add_api_route(path="/admin/users", endpoint=users_list)
 app.add_api_route(path="/admin/tutors", endpoint=tutors_list)
 app.add_api_route(path="/admin/students", endpoint=students_list)
 app.add_api_route(path="/admin/themes", endpoint=themes_list)
-app.add_api_route(path="/admin/theme-card", endpoint=create_theme_card)
-app.add_api_route(path="/lesson/{lesson_id}", endpoint=get_lesson)
+app.add_api_route(path="/admin/theme-card", endpoint=theme_cards)
+app.add_api_route(path="/lesson/{lesson_id}", endpoint=join_lesson)
 app.add_api_route(path="/tutor-profile", endpoint=tutor_profile)
 app.add_api_route(path="/student-profile", endpoint=student_profile)
 app.add_api_route(path="/progress", endpoint=studying_progress)

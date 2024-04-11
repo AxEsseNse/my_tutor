@@ -80,7 +80,6 @@ class ParentRepository:
             raise ParentAlreadyExistError
 
         new_parent = self._parent_model(
-            parent_id=await self._get_new_parent_id(session),
             student_id=student_id,
             status=parent_data.status,
             first_name=parent_data.first_name,

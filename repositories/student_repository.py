@@ -8,7 +8,7 @@ from sqlalchemy.orm import selectinload
 from datetime import datetime
 
 from my_tutor.repositories import UserRepository
-from my_tutor.exceptions import StudentNotFoundError, StudentSaveImageError, StudentAlreadyExistError
+from my_tutor.exceptions import StudentNotFoundError, StudentSaveImageError, StudentAlreadyExistError, StudentPhoneAlreadyExistError
 from my_tutor.models import UserModel, StudentModel, StudyingModel, ThemeStatusModel, ThemeModel
 from my_tutor.schemes import (
     AddStudentRequest,
@@ -19,7 +19,9 @@ from my_tutor.schemes import (
     UpdateStudentContactInfoRequest,
     UpdateStudentPrimaryInfoResponse,
     UpdateStudentContactInfoResponse,
-    UpdateStudentImageResponse
+    UpdateStudentImageResponse,
+    UpdateStudentRequest,
+    UpdateStudentResponse
 )
 from my_tutor.domain import StudentInfo, Student, StudentOption, ThemeStudyingStatus
 
@@ -52,8 +54,10 @@ class StudentRepository:
     _theme_model = ThemeModel
     _theme_status_model = ThemeStatusModel
     _date_pattern = "%d.%m.%Y"
+    _date_pattern_response = "%Y-%m-%d"
     _add_student_response = AddStudentResponse
     _delete_student_response = DeleteStudentResponse
+    _update_student_response = UpdateStudentResponse
     _update_student_primary_info_response = UpdateStudentPrimaryInfoResponse
     _update_student_contact_info_response = UpdateStudentContactInfoResponse
     _update_student_image_response = UpdateStudentImageResponse
@@ -63,11 +67,12 @@ class StudentRepository:
     def _to_student(self, student_model: StudentModel) -> Student:
 
         return self._student(
+            student_id=student_model.student_id,
             img_path=student_model.img_path,
-            second_name=student_model.second_name,
             first_name=student_model.first_name,
+            second_name=student_model.second_name,
             gender=student_model.gender,
-            age=18,
+            birthday=f"{datetime.strftime(student_model.birthday, self._date_pattern_response)}",
             lesson_price=student_model.lesson_price,
             discord=student_model.discord,
             phone=student_model.phone,
@@ -114,7 +119,7 @@ class StudentRepository:
             second_name=student_model.second_name,
             first_name=student_model.first_name,
             gender=student_model.gender,
-            age=18,
+            birthday=f"{datetime.strftime(student_model.birthday, self._date_pattern_response)}",
             lesson_price=student_model.lesson_price,
             discord=student_model.discord,
             phone=student_model.phone,
@@ -128,6 +133,22 @@ class StudentRepository:
         return self._delete_student_response(
             name=f"{student_model.second_name} {student_model.first_name}",
             message="Профиль студента успешно удален"
+        )
+
+    def _to_update_student_response(self, student_model: StudentModel) -> UpdateStudentResponse:
+        return self._update_student_response(
+            student_id=student_model.student_id,
+            img_path=student_model.img_path,
+            first_name=student_model.first_name,
+            second_name=student_model.second_name,
+            gender=student_model.gender,
+            lesson_price=student_model.lesson_price,
+            birthday=f"{datetime.strftime(student_model.birthday, self._date_pattern_response)}",
+            discord=student_model.discord,
+            phone=student_model.phone,
+            telegram=student_model.telegram,
+            whatsapp=student_model.whatsapp,
+            message="Данные студента успешно изменены"
         )
 
     def _to_update_student_primary_info_response(self, student_model: StudentModel) -> UpdateStudentPrimaryInfoResponse:
@@ -226,7 +247,7 @@ class StudentRepository:
 
     async def delete_student(self, session: AsyncSession, student_data: DeleteStudentRequest) -> DeleteStudentResponse:
         student_model = (
-            await session.execute(select(self._student_model).filter_by(phone=student_data.phone))).scalars().first()
+            await session.execute(select(self._student_model).filter_by(student_id=student_data.student_id))).scalars().first()
 
         if not student_model:
             raise StudentNotFoundError
@@ -240,6 +261,35 @@ class StudentRepository:
         await session.delete(student_model)
 
         return delete_student_response
+
+    async def update_student(self, session: AsyncSession, student_data: UpdateStudentRequest) -> UpdateStudentResponse:
+        student_model = (
+            await session.execute(select(self._student_model).filter_by(student_id=student_data.student_id))).scalars().first()
+
+        if not student_model:
+            raise StudentNotFoundError
+
+        if student_model.phone != student_data.phone:
+            student_phone_model = (
+                await session.execute(
+                    select(self._student_model).filter_by(phone=student_data.phone))).scalars().first()
+
+            if student_phone_model:
+                raise StudentPhoneAlreadyExistError
+
+        student_model.first_name = student_data.first_name
+        student_model.second_name = student_data.second_name
+        student_model.gender = student_data.gender
+        student_model.lesson_price = student_data.lesson_price
+        student_model.birthday = datetime.strptime(student_data.birthday, "%Y-%m-%d")
+        student_model.discord = student_data.discord
+        student_model.phone = student_data.phone
+        student_model.telegram = student_data.telegram
+        student_model.whatsapp = student_data.whatsapp
+        session.add(student_model)
+
+        return self._to_update_student_response(student_model=student_model)
+
 
     async def update_primary_info(self, session: AsyncSession, student_data: UpdateStudentPrimaryInfoRequest, user_id: int) -> UpdateStudentPrimaryInfoResponse:
         student_model = (

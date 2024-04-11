@@ -3,3 +3,4 @@ from .update_contact_info import UpdateStudentContactInfoRequest, UpdateStudentC
 from .update_image import UpdateStudentImageResponse
 from .add_student import AddStudentRequest, AddStudentResponse
 from .delete_student import DeleteStudentRequest, DeleteStudentResponse
+from .update_student import UpdateStudentRequest, UpdateStudentResponse

@@ -106,9 +106,14 @@ class ProgressTable {
             3: "Программирование"
         }
         this.rusStatus = {
-            "NOT STUDIED": 'Не изучалась',
+            "PLANNED": 'Запланировано',
             "COMPLETED": 'Изучена',
             "IN PROGRESS": 'В процессе'
+        }
+        this.statusColor = {
+            "PLANNED": 'blue',
+            "COMPLETED": '#56FF3D',
+            "IN PROGRESS": 'yellow'
         }
         this.statusIcon = {
             "COMPLETED": '<i class="fa-solid fa-star" style="color: #56FF3D;"></i>',
@@ -156,7 +161,7 @@ class ProgressTable {
         this.addCell(row, theme.exam_task_number)
         this.addCell(row, theme.title)
         this.addCell(row, theme.descr)
-        this.addCell(row, 'НЕ ПРОЙДЕНА')
+        this.addCell(row, 'Не изучалась')
         this.addCell(row, '')
     }
 
@@ -205,10 +210,13 @@ class ProgressTable {
 
     updateRow(theme) {
         const row = document.getElementById(`theme-id-${theme.theme_id}`).parentNode
-        if (theme.status != 'NOT STUDIED') {
+
+        if (theme.status != 'PLANNED') {
             row.cells[0].innerHTML = this.statusIcon[theme.status]
         }
+
         row.cells[4].textContent = this.rusStatus[theme.status]
+        row.cells[4].style.color = this.statusColor[theme.status]
         row.cells[5].textContent = theme.date
     }
 }

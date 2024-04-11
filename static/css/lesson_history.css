@@ -3,10 +3,6 @@
     margin-bottom: 10px;
 }
 
-#content {
-    background: #4A918B;
-}
-
 #content-title {
     height: 150px;
     padding: 30px 20px;
@@ -17,36 +13,42 @@
     text-align: center;
 }
 
+.select-student {
+    width: 30%
+}
+.label-select-student {
+    width: 25%;
+}
+
+.paid-status-button {
+    display: inline-block;
+    padding: 2px 8px;
+    width: 45px;
+    font-weight: 400;
+    color: #F6E6AE;
+    border: 5px solid #14A9A5;
+    border-color: #14A9A5;
+    border-radius: 30px;
+    text-align: center;
+    vertical-align: middle;
+    text-decoration: none;
+    cursor: default;
+    user-select: none;
+    font-size: 20px;
+}
+.paid-status-button:hover,
+.paid-status-button:focus-visible {
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem #F6E6AE;
+}
+.lesson-paid {
+    background-color: #72E179;
+}
+.lesson-not-paid {
+    background-color: #E68B8F;
+}
+
 .table th,
 .table td {
-    background-color: #4A918B;
-}
-
-.table tr:hover td {
-    background-image: linear-gradient(to right, #4A918B, #14A9A5 15%, #14A9A5 50%, #4A918B);
-    background-size: calc(100% * 6) 100%;
-}
-
-.table tr:hover td:first-child {
-    background-position: 0 0;
-}
-
-.table tr:hover td:nth-child(2) {
-    background-position: -100% 0;
-}
-
-.table tr:hover td:nth-child(3) {
-    background-position: -200% 0;
-}
-
-.table tr:hover td:nth-child(4) {
-    background-position: -300% 0;
-}
-
-.table tr:hover td:nth-child(5) {
-    background-position: -400% 0;
-}
-
-.table tr:hover td:nth-child(6) {
-    background-position: -500% 0;
+    background-color: #B4D8FA;
 }

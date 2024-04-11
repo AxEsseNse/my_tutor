@@ -1,39 +1,32 @@
-.admin-content-btn-add {
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
-
-.table th,
-.table td {
-    background-color: #B4D8FA;
-    font-family: 14px;
-}
-
 .table tr:hover td {
-    background-image: linear-gradient(to right, #B4D8FA, #C8C8F4 15%, #C8C8F4 50%, #B4D8FA);
-    background-size: calc(100% * 6) 100%;
+    background-image: linear-gradient(to right, #B4D8FA, #B4B7FA 15%, #B4B7FA 50%, #B4D8FA);
+    background-size: calc(100% * 9) 100%;
 }
 
 .table tr:hover td:first-child {
     background-position: 0 0;
 }
-
 .table tr:hover td:nth-child(2) {
     background-position: -100% 0;
 }
-
 .table tr:hover td:nth-child(3) {
     background-position: -200% 0;
 }
-
 .table tr:hover td:nth-child(4) {
     background-position: -300% 0;
 }
-
 .table tr:hover td:nth-child(5) {
     background-position: -400% 0;
 }
-
 .table tr:hover td:nth-child(6) {
     background-position: -500% 0;
+}
+.table tr:hover td:nth-child(7) {
+    background-position: -600% 0;
+}
+.table tr:hover td:nth-child(8) {
+    background-position: -700% 0;
+}
+.table tr:hover td:nth-child(9) {
+    background-position: -800% 0;
 }

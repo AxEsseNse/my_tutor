@@ -1,35 +1,73 @@
-{% extends "student_base.html" %}
-{% block student_head %}
-    <link rel="stylesheet" href="/static/css/lesson_history.css" />
-{% endblock student_head %}
-{% block student_content %}
-<div id="content-title">
-    История моих занятий
-</div>
-<table id="lessons-table" class="table table-info">
-    <thead class="thead-dark">
-        <tr>
-            {% if user.role == "Студент" %}
+{% if user.role == "Студент" %}
+    {% extends "student_base.html" %}
+    {% block student_head %}
+        <link rel="stylesheet" href="/static/css/lesson_history.css" />
+        <link rel="stylesheet" href="/static/css/lesson_history_student.css" />
+    {% endblock student_head %}
+    {% block student_content %}
+    <div id="content-title">
+        История моих занятий
+    </div>
+    <table id="lessons-table" class="table table-info">
+        <thead class="thead-dark">
+            <tr>
                 <th class="col-2 text-center small">Дата</th>
                 <th class="col-2 text-start small">Преподаватель</th>
                 <th class="col-1 text-start small">Профиль</th>
                 <th class="col-1 text-start small">№ Задания</th>
                 <th class="col-4 text-start small">Тема</th>
-                <th class="col-2 text-start small">Статус оплаты</th>
-            {% elif user.role == "Преподаватель" %}
-                <th class="col-2 text-center small">Дата</th>
+                <th class="col-2 text-center small">Оплата</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    {% endblock student_content %}
+    {% block student_scripts %}
+        <!-- Подключение js страницы-->
+        <script src="/static/js/lesson_history.js"></script>
+    {% endblock student_scripts %}
+{% elif user.role == "Преподаватель" %}
+    {% extends "tutor_base.html" %}
+    {% block tutor_head %}
+        <link rel="stylesheet" href="/static/css/lesson_history.css" />
+        <link rel="stylesheet" href="/static/css/lesson_history_tutor.css" />
+    {% endblock tutor_head %}
+    {% block tutor_content %}
+    <div id="content-title">
+        История моих занятий
+    </div>
+    <!-- Выбор ученика -->
+    <div class="input-group mt-2 mb-2 select-student">
+        <label class="input-group-text label-select-student" for="select-student" id="theme-card-theme-label">Студент</label>
+        <select class="form-select" id="select-student">
+        </select>
+    </div>
+    <table id="lessons-table" class="table table-info">
+        <thead class="thead-dark">
+            <tr>
+                <th class="col-1 text-center small">ID</th>
+                <th class="col-1 text-center small">Дата</th>
                 <th class="col-2 text-start small">Студент</th>
                 <th class="col-1 text-start small">Профиль</th>
                 <th class="col-1 text-start small">№ Задания</th>
-                <th class="col-4 text-start small">Тема</th>
+                <th class="col-2 text-start small">Тема</th>
                 <th class="col-2 text-start small">Заметка</th>
-            {% endif %}
-        </tr>
-    </thead>
-    <tbody></tbody>
-</table>
-{% endblock student_content %}
-{% block student_scripts %}
-    <!-- Подключение js страницы-->
-    <script src="/static/js/lesson_history.js"></script>
-{% endblock student_scripts %}
+                <th class="col-1 text-center small">Оплата</th>
+                <th class="col-1 text-center small">Действия</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    {% endblock tutor_content %}
+    {% block tutor_scripts %}
+        <!-- Подключение js страницы-->
+        <script src="/static/js/lesson_history.js"></script>
+        {% include "lessonFormReschedule.html" %}
+        {% include "lessonFormCancel.html" %}
+        {% include "lessonFormUpdateNote.html" %}
+    {% endblock tutor_scripts %}
+{% endif %}
+
+
+
+

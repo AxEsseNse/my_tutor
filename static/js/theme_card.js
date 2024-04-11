@@ -877,12 +877,12 @@ class Controller {
         return
         fetch(`/api/themes/${this.currentThemeId}/cards/`, {
             method: 'PUT',
-                headers: {
-                'Content-Type': 'application/json',
-                'My-Tutor-Auth-Token': token
-                },
-                body: JSON.stringify(updateTheoryCardData),
-            })
+            headers: {
+            'Content-Type': 'application/json',
+            'My-Tutor-Auth-Token': token
+            },
+            body: JSON.stringify(updateTheoryCardData)
+        })
         .then(response => {
             if (!response.ok) {
                 if (!(response.status == 400)) {
@@ -958,10 +958,6 @@ class Controller {
         if (!this.practiceTipDescr.value == "") {
             tipDescr = this.practiceTipDescr.value
         }
-
-//        if (!(tipDescr == null && this.currentCardTipImagePath == null)) {
-//            tipFilled = true
-//        }
 
         const updatePracticeCardData = {
             themeId: this.currentThemeId,

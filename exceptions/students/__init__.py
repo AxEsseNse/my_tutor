@@ -1,1 +1,7 @@
-from .student import StudentNotFoundError, StudentSaveImageError, StudentAlreadyExistError, StudentAlreadyHasLesson
+from .student import (
+    StudentNotFoundError,
+    StudentSaveImageError,
+    StudentAlreadyExistError,
+    StudentAlreadyHasLesson,
+    StudentPhoneAlreadyExistError
+)

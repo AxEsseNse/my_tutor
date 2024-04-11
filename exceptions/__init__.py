@@ -7,7 +7,8 @@ from .students import (
     StudentNotFoundError,
     StudentSaveImageError,
     StudentAlreadyExistError,
-    StudentAlreadyHasLesson
+    StudentAlreadyHasLesson,
+    StudentPhoneAlreadyExistError
 )
 from .parents import (
     ParentAlreadyExistError,

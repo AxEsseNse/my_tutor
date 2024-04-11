@@ -11,12 +11,15 @@ class StudentLesson(BaseModel):
 
 
 class TutorLesson(BaseModel):
+    lesson_id: int
     date: str
     student: str
     exam: str
     exam_task_number: int
     theme_title: str
     note: str
+    status: str
+    pay_status: bool
 
 
 class LessonOptions(BaseModel):

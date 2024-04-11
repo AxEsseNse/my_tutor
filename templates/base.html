@@ -26,7 +26,7 @@
                     <a href="/price-list"><strong>Услуги</strong></a>
                     <a href="/presentation"><strong>Об обучении</strong></a>
                     <a href="/reviews"><strong>Отзывы</strong></a>
-                    {% if user.current_lesson_id != None %}
+                    {% if user.role and user.current_lesson_id != None %}
                         <button type="button" class="lesson-enter-button" onclick="joinToLesson({{user.current_lesson_id}})">
                             Войти на урок
                         </button>
@@ -46,13 +46,12 @@
                         <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
                             <div class="dropdown text-end" id="header-user-dropdown">
                                 <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <img src="{{ user.img_path }}" alt="Err" width="50" height="50" class="rounded-circle" id="user-image">
+                                    <img src="{{ user.img_path }}" alt="Err" width="50" height="50" style="object-fit: cover; image-rendering: crisp-edges;" class="rounded-circle" id="user-image">
                                 </a>
                                 <ul class="dropdown-menu text-small">
                                     <li><h6 class="dropdown-header">{{ user.role }}</h6></li>
                                     <li><hr class="dropdown-divider"></li>
                                     {% if user.role == "Администратор" %}
-                                        <li><a class="dropdown-item btn btn-primary" href="/tutor-profile" role="button">Мой профиль</a></li>
                                         <li><a class="dropdown-item btn btn-primary" href="/admin/users" role="button">Администрирование</a></li>
                                         <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modal-lesson-add" onclick="setTodayDate()">Создать урок</button></li>
                                     {% elif user.role == "Преподаватель" %}
@@ -63,7 +62,7 @@
                                         <li><a class="dropdown-item btn btn-primary" href="/schedule" role="button">Расписание</a></li>
                                     {% endif %}
 
-                                    <li><button class="dropdown-item" href="#">Сменить пароль</button></li>
+                                    <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modal-user-update-password" id="user-update-password-button">Сменить пароль</button></li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li><button class="dropdown-item" onclick="logOut()">Выйти из профиля</button></li>
 
@@ -107,7 +106,14 @@
                     AxEsseNse &copy; 2024 My tutor
                 </div>
                 <div class="col-4 text-end" id="footer-contact">
-                    <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#contact">
+                    <button
+                        class="btn btn-outline-secondary btn-sm"
+                        type="button"
+                        title="Контактная информация"
+                        data-bs-toggle="modal"
+                        data-bs-target="#contact-info"
+                        id="btn-show-contact"
+                    >
                         Контакты
                     </button>
                 </div>
@@ -129,11 +135,14 @@
     <!-- Объявление глобальных переменных -->
     <script type="text/javascript">
         const userRole = "{{ user.role }}";
+        const userId = "{{ user.user_id }}";
     </script>
     {% if user.role == "Преподаватель" %}
         <script src="/static/js/tutor_menu.js"></script>
         {% include "lessonFormAdd.html" %}
     {% endif %}
+    {% include "contactForm.html" %}
+    {% include "userFormUpdatePassword.html" %}
     {% block scripts %}{% endblock %}
   </body>
 </html>

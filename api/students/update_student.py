@@ -4,14 +4,16 @@ from fastapi import Depends, HTTPException
 from pydantic import ValidationError
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from my_tutor.exceptions import StudentNotFoundError
+from my_tutor.exceptions import StudentNotFoundError, StudentPhoneAlreadyExistError
 from my_tutor.repositories import StudentRepository, UserRepository
-from my_tutor.routers import students_router
+from my_tutor.routers import students_router, admin_router
 from my_tutor.schemes import (
     UpdateStudentPrimaryInfoRequest,
     UpdateStudentContactInfoRequest,
     UpdateStudentPrimaryInfoResponse,
-    UpdateStudentContactInfoResponse
+    UpdateStudentContactInfoResponse,
+    UpdateStudentRequest,
+    UpdateStudentResponse
 )
 from my_tutor.session import get_db_session
 
@@ -41,4 +43,25 @@ async def update_student(
     except ValidationError as e:
         raise HTTPException(HTTPStatus.BAD_REQUEST, str(e))
     except StudentNotFoundError as e:
+        raise HTTPException(HTTPStatus.NOT_FOUND, e.message)
+
+
+@admin_router.put("/student/{student_id:int}/")
+async def update_student(
+    student_id: int,
+    student_data: UpdateStudentRequest,
+    session: AsyncSession = Depends(get_db_session)
+) -> UpdateStudentResponse:
+    if student_id != student_data.student_id:
+        raise HTTPException(HTTPStatus.BAD_REQUEST, "Bad request data")
+
+    try:
+        async with session.begin():
+
+            return await student_repository.update_student(session, student_data)
+    except ValidationError as e:
+        raise HTTPException(HTTPStatus.BAD_REQUEST, str(e))
+    except StudentNotFoundError as e:
+        raise HTTPException(HTTPStatus.NOT_FOUND, e.message)
+    except StudentPhoneAlreadyExistError as e:
         raise HTTPException(HTTPStatus.NOT_FOUND, e.message)

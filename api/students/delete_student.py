@@ -12,9 +12,9 @@ from my_tutor.schemes import DeleteStudentRequest, DeleteStudentResponse
 student_repository = StudentRepository()
 
 
-@admin_router.delete("/students/{phone:str}/")
-async def delete_student(phone: str, student_data: DeleteStudentRequest, session: AsyncSession = Depends(get_db_session)) -> DeleteStudentResponse:
-    if phone != student_data.phone:
+@admin_router.delete("/student/{student_id:int}/")
+async def delete_student(student_id: int, student_data: DeleteStudentRequest, session: AsyncSession = Depends(get_db_session)) -> DeleteStudentResponse:
+    if student_id != student_data.student_id:
         raise HTTPException(HTTPStatus.BAD_REQUEST, "Bad request data")
 
     try:

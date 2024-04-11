@@ -56,7 +56,7 @@ def upgrade() -> None:
     #  Добавление для тем статуса "Не изучалась" и записи для тестового студента по неизученной теме
     connection.execute(
         sa.text(
-            """INSERT INTO "themes_statuses" (title) VALUES ('NOT STUDIED')"""
+            """INSERT INTO "themes_statuses" (title) VALUES ('PLANNED')"""
         )
     )
     theme_status_not_studied_id = connection.execute(sa.text("SELECT currval('themes_statuses_theme_status_id_seq')")).fetchone()[0]
@@ -76,8 +76,8 @@ def upgrade() -> None:
     )
     theme_status_completed_id = connection.execute(sa.text("SELECT currval('themes_statuses_theme_status_id_seq')")).fetchone()[0]
     completed_theme_progress_cards = {
-        5: "CABD",
-        6: "DABC"
+        7: "CABD",
+        8: "DABC"
     }
     completed_theme_progress_cards_json = json.dumps(completed_theme_progress_cards)
     connection.execute(
@@ -96,7 +96,7 @@ def upgrade() -> None:
     )
     theme_status_in_progress_id = connection.execute(sa.text("SELECT currval('themes_statuses_theme_status_id_seq')")).fetchone()[0]
     in_progress_theme_progress_cards = {
-        7: "3"
+        10: "3"
     }
     in_progress_theme_progress_cards_json = json.dumps(in_progress_theme_progress_cards)
     connection.execute(

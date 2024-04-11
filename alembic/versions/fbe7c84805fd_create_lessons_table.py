@@ -20,7 +20,7 @@ depends_on: Union[str, Sequence[str], None] = None
 
 TEST_STUDENT_ID = 1
 TEST_TUTOR_ID = 1
-TEST_THEME_ID = 1
+TEST_THEME_ID = 3
 LessonStatus = sa.Enum('CREATED', 'STARTED', 'CANCELED', 'FINISHED', name='lesson_status')
 
 

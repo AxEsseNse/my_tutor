@@ -5,7 +5,8 @@ from .users import (
     UpdateUserPasswordRequest,
     UpdateUserPasswordResponse,
     DeleteUserRequest,
-    DeleteUserResponse
+    DeleteUserResponse,
+    UpdateUserPasswordByAdminRequest
 )
 from .students import (
     AddStudentRequest,
@@ -16,7 +17,9 @@ from .students import (
     UpdateStudentContactInfoRequest,
     UpdateStudentPrimaryInfoResponse,
     UpdateStudentContactInfoResponse,
-    UpdateStudentImageResponse
+    UpdateStudentImageResponse,
+    UpdateStudentRequest,
+    UpdateStudentResponse
 )
 from .parents import (
     AddParentRequest,
@@ -63,8 +66,14 @@ from .lessons import (
     DeleteLessonResponse,
     FinishLessonRequest,
     FinishLessonResponse,
-    PaidLessonRequest,
-    PaidLessonResponse,
+    ChangeLessonPaidStatusRequest,
+    ChangeLessonPaidStatusResponse,
     StartLessonResponse,
-    GetLessonStatusResponse
+    GetLessonStatusResponse,
+    CancelLessonRequest,
+    CancelLessonResponse,
+    RescheduleLessonRequest,
+    RescheduleLessonResponse,
+    UpdateNoteLessonRequest,
+    UpdateNoteLessonResponse
 )

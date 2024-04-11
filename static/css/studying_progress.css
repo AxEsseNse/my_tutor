@@ -1,7 +1,7 @@
-#content {
+/*#content {
     background: #4A918B;
 }
-
+*/
 .progress-content {
     margin-top: 20px;
 }
@@ -53,19 +53,17 @@
     box-shadow: 0 0 0 0.2rem #F6E6AE;
 }
 
-
-
 .table {
     margin-top: 30px;
 }
 
 .table th,
 .table td{
-    background-color: #4A918B;
+    background-color: #B4D8FA;
 }
 
 .table tr:hover td {
-    background-image: linear-gradient(to right, #4A918B, #14A9A5 20%, #14A9A5 80%, #4A918B);
+    background-image: linear-gradient(to right, #B4D8FA, #C8C8F4 15%, #C8C8F4 50%, #B4D8FA);
     background-size: calc(100% * 6) 100%;
 }
 

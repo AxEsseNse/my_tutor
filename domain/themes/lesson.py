@@ -4,5 +4,5 @@ from .theme import Theme
 
 class Lesson(BaseModel):
     student_id: int
-    progress_cards: dict
+    progress_cards: dict[int, str]
     theme: Theme

@@ -1,5 +1,5 @@
 #content {
-    background: #4A918B;
+    background: #B4D8FA;
 }
 
 #theory-content,
@@ -415,16 +415,6 @@ hr {
     cursor: default;
     user-select: none;
     font-size: 20px;
-}
-
-.sfpractice-answer-button-success:disabled,
-.sfpractice-answer-button-wrong.disabled {
-    width: 45px;
-    background-color: #72E179;
-    color: #F6E6AE;
-    border-color: #F6E6AE;
-    opacity: 0.65;
-    cursor: not-allowed;
 }
 
 #practice-tip-button {
