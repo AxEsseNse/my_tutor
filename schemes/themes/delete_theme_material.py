@@ -1,14 +1,11 @@
 from pydantic import BaseModel, Field
 
 
-class DeleteThemeMaterialRequest(BaseModel):
+class DeleteThemeCardRequest(BaseModel):
     theme_id: int = Field(alias="themeId")
-    card: int
+    card_id: int = Field(alias="cardId")
+    card_position: int = Field(alias="cardPosition")
 
 
-class DeleteThemeMaterialResponse(BaseModel):
-    exam: str
-    title: str
-    card: int
-    type_card: str
+class DeleteThemeCardResponse(BaseModel):
     message: str

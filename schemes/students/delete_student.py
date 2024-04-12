@@ -1,8 +1,8 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class DeleteStudentRequest(BaseModel):
-    phone: str
+    student_id: int = Field(alias="studentId")
 
 
 class DeleteStudentResponse(BaseModel):

@@ -27,7 +27,7 @@ function logOut() {
 }
 
 function checkPasswords(psw, pswRe) {
-    if (psw.length < 3) {
+    if (psw.length < 10) {
         return 'Длина пароля должна быть не менее 10 символов'
     }
     if (!(psw === pswRe)) {
@@ -36,25 +36,21 @@ function checkPasswords(psw, pswRe) {
     return NaN
 }
 
-function flashMsg(flashMsg, flashMsgDiv, flashMsgType, flashMsgTime = NaN) {
+function flashMsg(flashMsg, flashMsgDiv, flashMsgType, flashMsgTime = null) {
     flashMsgDiv.innerHTML = ''
     switch (flashMsgType) {
         case 'success':
-            if (!flashMsgDiv.classList.contains('axe-flash-msg-success')) {
-                flashMsgDiv.classList.add('axe-flash-msg-success')
+            if (!flashMsgDiv.classList.contains('flash-msg-success')) {
+                flashMsgDiv.classList.add('flash-msg-success')
             }
-            if (flashMsgDiv.classList.contains('axe-flash-msg-wrong')) {
-                flashMsgDiv.classList.remove('axe-flash-msg-wrong')
-            }
+            flashMsgDiv.classList.remove('flash-msg-wrong')
             flashMsgDiv.innerHTML = flashMsg
             break
         case 'wrong':
-            if (!flashMsgDiv.classList.contains('axe-flash-msg-wrong')) {
-                flashMsgDiv.classList.add('axe-flash-msg-wrong')
+            if (!flashMsgDiv.classList.contains('flash-msg-wrong')) {
+                flashMsgDiv.classList.add('flash-msg-wrong')
             }
-            if (flashMsgDiv.classList.contains('axe-flash-msg-success')) {
-                flashMsgDiv.classList.remove('axe-flash-msg-success')
-            }
+            flashMsgDiv.classList.remove('flash-msg-success')
             flashMsgDiv.innerHTML = flashMsg
             if (flashMsgTime) {
                 setTimeout(function () {
@@ -64,3 +60,103 @@ function flashMsg(flashMsg, flashMsgDiv, flashMsgType, flashMsgTime = NaN) {
             break
     }
 }
+
+function setTodayDate() {
+    var today = moment().format('YYYY-MM-DD')
+    document.getElementById('lesson-add-form-date').value = today
+}
+
+function joinToLesson(lessonId) {
+    window.location.href = `/lesson/${lessonId}`
+}
+
+
+class PasswordFormUpdate {
+    constructor() {
+        this.inputCurrentPassword = document.getElementById('user-update-password-form-current-password')
+        this.inputNewPassword = document.getElementById('user-update-password-form-new-password')
+        this.inputNewPasswordRe = document.getElementById('user-update-password-form-new-password-re')
+
+        this.flashMsg = document.getElementById('user-update-password-form-flash-msg')
+
+        this.btnUpdatePassword = document.getElementById('user-update-password-form-button')
+        this.btnUpdatePassword.onclick = () => {
+            this.updatePassword()
+        }
+    }
+
+    clearUpdateForm() {
+        this.inputCurrentPassword.value = ''
+        this.inputNewPassword.value = ''
+        this.inputNewPasswordRe.value = ''
+        this.flashMsg.innerHTML = ''
+    }
+
+    updatePassword() {
+        const checkPsw = checkPasswords(this.inputNewPassword.value, this.inputNewPasswordRe.value)
+
+        if (checkPsw) {
+            flashMsg(checkPsw, this.flashMsg, 'wrong')
+            return
+        }
+
+        const updatedPassword = {
+            userId: userId,
+            currentPassword: this.inputCurrentPassword.value,
+            newPassword: this.inputNewPassword.value
+        }
+
+        let token = getCookie('My-Tutor-Auth-Token')
+
+        if (token == undefined) {
+            return
+        }
+
+        fetch(`/api/users/${userId}/password/`, {
+            method: 'PUT',
+                headers: {
+                'Content-Type': 'application/json',
+                'My-Tutor-Auth-Token': token
+                },
+                body: JSON.stringify(updatedPassword),
+            })
+        .then(response => {
+            if (!response.ok) {
+                if (!(response.status == 400)) {
+                    return Promise.reject(response.text())
+                }
+            }
+            return Promise.resolve(response.text())
+        })
+        .then(text => {
+            return JSON.parse(text)
+        })
+        .then(response => {
+            if (response.hasOwnProperty('login')) {
+                flashMsg(`Пароль пользователя "${response.login}" успешно изменен`, this.flashMsg, 'success')
+                this.inputCurrentPassword.value = response.new_password
+                this.inputNewPassword.value = ''
+                this.inputNewPasswordRe.value = ''
+                console.log(response.message)
+            } else {
+                flashMsg(response.message, this.flashMsg, 'wrong')
+            }
+        })
+        .catch(error => {
+            console.log(error)
+        })
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function (event) {
+
+    if (!userRole) {
+        return
+    }
+
+    passwordFormUpdate = new PasswordFormUpdate()
+    const updatePasswordButton = document.getElementById('user-update-password-button')
+    updatePasswordButton.onclick = () => {
+        passwordFormUpdate.clearUpdateForm()
+    }
+})

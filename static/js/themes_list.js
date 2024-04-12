@@ -3,31 +3,61 @@ const exams = {
     ОГЭ: 2
 }
 const egeOptions = [
-    { value: '1', text: '1', selected: true },
-    { value: '2', text: '2' },
-    { value: '3', text: '3' }
-];
+    { value: '1', text: '1'},
+    { value: '2', text: '2'},
+    { value: '3', text: '3'},
+    { value: '4', text: '4'},
+    { value: '5', text: '5'},
+    { value: '6', text: '6'},
+    { value: '7', text: '7'},
+    { value: '8', text: '8'},
+    { value: '9', text: '9'},
+    { value: '10', text: '10'},
+    { value: '11', text: '11'},
+    { value: '12', text: '12'},
+    { value: '13', text: '13'},
+    { value: '14', text: '14'},
+    { value: '15', text: '15'},
+    { value: '16', text: '16'},
+    { value: '17', text: '17'},
+    { value: '18', text: '18'},
+    { value: '19', text: '19'},
+    { value: '20', text: '20'},
+    { value: '21', text: '21'},
+    { value: '22', text: '22'},
+    { value: '23', text: '23'},
+    { value: '24', text: '24'},
+    { value: '25', text: '25'},
+    { value: '26', text: '26'},
+    { value: '27', text: '27'}
+]
 
 const ogeOptions = [
-    { value: '10', text: '10', selected: true },
-    { value: '20', text: '20' },
-    { value: '30', text: '30' }
-];
-
-function clearAddThemeForm() {
-    console.log('Очистка формы добавления темы')
-    document.getElementById('theme-add-form-exam').value = '1'
-    document.getElementById('theme-add-form-title').value = ''
-    document.getElementById('theme-add-form-descr').value = ''
-    document.getElementById('theme-add-form-flash-msg').innerHTML = ''
-}
+    { value: '1', text: '1'},
+    { value: '2', text: '2'},
+    { value: '3', text: '3'},
+    { value: '4', text: '4'},
+    { value: '5', text: '5'},
+    { value: '6', text: '6'},
+    { value: '7', text: '7'},
+    { value: '8', text: '8'},
+    { value: '9', text: '9'},
+    { value: '10', text: '10'},
+    { value: '11', text: '11'},
+    { value: '12', text: '12'},
+    { value: '13', text: '13'},
+    { value: '14', text: '14'},
+    { value: '15', text: '15'}
+]
 
 class AddThemeForm {
     constructor(themeTable) {
         this.themeTable = themeTable
 
+        this.inputField = document.getElementById('theme-add-form-input-field')
         this.inputExam = document.getElementById('theme-add-form-exam')
-        this.inputExamTaskNumber = document.getElementById('theme-add-form-exam-task-number');
+        this.inputExamTaskNumberField = document.getElementById('theme-add-form-exam-task-number-field')
+        this.inputExamTaskNumber = document.getElementById('theme-add-form-exam-task-number')
         this.inputTitle = document.getElementById('theme-add-form-title')
         this.inputDescr = document.getElementById('theme-add-form-descr')
 
@@ -39,20 +69,52 @@ class AddThemeForm {
         }
     }
 
+    hideField(field) {
+        switch (field) {
+            case 'taskNumber':
+                if (!this.inputExamTaskNumberField.classList.contains('hidden-field')) {
+                        this.inputExamTaskNumberField.classList.add('hidden-field')
+                    }
+                break
+            case 'inputField':
+                if (!this.inputField.classList.contains('hidden-field')) {
+                    this.inputField.classList.add('hidden-field')
+                }
+                break
+        }
+    }
+
+    clearAddThemeForm() {
+        console.log('Очистка формы добавления темы')
+        this.inputExam.value = ''
+        this.inputTitle.value = ''
+        this.inputDescr.value = ''
+        this.flashMsg.innerHTML = ''
+
+        this.hideField('taskNumber')
+        this.hideField('inputField')
+    }
+
     addExamTaskNumberOptions(options) {
         options.forEach(option => {
             const optionElement = document.createElement('option');
             optionElement.value = option.value;
             optionElement.textContent = option.text;
-            if (option.selected) {
-                optionElement.selected = true;
-            }
             this.inputExamTaskNumber.appendChild(optionElement);
         });
     }
 
     fillExamTaskNumberOptions() {
         this.inputExamTaskNumber.innerHTML = '';
+
+        const emptyOption = document.createElement('option')
+        emptyOption.value = ""
+        emptyOption.hidden = true
+        emptyOption.disabled = true
+        emptyOption.selected = true
+        emptyOption.innerText = "Выберите номер задания"
+        this.inputExamTaskNumber.append(emptyOption)
+
         if (this.inputExam.value === '1') {
             this.addExamTaskNumberOptions(egeOptions);
         } else if (this.inputExam.value === '2') {
@@ -73,7 +135,9 @@ class AddThemeForm {
             title: this.inputTitle.value,
             descr: this.inputDescr.value
         }
+
         console.log(newTheme)
+
         fetch('/api/admin/themes/', {
             method: 'POST',
             headers: {
@@ -195,8 +259,8 @@ class ThemeFormUpdate {
         this.updateRow = updateRow
         this.themeId = updateRow.childNodes[0].innerText
         this.themeExam = updateRow.childNodes[1].innerText
-        this.themeTitle = updateRow.childNodes[2].innerText
-        this.themeDescr = updateRow.childNodes[3].innerText
+        this.themeTitle = updateRow.childNodes[3].innerText
+        this.themeDescr = updateRow.childNodes[4].innerText
 
         this.inputId = document.getElementById('theme-update-form-id')
         this.inputExam = document.getElementById('theme-update-form-exam')
@@ -369,8 +433,17 @@ document.addEventListener('DOMContentLoaded', function (event) {
     const themeTable = new ThemeTable()
     themeTable.loadThemes()
     addThemeForm = new AddThemeForm(themeTable)
+
+    const addThemeButton = document.getElementById('btn-add-theme')
+    addThemeButton.onclick = () => {
+        addThemeForm.clearAddThemeForm()
+    }
+
     addThemeForm.inputExam.addEventListener('change', () => {
         addThemeForm.fillExamTaskNumberOptions()
+        addThemeForm.inputExamTaskNumberField.classList.remove('hidden-field')
     });
-    addThemeForm.inputExam.dispatchEvent(new Event('change'));
+    addThemeForm.inputExamTaskNumber.addEventListener('change', () => {
+        addThemeForm.inputField.classList.remove('hidden-field')
+    });
 })

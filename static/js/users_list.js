@@ -104,27 +104,27 @@ class UpdateUserPasswordForm {
     constructor(login) {
         this.login = login
 
-        this.inputLogin = document.getElementById('user-change-password-form-login')
-        this.inputPsw = document.getElementById('user-change-password-form-password')
-        this.inputPswRe = document.getElementById('user-change-password-form-password-re')
+        this.inputLogin = document.getElementById('user-update-password-by-admin-form-login')
+        this.inputNewPassword = document.getElementById('user-update-password-by-admin-form-password')
+        this.inputNewPasswordRe = document.getElementById('user-update-password-by-admin-form-password-re')
 
-        this.flashMsg = document.getElementById('user-change-password-form-flash-msg')
+        this.flashMsg = document.getElementById('user-update-password-by-admin-form-flash-msg')
 
-        this.btnUpdatePassword = document.getElementById('user-change-password-form-button')
-        this.btnUpdatePassword.onclick = () => {
+        this.btnUpdateUserPassword = document.getElementById('user-update-password-by-admin-form-button')
+        this.btnUpdateUserPassword.onclick = () => {
             this.updateUserPassword()
         }
     }
 
     fillUpdateUserPasswordForm() {
         this.inputLogin.value = this.login
-        this.inputPsw.value = ''
-        this.inputPswRe.value = ''
+        this.inputNewPassword.value = ''
+        this.inputNewPasswordRe.value = ''
         this.flashMsg.innerHTML = ''
     }
 
     updateUserPassword() {
-        const checkPsw = checkPasswords(this.inputPsw.value, this.inputPswRe.value)
+        const checkPsw = checkPasswords(this.inputNewPassword.value, this.inputNewPasswordRe.value)
 
         if (checkPsw) {
             flashMsg(checkPsw, this.flashMsg, 'wrong')
@@ -132,8 +132,9 @@ class UpdateUserPasswordForm {
         }
 
         const newUserPassword = {
+            userId: userId,
             login: this.login,
-            password: this.inputPsw.value,
+            newPassword: this.inputNewPassword.value
         }
 
         let token = getCookie('My-Tutor-Auth-Token')
@@ -142,7 +143,7 @@ class UpdateUserPasswordForm {
             return
         }
 
-        fetch(`/api/admin/users/${this.login}/`, {
+        fetch(`/api/admin/users/${userId}/password/`, {
             method: 'PUT',
                 headers: {
                 'Content-Type': 'application/json',
@@ -164,6 +165,7 @@ class UpdateUserPasswordForm {
         .then(response => {
             if (response.hasOwnProperty('login')) {
                 flashMsg(`Пароль пользователя "${this.login}" успешно изменен`, this.flashMsg, 'success')
+                this.inputNewPasswordRe.value = ''
                 console.log(response.message)
             } else {
                 flashMsg(response.message, this.flashMsg, 'wrong')
@@ -284,6 +286,7 @@ class AddStudentProfileForm {
         document.getElementById('student-add-form-telegram').value = ''
         document.getElementById('student-add-form-whatsapp').value = ''
         document.getElementById('student-add-form-flash-msg').innerHTML = ''
+        this.btnAddStudent.disabled = false
     }
 
     addStudent() {
@@ -328,8 +331,9 @@ class AddStudentProfileForm {
         .then(student => {
             if (student.hasOwnProperty('first_name')) {
                 console.log(student.message)
-                const controllers = this.updateRow.querySelector('.text-end');
-                controllers.removeChild(this.addStudentController);
+                const controllers = this.updateRow.querySelector('.text-end')
+                controllers.removeChild(this.addStudentController)
+                this.btnAddStudent.disabled = true
                 flashMsg(
                     `Для пользователя "${student.student_login}" создан профиль студента`,
                     this.flashMsg,
@@ -416,7 +420,7 @@ class UserTable {
         btn.setAttribute('data-bs-target', '#modal-student-add')
         btn.innerHTML = '<i class="fa-solid fa-user-plus text-dark"></i>'
         btn.onclick = () => {
-            const form = new AddStudentProfileForm(row.childNodes[1].innerText, row, this)
+            const form = new AddStudentProfileForm(row.childNodes[1].innerText, row, btn)
             form.fillAddStudentProfileForm()
         }
         return btn
@@ -428,11 +432,11 @@ class UserTable {
         btn.setAttribute('type', 'button')
         btn.setAttribute('title', 'Изменить пароль пользователя')
         btn.setAttribute('data-bs-toggle', 'modal')
-        btn.setAttribute('data-bs-target', '#modal-user-change-password')
+        btn.setAttribute('data-bs-target', '#modal-user-update-password-by-admin')
         btn.innerHTML = '<i class="fa-solid fa-key text-dark"></i>'
         btn.onclick = () => {
-            const form = new ChangeUserPasswordForm(row.childNodes[1].innerText)
-            form.fillChangeUserPasswordForm()
+            const form = new UpdateUserPasswordForm(row.childNodes[1].innerText)
+            form.fillUpdateUserPasswordForm()
         }
         return btn
     }

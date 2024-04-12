@@ -8,6 +8,9 @@ api_router = APIRouter(prefix="/api")
 #     tags=["Users"],
 #     dependencies=[Depends(verify_user)],
 # )
+
+monitoring_router = APIRouter(tags=["Monitoring"])
+
 admin_router = APIRouter(
     prefix="/admin",
     tags=["Admin"]
@@ -22,6 +25,10 @@ tutors_router = APIRouter(
 )
 students_router = APIRouter(
     prefix="/students",
+    tags=["Users"]
+)
+themes_router = APIRouter(
+    prefix="/themes",
     tags=["Users"]
 )
 lessons_router = APIRouter(

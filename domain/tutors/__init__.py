@@ -1,1 +1,1 @@
-from .tutor import Tutor, TutorInfo
+from .tutor import Tutor, TutorInfo, TutorOption

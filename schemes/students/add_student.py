@@ -20,7 +20,7 @@ class AddStudentResponse(BaseModel):
     second_name: str
     first_name: str
     gender: str
-    age: int
+    birthday: str
     lesson_price: int
     discord: str
     phone: str

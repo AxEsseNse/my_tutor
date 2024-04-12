@@ -3,18 +3,14 @@
     margin-bottom: 10px;
 }
 
-#content {
-    background: #4A918B;
-}
-
 .table th,
 .table td {
-    background-color: #4A918B;
+    background-color: #B4D8FA;
     font-family: 14px;
 }
 
 .table tr:hover td {
-    background-image: linear-gradient(to right, #4A918B, #14A9A5 15%, #14A9A5 50%, #4A918B);
+    background-image: linear-gradient(to right, #B4D8FA, #C8C8F4 15%, #C8C8F4 50%, #B4D8FA);
     background-size: calc(100% * 11) 100%;
 }
 

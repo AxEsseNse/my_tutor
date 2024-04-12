@@ -1,0 +1,309 @@
+{% extends "admin_base.html" %}
+{% block admin_head %}
+    <link rel="stylesheet" href="/static/css/theme_card.css" />
+{% endblock admin_head %}
+{% block admin_content %}
+<div id="content-field">
+    <!-- Выбор профиля -->
+    <div class="input-group mt-2 mb-2 select-settings">
+        <label class="input-group-text label-settings" for="theme-card-profile" id="theme-card-exam-label">Профиль</label>
+        <select class="form-select" id="theme-card-profile">
+            <option value="" hidden disabled selected>Выберите профиль</option>
+            <option value="2">ОГЭ</option>
+            <option value="1">ЕГЭ</option>
+            <option value="3">Программирование</option>
+        </select>
+    </div>
+    <!-- Выбор темы профиля -->
+    <div class="hidden-field select-settings" id="theme-select">
+        <div class="input-group mt-2 mb-2">
+            <label class="input-group-text label-settings" for="theme-card-theme" id="theme-card-theme-label">Тема</label>
+            <select class="form-select" id="theme-card-theme">
+            </select>
+        </div>
+    </div>
+    <!-- Выбор действия с карточками -->
+    <div class="hidden-field select-settings" id="action-select">
+        <div class="input-group mt-2 mb-2">
+            <label class="input-group-text label-settings" for="theme-card-action" id="theme-card-action-label">Действие</label>
+            <select class="form-select" id="theme-card-action">
+            </select>
+        </div>
+    </div>
+    <!-- Форма выбора изменяемой карточки -->
+    <div class="hidden-field select-settings" id="update-content">
+        <div class="input-group mt-2 mb-2">
+            <label class="input-group-text label-settings" for="theme-card-update" id="theme-card-update-label">Карточка</label>
+            <select class="form-select" id="theme-card-update">
+            </select>
+        </div>
+    </div>
+    <!-- Форма выбора удаляемой карточки -->
+    <div class="hidden-field select-settings" id="delete-content">
+        <div class="input-group mt-2 mb-2">
+            <label class="input-group-text label-settings" for="theme-card-delete" id="theme-card-delete-label">Карточка</label>
+            <select class="form-select" id="theme-card-delete">
+            </select>
+            <button class="btn btn-danger" type="button" id="delete-card-button">Удалить</button>
+        </div>
+    </div>
+    <!-- Поля для управления созданием карточки -->
+    <div class="hidden-field mt-3" id="create-content">
+        <button type="button" class="custom-sand-button card-type-button" id="create-theory-card-button">
+            Теория
+        </button>
+        <button type="button" class="custom-sand-button card-type-button" id="create-practice-card-button">
+            Практика
+        </button>
+    </div>
+    <!-- Поля для карточки теории -->
+    <div class="hidden-field" id="card-theory-field">
+        <!-- Поле ввода названия карточки -->
+        <div class="form-group row mt-3 input-field">
+            <label class="col-2 col-form-label label-input-field" for="card-theory-title">Название</label>
+            <div class="col-10">
+                <textarea
+                    class="form-control text-input"
+                    id="card-theory-title"
+                    style="height: 80px"
+                    required
+                ></textarea>
+            </div>
+        </div>
+        <!-- Поле ввода содержимого карточки -->
+        <div class="form-group row mt-3 input-field">
+            <label class="col-2 col-form-label label-input-field" for="card-theory-descr">Содержимое</label>
+            <div class="col-10">
+                <textarea
+                    class="form-control text-input"
+                    id="card-theory-descr"
+                    style="height: 200px"
+                    required
+                ></textarea>
+            </div>
+        </div>
+        <!-- Поле изображения карточки -->
+        <div id="card-theory-image-button-add-field">
+            <button type="button" class="custom-sand-button enable-add-image" id="card-theory-image-button-add">
+                Добавить изображение
+            </button>
+        </div>
+        <div id="card-theory-image-button-delete-field">
+            <button type="button" class="custom-sand-button enable-add-image" id="card-theory-image-button-delete">
+                Удалить изображение
+            </button>
+        </div>
+        <div class="hidden-field" id="card-theory-image-field">
+            <div class="form-group row mt-3 input-field">
+                <label class="col-2 col-form-label label-input-field" for="card-theory-image-preview">Изображение</label>
+                <div class="col-5">
+                    <img class="image-preview" id="card-theory-image-preview" alt="Preview">
+                </div>
+                <div class="col-5">
+                    <!-- Поле загрузки изображения -->
+                    <div class="input-group mb-3 upload-image-field">
+                        <input type="file" class="form-control" accept="image/*" id="card-theory-image">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Поля для карточки практики -->
+    <div class="hidden-field" id="card-practice-field">
+        <!-- Поле ввода названия карточки -->
+        <div class="form-group row mt-3 input-field">
+            <label class="col-2 col-form-label label-input-field" for="card-practice-title">Название</label>
+            <div class="col-10">
+                <textarea
+                    class="form-control"
+                    id="card-practice-title"
+                    style="height: 80px"
+                    required
+                ></textarea>
+            </div>
+        </div>
+        <!-- Поле ввода содержимого карточки -->
+        <div class="form-group row mt-3 input-field">
+            <label class="col-2 col-form-label label-input-field" for="card-practice-descr">Содержимое</label>
+            <div class="col-10">
+                <textarea
+                    class="form-control"
+                    id="card-practice-descr"
+                    style="height: 200px"
+                    required
+                ></textarea>
+            </div>
+        </div>
+        <!-- Поле ответа на задачу -->
+        <div class="form-group row mt-3 input-field">
+            <label class="col-2 col-form-label label-input-field" for="card-practice-answer">Ответ</label>
+            <div class="col-10">
+                <input
+                    class="form-control answer-input-field"
+                    type="text"
+                    id="card-practice-answer"
+                    value=""
+                    required
+                />
+            </div>
+        </div>
+        <!-- Поле изображения карточки -->
+        <div id="card-practice-image-button-add-field">
+            <button type="button" class="custom-sand-button enable-add-image" id="card-practice-image-button-add">
+                Добавить изображение
+            </button>
+        </div>
+        <div id="card-practice-image-button-delete-field">
+            <button type="button" class="custom-sand-button enable-add-image" id="card-practice-image-button-delete">
+                Удалить изображение
+            </button>
+        </div>
+        <div class="hidden-field" id="card-practice-image-field">
+            <div class="form-group row mt-3 input-field">
+                <label class="col-2 col-form-label label-input-field" for="card-practice-image-preview">Изображение</label>
+                <div class="col-5">
+                    <img class="image-preview" id="card-practice-image-preview" alt="Preview">
+                </div>
+                <!-- Поле загрузки изображения -->
+                <div class="col-5">
+                    <div class="input-group mb-3 upload-image-field">
+                        <input type="file" class="form-control" accept="image/*" id="card-practice-image">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Кнопка решения -->
+        <div id="card-practice-tip-button-add-field">
+            <button type="button" class="custom-sand-button enable-add-tip" id="card-practice-tip-button-add">
+                Добавить решение
+            </button>
+        </div>
+        <div id="card-practice-tip-button-delete-field">
+            <button type="button" class="custom-sand-button enable-add-tip" id="card-practice-tip-button-delete">
+                Удалить решение
+            </button>
+        </div>
+        <!-- Поле решения задачи -->
+        <div class="hidden-field" id="card-practice-tip-field">
+            <div id="card-tip">Решение</div>
+            <hr />
+            <!-- Поле ввода решения задачи -->
+            <div class="form-group row mt-3 input-field">
+                <label class="col-2 col-form-label label-input-field" for="card-practice-tip-descr">Описание решения</label>
+                <div class="col-10">
+                    <textarea
+                        class="form-control"
+                        id="card-practice-tip-descr"
+                        style="height: 200px"
+                        required
+                    ></textarea>
+                </div>
+            </div>
+            <!-- Поле изображения решения -->
+            <div id="card-practice-tip-image-button-add-field">
+                <button type="button" class="custom-sand-button enable-add-image" id="card-practice-tip-image-button-add">
+                    Добавить изображение
+                </button>
+            </div>
+            <div id="card-practice-tip-image-button-delete-field">
+                <button type="button" class="custom-sand-button enable-add-image" id="card-practice-tip-image-button-delete">
+                    Удалить изображение
+                </button>
+            </div>
+            <div class="hidden-field" id="card-practice-tip-image-field">
+                <div class="form-group row mt-3 input-field">
+                    <label class="col-2 col-form-label label-input-field" for="card-practice-tip-image-preview">Изображение решения</label>
+                    <div class="col-5">
+                        <img class="image-preview" id="card-practice-tip-image-preview" alt="Preview">
+                    </div>
+                    <div class="col-5">
+                        <!-- Поле загрузки изображения решения -->
+                        <div class="input-group mb-3 upload-image-field">
+                            <input type="file" class="form-control" accept="image/*" id="card-practice-tip-image">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr />
+        </div>
+    </div>
+    <!-- Поле отправки данных на сервер -->
+    <div class="send-field">
+        <!-- Поле выбора позиции карточки -->
+        <div class="hidden-field input-group mt-3 mb-3 select-position" id="card-position-field">
+            <label class="input-group-text select-position-label" for="card-position" id="card-position-label">Позиция</label>
+            <select class="form-select" id="card-position">
+            </select>
+        </div>
+        <!-- Кнопка отправки запроса на сервер -->
+        <div class="hidden-field" id="send-card-data-to-server-button-field">
+            <button type="button" class="custom-sand-button send-card-data-button" id="send-card-data-to-server-button">Отправить</button>
+        </div>
+    </div>
+    <!-- Поле ответа сервера -->
+    <hr/>
+
+    <div class="form-group row mt-2 mb-2 input-field" id="flash-msg-field">
+        <label class="col-2 col-form-label label-input-field" for="card-flash-msg"><strong>Feedback</strong></label>
+        <div class="col-10" id="card-flash-msg"></div>
+    </div>
+
+    <hr />
+
+    <!-- Поле просмотра карточки -->
+    <div id="card-content">
+        <div id="card-action"></div>
+        <div id="card-title"></div>
+        <!-- Слайд с теорией -->
+        <div class="hidden-field" id="theory-content">
+            <div class="row">
+                <div class="col-4 text-end">
+                    <img src="" id="theory-image">
+                </div>
+                <div class="col-8 text-start">
+                    <div id="theory-descr"></div>
+                </div>
+            </div>
+        </div>
+        <!-- Слайд с практикой -->
+        <div class="hidden-field" id="practice-content">
+            <div class="row">
+                <div class="col-4 text-end" id="practice-image-field">
+                    <img src="" id="practice-image">
+                </div>
+                <div class="col-8 text-start" id="practice-descr">
+                    <div id="practice">
+                        <div id="practice-descr-field"></div>
+                        <div id="practice-answer-field">
+                            <input
+                                class="answer-input"
+                                type="text"
+                                id="practice-answer"
+                                value=""
+                                placeholder="Введите сюда ваш ответ"
+                                autocomplete="off"
+                            />
+                            <button type="button" class="card-content-button" id="practice-answer-button">
+                                Проверить
+                            </button>
+                            <button type="button" class="card-content-button" id="practice-tip-button">
+                                Показать решение
+                            </button>
+                        </div>
+                        <div class="hidden-field" id="practice-tip-field">
+                            <div class="text-center">
+                                <img src="" id="practice-tip-image">
+                            </div>
+                            <div id="practice-tip-descr"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock admin_content %}
+{% block admin_scripts %}
+    <-- Подключение js страницы-->
+    <script src="/static/js/theme_card.js"></script>
+{% endblock admin_scripts %}
