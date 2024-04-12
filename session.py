@@ -14,12 +14,12 @@ from sqlalchemy import create_engine
 app_type = os.getenv('APPTYPE', 'development')
 
 
-if app_type == 'development':
-    DATABASE_URL = "postgresql+asyncpg://axessense:itarmenia@localhost:5432/my_tutor"
-    DATABASE_SYNC_URL = "postgresql://axessense:itarmenia@localhost:5432/my_tutor"
-else:
+if app_type == 'product':
     DATABASE_URL = os.getenv('DATABASE_URL')
     DATABASE_SYNC_URL = os.getenv('DATABASE_SYNC_URL')
+else:
+    DATABASE_URL = "postgresql+asyncpg://axessense:itarmenia@localhost:5432/my_tutor"
+    DATABASE_SYNC_URL = "postgresql://axessense:itarmenia@localhost:5432/my_tutor"
 
 
 async_engine = create_async_engine(url=DATABASE_URL) #echo=True для логгирования взаимодействий с БД

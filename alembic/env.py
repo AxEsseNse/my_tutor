@@ -22,10 +22,10 @@ if config.config_file_name is not None:
 target_metadata = None
 app_type = os.getenv('APPTYPE', 'development')
 
-if app_type == 'development':
-    sqlalchemy_sync_url = 'postgresql://axessense:itarmenia@127.0.0.1:5432/my_tutor'
-else:
+if app_type == 'product':
     sqlalchemy_sync_url = os.getenv("DATABASE_SYNC_URL")
+else:
+    sqlalchemy_sync_url = 'postgresql://axessense:itarmenia@127.0.0.1:5432/my_tutor'
 config.set_main_option("sqlalchemy.url", sqlalchemy_sync_url)
 
 # other values from the config, defined by the needs of env.py,
