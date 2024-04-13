@@ -1,14 +1,3 @@
-const iconLib = {
-    login: "fa-solid fa-user",
-    firstName: "fa-solid fa-user",
-    secondName: "fa-solid fa-user",
-    gender: "fa-solid fa-venus-mars",
-    birthday: "fa-solid fa-calendar-days",
-    discord: "fa-brands fa-discord",
-    phone: "fa-solid fa-phone",
-    telegram: "fa-brands fa-telegram",
-    whatsapp: "fa-brands fa-whatsapp"
-}
 const monthNumber = {
     'января': '01',
     'февраля': '02',
@@ -22,7 +11,7 @@ const monthNumber = {
     'октября': '10',
     'ноября': '11',
     'декабря': '12'
-  };
+}
 
 function convertDate(dateString) {
   const parts = dateString.replace(' года', '').split(' ');
@@ -33,63 +22,13 @@ function convertDate(dateString) {
   return `${year}-${month}-${day}`;
 }
 
-function fillUpdateImageForm() {
-    console.log('Заполнение формы для изменения аватара преподавателя')
-    document.getElementById('tutor-update-image-form-login').value = document.getElementById('tutor-login').textContent.trim()
-
-    document.getElementById('tutor-modal-image-descr').innerHTML = "Ваше текущее изображение"
-    let tutorImage = document.getElementById('tutor-img');
-    let tutorImagePath = tutorImage.getAttribute('src');
-    let previewImage = document.getElementById('preview-image');
-    previewImage.src = tutorImagePath;
-    previewImage.style.display = 'block';
-    document.getElementById('tutor-update-image-form-flash-msg').innerHTML = ''
-}
-
-function fillUpdatePrimaryInfoForm() {
-    console.log('Заполнение формы для изменения личной информации преподавателя')
-    document.getElementById('tutor-update-primary-info-form-login').value = document.getElementById('tutor-login').textContent.trim()
-
-    document.getElementById('tutor-update-primary-info-form-first-name').value = document.getElementById('tutor-first-name').textContent.trim()
-    document.getElementById('tutor-update-primary-info-form-second-name').value = document.getElementById('tutor-second-name').textContent.trim()
-    document.getElementById('tutor-update-primary-info-form-gender').value = document.getElementById('tutor-gender').textContent.trim()
-    document.getElementById('tutor-update-primary-info-form-birthday').value = convertDate(document.getElementById('tutor-birthday').textContent.trim())
-    document.getElementById('tutor-update-primary-info-form-flash-msg').innerHTML = ''
-}
-
-function fillUpdateContactInfoForm() {
-    console.log('Заполнение формы для изменения контактных данных преподавателя')
-    document.getElementById('tutor-update-contact-info-form-login').value = document.getElementById('tutor-login').textContent.trim()
-
-    document.getElementById('tutor-update-contact-info-form-discord').value = document.getElementById('tutor-discord').textContent.trim()
-    document.getElementById('tutor-update-contact-info-form-phone').value = document.getElementById('tutor-phone').textContent.trim()
-    document.getElementById('tutor-update-contact-info-form-telegram').value = document.getElementById('tutor-telegram').textContent.trim()
-    document.getElementById('tutor-update-contact-info-form-whatsapp').value = document.getElementById('tutor-whatsapp').textContent.trim()
-    document.getElementById('tutor-update-contact-info-form-flash-msg').innerHTML = ''
-}
-
-function fillTutorDataDiv(divId, data, iconTag=null) {
-    let fillDiv = document.getElementById(divId)
-    fillDiv.innerHTML = "";
-
-    if (iconTag!==null) {
-        let iconElement = document.createElement("i")
-        iconElement.className = iconLib[iconTag]
-
-        fillDiv.appendChild(iconElement)
-        fillDiv.innerHTML += data;
-    } else {
-        fillDiv.innerHTML += data;
-    }
-}
-
 class UpdateTutorImageForm {
     constructor() {
-        this.login = document.getElementById('tutor-login').textContent.trim()
+        this.tutorLogin = document.getElementById('tutor-login').textContent
         this.tutorImage = document.getElementById('tutor-img')
         this.userImage = document.getElementById('user-image')
 
-        this.inputLogin = document.getElementById('tutor-update-primary-info-form-login')
+        this.inputLogin = document.getElementById('tutor-update-image-form-login')
         this.inputImage = document.getElementById('image-input')
         this.previewImage = document.getElementById('preview-image');
         this.descriptionImage = document.getElementById('tutor-modal-image-descr')
@@ -102,6 +41,15 @@ class UpdateTutorImageForm {
         }
     }
 
+    fillUpdateImageForm() {
+        console.log('Заполнение формы для изменения аватара преподавателя')
+        this.inputLogin.value = this.tutorLogin
+        this.descriptionImage.innerHTML = "Ваше текущее изображение"
+        this.previewImage.src = this.tutorImage.getAttribute('src');
+        this.previewImage.style.display = 'block';
+        this.flashMsg.innerHTML = ''
+    }
+
     updateImage() {
         const imgData = new FormData();
         imgData.append('image_data', this.inputImage.files[0]);
@@ -112,11 +60,11 @@ class UpdateTutorImageForm {
             return
         }
 
-        fetch(`/api/tutors/tutor/image/${this.login}/`, {
+        fetch(`/api/tutors/tutor/image/${this.tutorLogin}/`, {
             method: 'PUT',
             headers: {
                 'My-Tutor-Auth-Token': token,
-                'Login': this.login
+                'Login': this.tutorLogin
             },
             body: imgData,
         })
@@ -133,6 +81,7 @@ class UpdateTutorImageForm {
         })
         .then(tutor => {
             if (tutor.hasOwnProperty('img_path')) {
+                console.log(tutor.message)
                 this.tutorImage.src = tutor.img_path + '?v=' + new Date().getTime();
                 this.previewImage.src = tutor.img_path + '?v=' + new Date().getTime();
                 this.userImage.src = tutor.img_path + '?v=' + new Date().getTime();
@@ -150,7 +99,10 @@ class UpdateTutorImageForm {
 
 class UpdateTutorPrimaryInfoForm {
     constructor() {
-        this.login = document.getElementById('tutor-login').textContent.trim()
+        this.tutorLogin = document.getElementById("tutor-login")
+        this.tutorName = document.getElementById("tutor-name")
+        this.tutorGender = document.getElementById("tutor-gender")
+        this.tutorBirthday = document.getElementById("tutor-birthday")
 
         this.inputLogin = document.getElementById('tutor-update-primary-info-form-login')
         this.inputFirstName = document.getElementById('tutor-update-primary-info-form-first-name')
@@ -166,9 +118,19 @@ class UpdateTutorPrimaryInfoForm {
         }
     }
 
+    fillUpdatePrimaryInfoForm() {
+        console.log('Заполнение формы для изменения личной информации преподавателя')
+        this.inputLogin.value = this.tutorLogin.textContent
+        this.inputSecondName.value = this.tutorName.textContent.split(" ")[0]
+        this.inputFirstName.value = this.tutorName.textContent.split(" ")[1]
+        this.inputGender.value = this.tutorGender.textContent
+        this.inputBirthday.value = convertDate(this.tutorBirthday.textContent)
+        this.flashMsg.innerHTML = ''
+    }
+
     updatePrimaryInfo() {
         const newPrimaryInfo = {
-            login: this.login,
+            login: this.tutorLogin.textContent,
             firstName: this.inputFirstName.value,
             secondName: this.inputSecondName.value,
             gender: this.inputGender.value,
@@ -181,7 +143,7 @@ class UpdateTutorPrimaryInfoForm {
             return
         }
 
-        fetch(`/api/tutors/tutor/${this.login}/`, {
+        fetch(`/api/tutors/tutor/${this.tutorLogin.textContent}/`, {
             method: 'PUT',
                 headers: {
                 'Content-Type': 'application/json',
@@ -202,10 +164,9 @@ class UpdateTutorPrimaryInfoForm {
         })
         .then(tutor => {
             if (tutor.hasOwnProperty('first_name')) {
-                fillTutorDataDiv("tutor-first-name", ` ${tutor.first_name}`);
-                fillTutorDataDiv("tutor-second-name", ` ${tutor.second_name}`);
-                fillTutorDataDiv("tutor-gender", ` ${tutor.gender}`, "gender");
-                fillTutorDataDiv("tutor-birthday", ` ${tutor.birthday}`, "birthday");
+                this.tutorName.innerText = `${tutor.second_name} ${tutor.first_name}`
+                this.tutorGender.innerText = tutor.gender
+                this.tutorBirthday.innerText = tutor.birthday
 
                 flashMsg(`${tutor.message}`, this.flashMsg, 'success')
                 console.log(tutor.message)
@@ -221,7 +182,11 @@ class UpdateTutorPrimaryInfoForm {
 
 class UpdateTutorContactInfoForm {
     constructor() {
-        this.login = document.getElementById('tutor-login').textContent.trim()
+        this.tutorLogin = document.getElementById("tutor-login")
+        this.tutorDiscord = document.getElementById("tutor-discord")
+        this.tutorPhone = document.getElementById("tutor-phone")
+        this.tutorTelegram = document.getElementById("tutor-telegram")
+        this.tutorWhatsapp = document.getElementById("tutor-whatsapp")
 
         this.inputLogin = document.getElementById('tutor-update-contact-info-form-login')
         this.inputDiscord = document.getElementById('tutor-update-contact-info-form-discord')
@@ -237,9 +202,20 @@ class UpdateTutorContactInfoForm {
         }
     }
 
+    fillUpdateContactInfoForm() {
+        console.log('Заполнение формы для изменения контактной информации преподавателя')
+        this.inputLogin.value = this.tutorLogin.textContent
+
+        this.inputDiscord.value = this.tutorDiscord.textContent
+        this.inputPhone.value = this.tutorPhone.textContent
+        this.inputTelegram.value = this.tutorTelegram.textContent
+        this.inputWhatsapp.value = this.tutorWhatsapp.textContent
+        this.flashMsg.innerHTML = ''
+    }
+
     updateContactInfo() {
         const newContactInfo = {
-            login: this.login,
+            login: this.tutorLogin.textContent,
             discord: this.inputDiscord.value,
             phone: this.inputPhone.value,
             telegram: this.inputTelegram.value,
@@ -252,7 +228,7 @@ class UpdateTutorContactInfoForm {
             return
         }
 
-        fetch(`/api/tutors/tutor/${this.login}/`, {
+        fetch(`/api/tutors/tutor/${this.tutorLogin.textContent}/`, {
             method: 'PUT',
                 headers: {
                 'Content-Type': 'application/json',
@@ -273,10 +249,10 @@ class UpdateTutorContactInfoForm {
         })
         .then(tutor => {
             if (tutor.hasOwnProperty('discord')) {
-                fillTutorDataDiv("tutor-discord", ` ${tutor.discord}`, "discord");
-                fillTutorDataDiv("tutor-phone", ` ${tutor.phone}`, "phone");
-                fillTutorDataDiv("tutor-telegram", ` ${tutor.telegram}`, "telegram");
-                fillTutorDataDiv("tutor-whatsapp", ` ${tutor.whatsapp}`, "whatsapp");
+                this.tutorDiscord.innerText = tutor.discord
+                this.tutorPhone.innerText = tutor.phone
+                this.tutorTelegram.innerText = tutor.telegram
+                this.tutorWhatsapp.innerText = tutor.whatsapp
 
                 flashMsg(`${tutor.message}`, this.flashMsg, 'success')
                 console.log(tutor.message)
@@ -292,19 +268,20 @@ class UpdateTutorContactInfoForm {
 
 class TutorInfo {
     constructor() {
-        this.login = 'axessense'
-        this.iconLib = {
-            login: "fa-solid fa-user",
-            firstName: "fa-solid fa-user",
-            secondName: "fa-solid fa-user",
-            gender: "fa-solid fa-venus-mars",
-            birthday: "fa-solid fa-calendar-days",
-            lessonPrice: "fa-solid fa-sack-dollar",
-            discord: "fa-brands fa-discord",
-            phone: "fa-solid fa-phone",
-            telegram: "fa-brands fa-telegram",
-            whatsapp: "fa-brands fa-whatsapp"
-        }
+        this.login = userLogin
+
+        this.tutorLogin = document.getElementById("tutor-login")
+        this.tutorName = document.getElementById("tutor-name")
+        this.tutorGender = document.getElementById("tutor-gender")
+        this.tutorBirthday = document.getElementById("tutor-birthday")
+        this.tutorDiscord = document.getElementById("tutor-discord")
+        this.tutorPhone = document.getElementById("tutor-phone")
+        this.tutorTelegram = document.getElementById("tutor-telegram")
+        this.tutorWhatsapp = document.getElementById("tutor-whatsapp")
+
+        this.updateImageButton = document.getElementById('btn-update-img')
+        this.updatePrimaryInfoButton = document.getElementById('btn-update-primary')
+        this.updateContactInfoButton = document.getElementById('btn-update-contact')
     }
 
     loadTutorInfo() {
@@ -325,9 +302,21 @@ class TutorInfo {
         .then(response => response.json())
         .then(data => {
             this.fillInfo(data)
-            new UpdateTutorPrimaryInfoForm()
-            new UpdateTutorContactInfoForm()
-            new UpdateTutorImageForm()
+
+            const updatePrimaryInfoForm = new UpdateTutorPrimaryInfoForm()
+            this.updatePrimaryInfoButton.onclick = () => {
+                updatePrimaryInfoForm.fillUpdatePrimaryInfoForm()
+            }
+
+            const updateContactInfoForm = new UpdateTutorContactInfoForm()
+            this.updateContactInfoButton.onclick = () => {
+                updateContactInfoForm.fillUpdateContactInfoForm()
+            }
+
+            const updateImageForm = new UpdateTutorImageForm()
+            this.updateImageButton.onclick = () => {
+                updateImageForm.fillUpdateImageForm()
+            }
         })
         .catch(error => {
             console.error(error)
@@ -339,27 +328,14 @@ class TutorInfo {
         const tutorImage = document.getElementById('tutor-img');
         tutorImage.src = tutor.img_path;
 
-        fillTutorDataDiv("tutor-login", ` ${tutor.login}`, "login");
-        fillTutorDataDiv("tutor-first-name", ` ${tutor.first_name}`);
-        fillTutorDataDiv("tutor-second-name", ` ${tutor.second_name}`);
-        fillTutorDataDiv("tutor-gender", ` ${tutor.gender}`, "gender");
-        fillTutorDataDiv("tutor-birthday", ` ${tutor.birthday}`, "birthday");
-        fillTutorDataDiv("tutor-discord", ` ${tutor.discord}`, "discord");
-        fillTutorDataDiv("tutor-phone", ` ${tutor.phone}`, "phone");
-        fillTutorDataDiv("tutor-telegram", ` ${tutor.telegram}`, "telegram");
-        fillTutorDataDiv("tutor-whatsapp", ` ${tutor.whatsapp}`, "whatsapp");
-    }
-
-    fillInfoDiv(divId, data, iconTag) {
-        let fillDiv = document.getElementById(divId)
-        fillDiv.innerHTML = "";
-
-        let iconElement = document.createElement("i")
-        iconElement.className = this.iconLib[iconTag]
-        let textElement = document.createTextNode(data)
-
-        fillDiv.appendChild(iconElement)
-        fillDiv.appendChild(textElement)
+        this.tutorLogin.innerText = tutor.login
+        this.tutorName.innerText = `${tutor.second_name} ${tutor.first_name}`
+        this.tutorGender.innerText = tutor.gender
+        this.tutorBirthday.innerText = tutor.birthday
+        this.tutorDiscord.innerText = tutor.discord
+        this.tutorPhone.innerText = tutor.phone
+        this.tutorTelegram.innerText = tutor.telegram
+        this.tutorWhatsapp.innerText = tutor.whatsapp
     }
 }
 

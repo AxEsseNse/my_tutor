@@ -1,12 +1,12 @@
 <div
-    class="modal fade"
+    class="modal fade custom-modal"
     tabindex="-1"
     aria-labelledby="modal-parent-add"
     aria-hidden="true"
     id="modal-parent-update"
 >
     <div class="modal-dialog modal-md">
-        <div class="modal-content">
+        <div class="modal-content custom-modal-body">
             <!-- Header окна обновления данных родителя -->
             <div class="modal-header">
                 <h5 class="modal-title">Обновление данных родителя</h5>
@@ -19,17 +19,8 @@
                     <div class="form-group row mt-2 mb-2">
                         <label class="col-4 col-form-label" for="parent-update-form-login">Пользователь</label>
                         <div class="col-8">
-                            <input class="form-control" type="text" id="parent-update-form-login" disabled />
+                            <input class="form-control disabled-input" type="text" id="parent-update-form-login" disabled />
                         </div>
-                    </div>
-                    <!-- Кнопка очистки формы -->
-                    <div class="form-group row text-end mb-3 mt-4">
-                        <i
-                            class="fa-solid fa-eraser fa-lg"
-                            title="Очистка формы"
-                            id="parent-add-cleaner"
-                            onclick="fillAddParentForm()"
-                        ></i>
                     </div>
                     <!-- Поле выбора родителя -->
                     <div class="input-group mb-3">
@@ -116,16 +107,16 @@
                     <!-- Поле ответа сервера -->
                     <hr/>
 
-                    <div class="form-group row mt-2 mb-2">
-                        <label class="col-4 col-form-label" for="parent-update-form-flash-msg"><strong>Feedback</strong></label>
-                        <div class="col-8" id="parent-update-form-flash-msg"></div>
+                    <div class="form-group row mt-2 mb-2 align-items-center">
+                        <label class="col-3 col-form-label" for="parent-update-form-flash-msg"><strong>Feedback</strong></label>
+                        <div class="col-9" id="parent-update-form-flash-msg"></div>
                     </div>
 
                     <hr />
                     <!-- Кнопка отправки формы -->
                     <div class="text-center">
-                        <button type="button" class="btn btn-dark btn-block" id="parent-update-form-button">
-                            Добавить
+                        <button type="button" class="btn profile-button" id="parent-update-form-button">
+                            Применить изменения
                         </button>
                     </div>
                 </form>

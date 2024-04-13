@@ -7,17 +7,16 @@
     <div class="row">
         <!-- Изображение пользователя -->
         <div class="col-3 text-end">
-            <img width="300" height="300" class="rounded-circle" style="object-fit: cover" id="tutor-img">
+            <img width="300" height="300" class="rounded-circle" style="object-fit: cover; border: 3px solid #B4B7FA;" id="tutor-img">
         </div>
         <div class="col-1 text-start" id="tutor-image-btn">
             <button
-                class="btn btn-sm btn-secondary align-top align-middle"
+                class="btn align-top align-middle profile-button"
                 type="button"
                 title="Изменить аватар"
                 data-bs-toggle="modal"
                 data-bs-target="#modal-tutor-update-img"
                 id="btn-update-img"
-                onclick="fillUpdateImageForm()"
             ><i class="fa-solid fa-image text-dark"></i></i>
             </button>
         </div>
@@ -29,36 +28,44 @@
                 </div>
                 <div class="col-2 text-center">
                     <button
-                        class="btn btn-sm btn-secondary"
+                        class="btn profile-button"
                         type="button"
                         title="Изменить личную информацию"
                         data-bs-toggle="modal"
                         data-bs-target="#modal-tutor-update-primary-info"
                         id="btn-update-primary"
-                        onclick="fillUpdatePrimaryInfoForm()"
                     >
                         <i class="fa-solid fa-user-pen text-dark"></i>
                     </button>
                 </div>
             </div>
             <hr id="hr-under-info"/>
-            <div id="tutor-login">
-                <i class="fa-solid fa-user"></i>
-                -
+            <div class="row info-element">
+                <div class="col-1">
+                </div>
+                <div class="col-11" id="tutor-name">
+                </div>
             </div>
-            <div id="tutor-second-name">
-                -
+            <div class="row info-element">
+                <div class="col-1">
+                    <i class="fa-solid fa-user fa-lg" style="color: #1E90FF"></i>
+                </div>
+                <div class="col-11" id="tutor-login">
+                </div>
             </div>
-            <div id="tutor-first-name">
-                -
+            <div class="row info-element">
+                <div class="col-1">
+                    <i class="fa-solid fa-venus-mars fa-lg" style="color: #800080"></i>
+                </div>
+                <div class="col-11" id="tutor-gender">
+                </div>
             </div>
-            <div id="tutor-gender">
-                <i class="fa-solid fa-venus-mars"></i>
-                -
-            </div>
-            <div title="Дата рождения"  id="tutor-birthday">
-                <i class="fa-solid fa-calendar-days"></i>
-                -
+            <div class="row info-element">
+                <div class="col-1">
+                    <i class="fa-solid fa-calendar-days fa-lg" style="color: #1E90FF"></i>
+                </div>
+                <div class="col-11" id="tutor-birthday">
+                </div>
             </div>
         </div>
         <!-- Контактные данные преподавателя -->
@@ -69,34 +76,45 @@
                 </div>
                 <div class="col-2 text-center">
                     <button
-                        class="btn btn-sm btn-secondary"
+                        class="btn profile-button"
                         type="button"
                         title="Изменить контактные данные"
                         data-bs-toggle="modal"
                         data-bs-target="#modal-tutor-update-contact-info"
                         id="btn-update-contact"
-                        onclick="fillUpdateContactInfoForm()"
                     >
-                        <i class="fa-solid fa-mobile text-dark"></i>
+                        <i class="fa-solid fa-mobile-screen"></i>
                     </button>
                 </div>
             </div>
             <hr id="hr-under-contact"/>
-            <div id="tutor-discord">
-                <i class="fa-brands fa-discord"></i>
-                -
+            <div class="row info-element">
+                <div class="col-1">
+                    <i class="fa-brands fa-discord fa-lg" style="color: #7289da"></i>
+                </div>
+                <div class="col-11" id="tutor-discord">
+                </div>
             </div>
-            <div id="tutor-phone">
-                <i class="fa-solid fa-phone"></i>
-                -
+            <div class="row info-element">
+                <div class="col-1">
+                    <i class="fa-solid fa-phone fa-lg" style="color: green"></i>
+                </div>
+                <div class="col-11" id="tutor-phone">
+                </div>
             </div>
-            <div id="tutor-telegram">
-                <i class="fa-brands fa-telegram"></i>
-                -
+            <div class="row info-element">
+                <div class="col-1">
+                    <i class="fa-brands fa-telegram fa-xl" style="color: #2AABEE"></i>
+                </div>
+                <div class="col-11" id="tutor-telegram">
+                </div>
             </div>
-            <div id="tutor-whatsapp">
-                <i class="fa-brands fa-whatsapp"></i>
-                -
+            <div class="row info-element">
+                <div class="col-1">
+                    <i class="fa-brands fa-whatsapp fa-xl" style="color: #25D366"></i>
+                </div>
+                <div class="col-11" id="tutor-whatsapp">
+                </div>
             </div>
         </div>
     </div>

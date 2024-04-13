@@ -1,5 +1,5 @@
 <div
-    class="modal fade bd-example-modal-lg"
+    class="modal fade bd-example-modal-lg custom-modal"
     tabindex="-1"
     role="dialog"
     aria-labelledby="modal-tutor-update-contact-info"
@@ -7,7 +7,7 @@
     id="modal-tutor-update-contact-info"
 >
     <div class="modal-dialog modal-md">
-        <div class="modal-content">
+        <div class="modal-content custom-modal-body">
             <!-- Header окна изменения контактных данных пользователя -->
             <div class="modal-header">
                 <h5 class="modal-title">Контактные данные</h5>
@@ -20,7 +20,7 @@
                     <div class="form-group row mt-2 mb-2">
                         <label class="col-4 col-form-label" for="tutor-update-contact-info-form-login">Пользователь</label>
                         <div class="col-8">
-                            <input class="form-control" type="text" id="tutor-update-contact-info-form-login" disabled />
+                            <input class="form-control disabled-input" type="text" id="tutor-update-contact-info-form-login" disabled />
                         </div>
                     </div>
                     <!-- Поле ввода нового дискорда -->
@@ -82,17 +82,17 @@
                     <!-- Поле ответа сервера -->
                     <hr />
 
-                    <div class="form-group row mt-2 mb-2">
-                        <label class="col-2 col-form-label" for="tutor-update-contact-info-form-flash-msg">
+                    <div class="form-group row mt-2 mb-2 align-items-center">
+                        <label class="col-3 col-form-label" for="tutor-update-contact-info-form-flash-msg">
                             <strong>Feedback</strong>
                         </label>
-                        <div class="col-10" id="tutor-update-contact-info-form-flash-msg"></div>
+                        <div class="col-9" id="tutor-update-contact-info-form-flash-msg"></div>
                     </div>
 
                     <hr />
                     <!-- Поле кнопки отправки формы -->
                     <div class="text-center">
-                        <button type="button" class="btn btn-dark btn-block" id="tutor-update-contact-info-form-button">
+                        <button type="button" class="btn profile-button" id="tutor-update-contact-info-form-button">
                             Применить изменения
                         </button>
                     </div>

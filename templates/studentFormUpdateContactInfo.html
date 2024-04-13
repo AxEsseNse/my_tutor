@@ -1,13 +1,13 @@
 <div
-    class="modal fade bd-example-modal-lg"
+    class="modal fade bd-example-modal-lg custom-modal"
     tabindex="-1"
     role="dialog"
     aria-labelledby="modal-student-edit-contact-info"
     aria-hidden="true"
-    id="modal-student-edit-contact-info"
+    id="modal-student-update-contact-info"
 >
     <div class="modal-dialog modal-md">
-        <div class="modal-content">
+        <div class="modal-content custom-modal-body">
             <!-- Header окна изменения контактных данных пользователя -->
             <div class="modal-header">
                 <h5 class="modal-title">Контактные данные</h5>
@@ -15,22 +15,22 @@
             </div>
 
             <div class="modal-body">
-                <form class="needs-validation" id="student-edit-contact-info-form" novalidate>
+                <form class="needs-validation" id="student-update-contact-info-form" novalidate>
                     <!-- Логин пользователя -->
                     <div class="form-group row mt-2 mb-2">
-                        <label class="col-4 col-form-label" for="student-edit-contact-info-form-login">Пользователь</label>
+                        <label class="col-4 col-form-label" for="student-update-contact-info-form-login">Пользователь</label>
                         <div class="col-8">
-                            <input class="form-control" type="text" id="student-edit-contact-info-form-login" disabled />
+                            <input class="form-control disabled-input" type="text" id="student-update-contact-info-form-login" disabled />
                         </div>
                     </div>
                     <!-- Поле ввода нового дискорда -->
                     <div class="form-group row mb-1">
-                        <label class="col-4 col-form-label" for="student-edit-contact-info-form-discord">Discord</label>
+                        <label class="col-4 col-form-label" for="student-update-contact-info-form-discord">Discord</label>
                         <div class="col-8">
                             <input
                                 class="form-control"
                                 type="text"
-                                id="student-edit-contact-info-form-discord"
+                                id="student-update-contact-info-form-discord"
                                 value=""
                                 placeholder="Введите новый аккаунт в Discord"
                                 required
@@ -39,12 +39,12 @@
                     </div>
                     <!-- Поле ввода нового номера телефона -->
                     <div class="form-group row mb-1">
-                        <label class="col-4 col-form-label" for="student-edit-contact-info-form-phone">Телефон</label>
+                        <label class="col-4 col-form-label" for="student-update-contact-info-form-phone">Телефон</label>
                         <div class="col-8">
                             <input
                                 class="form-control"
                                 type="text"
-                                id="student-edit-contact-info-form-phone"
+                                id="student-update-contact-info-form-phone"
                                 value=""
                                 placeholder="Введите новый номер телефона"
                                 required
@@ -53,12 +53,12 @@
                     </div>
                     <!-- Поле ввода нового аккаунта в Telegram -->
                     <div class="form-group row mb-1">
-                        <label class="col-4 col-form-label" for="student-edit-contact-info-form-telegram">Telegram</label>
+                        <label class="col-4 col-form-label" for="student-update-contact-info-form-telegram">Telegram</label>
                         <div class="col-8">
                             <input
                                 class="form-control"
                                 type="text"
-                                id="student-edit-contact-info-form-telegram"
+                                id="student-update-contact-info-form-telegram"
                                 value=""
                                 placeholder="Введите новый аккаунт в Telegram"
                                 required
@@ -67,12 +67,12 @@
                     </div>
                     <!-- Поле ввода нового аккаунта в WhatsApp -->
                     <div class="form-group row">
-                        <label class="col-4 col-form-label" for="student-edit-contact-info-form-whatsapp">Telegram</label>
+                        <label class="col-4 col-form-label" for="student-update-contact-info-form-whatsapp">Whatsapp</label>
                         <div class="col-8">
                             <input
                                 class="form-control"
                                 type="text"
-                                id="student-edit-contact-info-form-whatsapp"
+                                id="student-update-contact-info-form-whatsapp"
                                 value=""
                                 placeholder="Введите новый аккаунт в WhatsApp"
                                 required
@@ -82,21 +82,20 @@
                     <!-- Поле ответа сервера -->
                     <hr />
 
-                    <div class="form-group row mt-2 mb-2">
-                        <label class="col-2 col-form-label" for="student-edit-contact-info-form-flash-msg">
+                    <div class="form-group row mt-2 mb-2 align-items-center">
+                        <label class="col-3 col-form-label" for="student-update-contact-info-form-flash-msg">
                             <strong>Feedback</strong>
                         </label>
-                        <div class="col-10" id="student-edit-contact-info-form-flash-msg"></div>
+                        <div class="col-9" id="student-update-contact-info-form-flash-msg"></div>
                     </div>
 
                     <hr />
                     <!-- Поле кнопки отправки формы -->
                     <div class="text-center">
-                        <button type="button" class="btn btn-dark btn-block" id="student-edit-contact-info-form-button">
+                        <button type="button" class="btn profile-button" id="student-update-contact-info-form-button">
                             Применить изменения
                         </button>
                     </div>
-
                 </form>
             </div>
         </div>

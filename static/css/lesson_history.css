@@ -8,8 +8,8 @@
     padding: 30px 20px;
     font-size: 40px;
     font-family: Georgia;
-    color: black;
-    font-weight: 400;
+    color: #096F67;
+    font-weight: 500;
     text-align: center;
 }
 
@@ -27,7 +27,6 @@
     font-weight: 400;
     color: #F6E6AE;
     border: 5px solid #14A9A5;
-    border-color: #14A9A5;
     border-radius: 30px;
     text-align: center;
     vertical-align: middle;

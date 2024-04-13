@@ -1,5 +1,5 @@
 <div
-    class="modal fade bd-example-modal-lg"
+    class="modal fade bd-example-modal-lg custom-modal"
     tabindex="-1"
     role="dialog"
     aria-labelledby="modal-tutor-update-primary-info"
@@ -7,7 +7,7 @@
     id="modal-tutor-update-primary-info"
 >
     <div class="modal-dialog modal-md">
-        <div class="modal-content">
+        <div class="modal-content custom-modal-body">
             <!-- Header окна изменения личной информации пользователя -->
             <div class="modal-header">
                 <h5 class="modal-title">Личная информация</h5>
@@ -20,7 +20,7 @@
                     <div class="form-group row mt-2 mb-2">
                         <label class="col-4 col-form-label" for="tutor-update-primary-info-form-login">Пользователь</label>
                         <div class="col-8">
-                            <input class="form-control" type="text" id="tutor-update-primary-info-form-login" disabled />
+                            <input class="form-control disabled-input" type="text" id="tutor-update-primary-info-form-login" disabled />
                         </div>
                     </div>
                     <!-- Поле ввода нового имени -->
@@ -70,7 +70,7 @@
                     <!-- Поле ответа сервера -->
                     <hr />
 
-                    <div class="form-group row mt-2 mb-2">
+                    <div class="form-group row mt-2 mb-2 align-items-center">
                         <label class="col-3 col-form-label" for="tutor-update-primary-info-form-flash-msg">
                             <strong>Feedback</strong>
                         </label>
@@ -80,7 +80,7 @@
                     <hr />
                     <!-- Поле кнопки отправки формы -->
                     <div class="text-center">
-                        <button type="button" class="btn btn-dark btn-block" id="tutor-update-primary-info-form-button">
+                        <button type="button" class="btn profile-button" id="tutor-update-primary-info-form-button">
                             Применить изменения
                         </button>
                     </div>

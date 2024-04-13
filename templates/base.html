@@ -46,7 +46,7 @@
                         <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
                             <div class="dropdown text-end" id="header-user-dropdown">
                                 <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <img src="{{ user.img_path }}" alt="Err" width="50" height="50" style="object-fit: cover; image-rendering: crisp-edges;" class="rounded-circle" id="user-image">
+                                    <img src="{{ user.img_path }}" alt="Err" width="50" height="50" style="object-fit: cover; image-rendering: crisp-edges; border: 1px solid #B4D8FA;" class="rounded-circle" id="user-image">
                                 </a>
                                 <ul class="dropdown-menu text-small">
                                     <li><h6 class="dropdown-header">{{ user.role }}</h6></li>
@@ -87,7 +87,6 @@
             {% endif %}
         </div>
     </div>
-
 
     <!-- Content -->
     <div id="content">
@@ -136,6 +135,7 @@
     <script type="text/javascript">
         const userRole = "{{ user.role }}";
         const userId = "{{ user.user_id }}";
+        const userLogin = "{{ user.login }}"
     </script>
     {% if user.role == "Преподаватель" %}
         <script src="/static/js/tutor_menu.js"></script>

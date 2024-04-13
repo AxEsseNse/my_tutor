@@ -149,12 +149,12 @@ body {
 }
 
 .flash-msg-success {
-  color: #7CF847;
+  color: #228B22;
   font-weight: 500;
 }
 
 .flash-msg-wrong {
-  color: #FB962B;
+  color: #B22222;
   font-weight: 300;
 }
 
@@ -176,4 +176,16 @@ body {
 
 .hidden-field {
     display: none;
+}
+
+.custom-modal.show {
+    backdrop-filter: blur(5px);
+}
+.custom-modal-body {
+    background: #B4D8FA;
+}
+.disabled-input {
+    background-color: #B4CFFA !important;
+    color: #6C757D;
+    border: 1px solid #B4B7FA;
 }

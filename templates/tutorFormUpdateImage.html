@@ -1,5 +1,5 @@
 <div
-    class="modal fade bd-example-modal-lg"
+    class="modal fade bd-example-modal-lg custom-modal"
     tabindex="-1"
     role="dialog"
     aria-labelledby="modal-tutor-update-img"
@@ -7,7 +7,7 @@
     id="modal-tutor-update-img"
 >
     <div class="modal-dialog modal-md">
-        <div class="modal-content">
+        <div class="modal-content custom-modal-body">
             <!-- Header окна изменения пароля пользователя -->
             <div class="modal-header">
                 <h5 class="modal-title">Изменить аватар</h5>
@@ -20,7 +20,7 @@
                     <div class="form-group row mt-2 mb-2">
                         <label class="col-6 col-form-label text-start" for="tutor-update-image-form-login">Пользователь</label>
                         <div class="col-6">
-                            <input class="form-control" type="text" id="tutor-update-image-form-login" disabled />
+                            <input class="form-control disabled-input" type="text" id="tutor-update-image-form-login" disabled />
                         </div>
                     </div>
                     <!-- Поле загрузки нового изображения -->
@@ -31,13 +31,13 @@
                     <hr />
 
                     <div id="student-modal-image">
-                        <img id="preview-image" width="300" height="300" class="rounded-circle mx-auto" style="display: none; max-width: 100%; object-fit: cover" alt="Preview">
+                        <img id="preview-image" width="300" height="300" class="rounded-circle mx-auto" style="display: none; max-width: 100%; object-fit: cover; border: 3px solid #B4B7FA" alt="Preview">
                     </div>
                     <div class="text-center mt-2" id="tutor-modal-image-descr"></div>
 
                     <hr />
                     <!-- Поле ответа сервера -->
-                    <div class="form-group row">
+                    <div class="form-group row align-items-center">
                         <label class="col-3 col-form-label" for="tutor-update-image-form-flash-msg">
                             <strong>Feedback</strong>
                         </label>
@@ -46,7 +46,7 @@
 
                     <hr />
                     <!-- Кнопка отправки формы -->
-                    <button type="button" class="btn btn-dark btn-block" id="tutor-update-image-form-button">
+                    <button type="button" class="btn profile-button" id="tutor-update-image-form-button">
                         Применить изменения
                     </button>
                 </form>

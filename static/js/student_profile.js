@@ -1,15 +1,3 @@
-const iconLib = {
-    login: "fa-solid fa-user",
-    firstName: "fa-solid fa-user",
-    secondName: "fa-solid fa-user",
-    gender: "fa-solid fa-venus-mars",
-    birthday: "fa-solid fa-calendar-days",
-    lessonPrice: "fa-solid fa-sack-dollar",
-    discord: "fa-brands fa-discord",
-    phone: "fa-solid fa-phone",
-    telegram: "fa-brands fa-telegram",
-    whatsapp: "fa-brands fa-whatsapp"
-}
 const monthNumber = {
     'января': '01',
     'февраля': '02',
@@ -23,7 +11,7 @@ const monthNumber = {
     'октября': '10',
     'ноября': '11',
     'декабря': '12'
-  };
+}
 
 function convertDate(dateString) {
   const parts = dateString.replace(' года', '').split(' ');
@@ -34,89 +22,35 @@ function convertDate(dateString) {
   return `${year}-${month}-${day}`;
 }
 
-function fillAddParentForm() {
-    console.log('Подготовка формы добавления родителя')
-    document.getElementById('parent-add-form-login').value = document.getElementById('student-login').textContent.trim()
-    document.getElementById('parent-add-form-status').value = "Мать"
-    document.getElementById('parent-add-form-first-name').value = ''
-    document.getElementById('parent-add-form-second-name').value = ''
-    document.getElementById('parent-add-form-phone').value = ''
-    document.getElementById('parent-add-form-telegram').value = ''
-    document.getElementById('parent-add-form-whatsapp').value = ''
-    document.getElementById('parent-add-form-flash-msg').innerHTML = ''
-}
-
-function fillEditImageForm() {
-    console.log('Заполнение формы для изменения аватара студента')
-    document.getElementById('student-edit-image-form-login').value = document.getElementById('student-login').textContent.trim()
-
-    document.getElementById('student-modal-image-type').innerHTML = "Ваше текущее изображение"
-    const studentImage = document.getElementById('student-img');
-    const studentImagePath = studentImage.getAttribute('src');
-    const previewImage = document.getElementById('preview-image');
-    previewImage.src = studentImagePath;
-    previewImage.style.display = 'block';
-    document.getElementById('student-edit-image-form-flash-msg').innerHTML = ''
-}
-
-function fillEditPrimaryInfoForm() {
-    console.log('Заполнение формы для изменения личной информации студента')
-    document.getElementById('student-edit-primary-info-form-login').value = document.getElementById('student-login').textContent.trim()
-
-    document.getElementById('student-edit-primary-info-form-first-name').value = document.getElementById('student-first-name').textContent.trim()
-    document.getElementById('student-edit-primary-info-form-second-name').value = document.getElementById('student-second-name').textContent.trim()
-    document.getElementById('student-edit-primary-info-form-gender').value = document.getElementById('student-gender').textContent.trim()
-    document.getElementById('student-edit-primary-info-form-birthday').value = convertDate(document.getElementById('student-birthday').textContent.trim())
-    document.getElementById('student-edit-primary-info-form-flash-msg').innerHTML = ''
-}
-
-function fillEditContactInfoForm() {
-    console.log('Заполнение формы для изменения контактных данных студента')
-    document.getElementById('student-edit-contact-info-form-login').value = document.getElementById('student-login').textContent.trim()
-
-    document.getElementById('student-edit-contact-info-form-discord').value = document.getElementById('student-discord').textContent.trim()
-    document.getElementById('student-edit-contact-info-form-phone').value = document.getElementById('student-phone').textContent.trim()
-    document.getElementById('student-edit-contact-info-form-telegram').value = document.getElementById('student-telegram').textContent.trim()
-    document.getElementById('student-edit-contact-info-form-whatsapp').value = document.getElementById('student-whatsapp').textContent.trim()
-    document.getElementById('student-edit-contact-info-form-flash-msg').innerHTML = ''
-}
-
-function fillStudentDataDiv(divId, data, iconTag=null) {
-    let fillDiv = document.getElementById(divId)
-    fillDiv.innerHTML = "";
-
-    if (iconTag!==null) {
-        let iconElement = document.createElement("i")
-        iconElement.className = iconLib[iconTag]
-
-        fillDiv.appendChild(iconElement)
-        fillDiv.innerHTML += data;
-    } else {
-        fillDiv.innerHTML += data;
-    }
-}
-
-class EditStudentImageForm {
-
+class UpdateStudentImageForm {
     constructor() {
-        this.login = document.getElementById('student-login').textContent.trim()
+        this.studentLogin = document.getElementById("student-login").textContent
         this.studentImage = document.getElementById('student-img')
         this.userImage = document.getElementById('user-image')
 
-        this.inputLogin = document.getElementById('student-edit-primary-info-form-login')
+        this.inputLogin = document.getElementById('student-update-image-form-login')
         this.inputImage = document.getElementById('image-input')
         this.previewImage = document.getElementById('preview-image');
-        this.descriptionImage = document.getElementById('student-modal-image-type')
+        this.descriptionImage = document.getElementById('student-modal-image-descr')
 
-        this.flashMsg = document.getElementById('student-edit-image-form-flash-msg')
+        this.flashMsg = document.getElementById('student-update-image-form-flash-msg')
 
-        this.btnEditImage = document.getElementById('student-edit-image-form-button')
-        this.btnEditImage.onclick = () => {
-            this.editImage()
+        this.btnUpdateImage = document.getElementById('student-update-image-form-button')
+        this.btnUpdateImage.onclick = () => {
+            this.updateImage()
         }
     }
 
-    editImage() {
+    fillUpdateImageForm() {
+        console.log('Заполнение формы для изменения аватара студента')
+        this.inputLogin.value = this.studentLogin
+        this.descriptionImage.innerHTML = "Ваше текущее изображение"
+        this.previewImage.src = this.studentImage.getAttribute('src');
+        this.previewImage.style.display = 'block';
+        this.flashMsg.innerHTML = ''
+    }
+
+    updateImage() {
         const imgData = new FormData();
         imgData.append('image_data', this.inputImage.files[0]);
 
@@ -126,11 +60,11 @@ class EditStudentImageForm {
             return
         }
 
-        fetch(`/api/students/student/image/${this.login}/`, {
+        fetch(`/api/students/student/image/${this.studentLogin}/`, {
             method: 'PUT',
             headers: {
                 'My-Tutor-Auth-Token': token,
-                'Login': this.login
+                'Login': this.studentLogin
             },
             body: imgData,
         })
@@ -147,7 +81,7 @@ class EditStudentImageForm {
         })
         .then(student => {
             if (student.hasOwnProperty('img_path')) {
-                console.log(student)
+                console.log(student.message)
                 this.studentImage.src = student.img_path + '?v=' + new Date().getTime();
                 this.previewImage.src = student.img_path + '?v=' + new Date().getTime();
                 this.userImage.src = student.img_path + '?v=' + new Date().getTime();
@@ -163,28 +97,40 @@ class EditStudentImageForm {
     }
 }
 
-class EditStudentPrimaryInfoForm {
-
+class UpdateStudentPrimaryInfoForm {
     constructor() {
-        this.login = document.getElementById('student-login').textContent.trim()
+        this.studentLogin = document.getElementById("student-login")
+        this.studentName = document.getElementById("student-name")
+        this.studentGender = document.getElementById("student-gender")
+        this.studentBirthday = document.getElementById("student-birthday")
 
-        this.inputLogin = document.getElementById('student-edit-primary-info-form-login')
-        this.inputFirstName = document.getElementById('student-edit-primary-info-form-first-name')
-        this.inputSecondName = document.getElementById('student-edit-primary-info-form-second-name')
-        this.inputGender = document.getElementById('student-edit-primary-info-form-gender')
-        this.inputBirthday = document.getElementById('student-edit-primary-info-form-birthday')
+        this.inputLogin = document.getElementById('student-update-primary-info-form-login')
+        this.inputFirstName = document.getElementById('student-update-primary-info-form-first-name')
+        this.inputSecondName = document.getElementById('student-update-primary-info-form-second-name')
+        this.inputGender = document.getElementById('student-update-primary-info-form-gender')
+        this.inputBirthday = document.getElementById('student-update-primary-info-form-birthday')
 
-        this.flashMsg = document.getElementById('student-edit-primary-info-form-flash-msg')
+        this.flashMsg = document.getElementById('student-update-primary-info-form-flash-msg')
 
-        this.btnEditPrimaryInfo = document.getElementById('student-edit-primary-info-form-button')
-        this.btnEditPrimaryInfo.onclick = () => {
-            this.editPrimaryInfo()
+        this.btnUpdatePrimaryInfo = document.getElementById('student-update-primary-info-form-button')
+        this.btnUpdatePrimaryInfo.onclick = () => {
+            this.updatePrimaryInfo()
         }
     }
 
-    editPrimaryInfo() {
+    fillUpdatePrimaryInfoForm() {
+        console.log('Заполнение формы для изменения личной информации студента')
+        this.inputLogin.value = this.studentLogin.textContent
+        this.inputSecondName.value = this.studentName.textContent.split(" ")[0]
+        this.inputFirstName.value = this.studentName.textContent.split(" ")[1]
+        this.inputGender.value = this.studentGender.textContent
+        this.inputBirthday.value = convertDate(this.studentBirthday.textContent)
+        this.flashMsg.innerHTML = ''
+    }
+
+    updatePrimaryInfo() {
         const newPrimaryInfo = {
-            login: this.login,
+            login: this.studentLogin.textContent,
             firstName: this.inputFirstName.value,
             secondName: this.inputSecondName.value,
             gender: this.inputGender.value,
@@ -197,7 +143,7 @@ class EditStudentPrimaryInfoForm {
             return
         }
 
-        fetch(`/api/students/student/${this.login}/`, {
+        fetch(`/api/students/student/${this.studentLogin.textContent}/`, {
             method: 'PUT',
                 headers: {
                 'Content-Type': 'application/json',
@@ -218,10 +164,9 @@ class EditStudentPrimaryInfoForm {
         })
         .then(student => {
             if (student.hasOwnProperty('first_name')) {
-                fillStudentDataDiv("student-first-name", ` ${student.first_name}`);
-                fillStudentDataDiv("student-second-name", ` ${student.second_name}`);
-                fillStudentDataDiv("student-gender", ` ${student.gender}`, "gender");
-                fillStudentDataDiv("student-birthday", ` ${student.birthday}`, "birthday");
+                this.studentName.innerText = `${student.second_name} ${student.first_name}`
+                this.studentGender.innerText = student.gender
+                this.studentBirthday.innerText = student.birthday
 
                 flashMsg(`${student.message}`, this.flashMsg, 'success')
                 console.log(student.message)
@@ -235,28 +180,42 @@ class EditStudentPrimaryInfoForm {
     }
 }
 
-class EditStudentContactInfoForm {
-
+class UpdateStudentContactInfoForm {
     constructor() {
-        this.login = document.getElementById('student-login').textContent.trim()
+        this.studentLogin = document.getElementById("student-login")
+        this.studentDiscord = document.getElementById("student-discord")
+        this.studentPhone = document.getElementById("student-phone")
+        this.studentTelegram = document.getElementById("student-telegram")
+        this.studentWhatsapp = document.getElementById("student-whatsapp")
 
-        this.inputLogin = document.getElementById('student-edit-contact-info-form-login')
-        this.inputDiscord = document.getElementById('student-edit-contact-info-form-discord')
-        this.inputPhone = document.getElementById('student-edit-contact-info-form-phone')
-        this.inputTelegram = document.getElementById('student-edit-contact-info-form-telegram')
-        this.inputWhatsapp = document.getElementById('student-edit-contact-info-form-whatsapp')
+        this.inputLogin = document.getElementById('student-update-contact-info-form-login')
+        this.inputDiscord = document.getElementById('student-update-contact-info-form-discord')
+        this.inputPhone = document.getElementById('student-update-contact-info-form-phone')
+        this.inputTelegram = document.getElementById('student-update-contact-info-form-telegram')
+        this.inputWhatsapp = document.getElementById('student-update-contact-info-form-whatsapp')
 
-        this.flashMsg = document.getElementById('student-edit-contact-info-form-flash-msg')
+        this.flashMsg = document.getElementById('student-update-contact-info-form-flash-msg')
 
-        this.btnEditContactInfo = document.getElementById('student-edit-contact-info-form-button')
-        this.btnEditContactInfo.onclick = () => {
-            this.editContactInfo()
+        this.btnUpdateContactInfo = document.getElementById('student-update-contact-info-form-button')
+        this.btnUpdateContactInfo.onclick = () => {
+            this.updateContactInfo()
         }
     }
 
-    editContactInfo() {
+    fillUpdateContactInfoForm() {
+        console.log('Заполнение формы для изменения контактной информации студента')
+        this.inputLogin.value = this.studentLogin.textContent
+
+        this.inputDiscord.value = this.studentDiscord.textContent
+        this.inputPhone.value = this.studentPhone.textContent
+        this.inputTelegram.value = this.studentTelegram.textContent
+        this.inputWhatsapp.value = this.studentWhatsapp.textContent
+        this.flashMsg.innerHTML = ''
+    }
+
+    updateContactInfo() {
         const newContactInfo = {
-            login: this.login,
+            login: this.studentLogin.textContent,
             discord: this.inputDiscord.value,
             phone: this.inputPhone.value,
             telegram: this.inputTelegram.value,
@@ -269,7 +228,7 @@ class EditStudentContactInfoForm {
             return
         }
 
-        fetch(`/api/students/student/${this.login}/`, {
+        fetch(`/api/students/student/${this.studentLogin.textContent}/`, {
             method: 'PUT',
                 headers: {
                 'Content-Type': 'application/json',
@@ -290,10 +249,10 @@ class EditStudentContactInfoForm {
         })
         .then(student => {
             if (student.hasOwnProperty('discord')) {
-                fillStudentDataDiv("student-discord", ` ${student.discord}`, "discord");
-                fillStudentDataDiv("student-phone", ` ${student.phone}`, "phone");
-                fillStudentDataDiv("student-telegram", ` ${student.telegram}`, "telegram");
-                fillStudentDataDiv("student-whatsapp", ` ${student.whatsapp}`, "whatsapp");
+                this.studentDiscord.innerText = student.discord
+                this.studentPhone.innerText = student.phone
+                this.studentTelegram.innerText = student.telegram
+                this.studentWhatsapp.innerText = student.whatsapp
 
                 flashMsg(`${student.message}`, this.flashMsg, 'success')
                 console.log(student.message)
@@ -308,18 +267,18 @@ class EditStudentContactInfoForm {
 }
 
 class AddParentForm {
-
     constructor(parentTable) {
         this.parentTable = parentTable
 
-        this.studentLogin = document.getElementById('student-login').textContent.trim()
+        this.studentLogin = document.getElementById('student-login').textContent
 
+        this.inputLogin = document.getElementById('parent-add-form-login')
         this.inputStatus = document.getElementById('parent-add-form-status')
         this.inputFirstName = document.getElementById('parent-add-form-first-name')
         this.inputSecondName = document.getElementById('parent-add-form-second-name')
         this.inputPhone = document.getElementById('parent-add-form-phone')
         this.inputTelegram = document.getElementById('parent-add-form-telegram')
-        this.inputWhatsApp = document.getElementById('parent-add-form-whatsapp')
+        this.inputWhatsapp = document.getElementById('parent-add-form-whatsapp')
 
         this.flashMsg = document.getElementById('parent-add-form-flash-msg')
 
@@ -327,6 +286,18 @@ class AddParentForm {
         this.btnAddParent.onclick = () => {
             this.addParent()
         }
+    }
+
+    fillAddParentForm() {
+        console.log('Подготовка формы добавления родителя')
+        this.inputLogin.value = this.studentLogin
+        this.inputStatus.value = "Мать"
+        this.inputFirstName.value = ''
+        this.inputSecondName.value = ''
+        this.inputPhone.value = ''
+        this.inputTelegram.value = ''
+        this.inputWhatsapp.value = ''
+        this.flashMsg.innerHTML = ''
     }
 
     addParent() {
@@ -337,7 +308,7 @@ class AddParentForm {
             secondName: this.inputSecondName.value,
             phone: this.inputPhone.value,
             telegram: this.inputTelegram.value,
-            whatsApp: this.inputWhatsApp.value,
+            whatsApp: this.inputWhatsapp.value,
         }
 
         let token = getCookie('My-Tutor-Auth-Token')
@@ -367,12 +338,10 @@ class AddParentForm {
         })
         .then(parent => {
             if (parent.hasOwnProperty('first_name')) {
-                console.log(parent)
-
+                console.log(parent.message)
                 const body = this.parentTable.table.tBodies[0]
                 const row = body.insertRow()
                 this.parentTable.fillRow(row, parent)
-
 
                 flashMsg(
                     `Данные родителя "${parent.first_name} ${parent.second_name}" успешно добавлены`,
@@ -390,15 +359,13 @@ class AddParentForm {
 }
 
 class UpdateParentForm {
-
     constructor(updateRow) {
         this.updateRow = updateRow
 
-        this.studentLogin = document.getElementById('student-login').textContent.trim()
+        this.studentLogin = document.getElementById('student-login').textContent
         this.phone = this.updateRow.childNodes[3].innerText
 
         this.inputLogin = document.getElementById('parent-update-form-login')
-
         this.inputStatus = document.getElementById('parent-update-form-status')
         this.inputFirstName = document.getElementById('parent-update-form-first-name')
         this.inputSecondName = document.getElementById('parent-update-form-second-name')
@@ -417,7 +384,6 @@ class UpdateParentForm {
     fillUpdateForm() {
         console.log('Заполнение формы для изменения данных родителя')
         this.inputLogin.value = this.studentLogin
-
         this.inputStatus.value = this.updateRow.childNodes[0].innerText
         this.inputFirstName.value = this.updateRow.childNodes[1].innerText
         this.inputSecondName.value = this.updateRow.childNodes[2].innerText
@@ -490,8 +456,7 @@ class DeleteParentForm {
     constructor(delRow) {
         this.delRow = delRow
 
-        this.studentLogin = document.getElementById('student-login').textContent.trim()
-
+        this.studentLogin = document.getElementById('student-login').textContent
         this.inputLogin = document.getElementById('parent-delete-form-login')
         this.inputStatus = document.getElementById('parent-delete-form-status')
         this.inputFirstName = document.getElementById('parent-delete-form-first-name')
@@ -510,14 +475,12 @@ class DeleteParentForm {
 
     fillDeleteForm() {
         this.inputLogin.value = this.studentLogin
-
         this.inputStatus.value = this.delRow.childNodes[0].innerText
         this.inputFirstName.value = this.delRow.childNodes[1].innerText
         this.inputSecondName.value = this.delRow.childNodes[2].innerText
         this.inputPhone.value = this.delRow.childNodes[3].innerText
         this.inputTelegram.value = this.delRow.childNodes[4].innerText
         this.inputWhatsApp.value = this.delRow.childNodes[5].innerText
-
         this.flashMsg.innerHTML = ''
         this.btnDeleteParent.disabled = false
     }
@@ -533,7 +496,7 @@ class DeleteParentForm {
         if (token == undefined) {
             return
         }
-        console.log(deleteParent)
+
         fetch(`/api/students/parents/${this.login}/`, {
             method: 'DELETE',
             headers: {
@@ -570,22 +533,25 @@ class DeleteParentForm {
 }
 
 class StudentInfo {
-
     constructor(parentTable) {
         this.parentTable = parentTable
-        this.login = 'kira'
-        this.iconLib = {
-            login: "fa-solid fa-user",
-            firstName: "fa-solid fa-user",
-            secondName: "fa-solid fa-user",
-            gender: "fa-solid fa-venus-mars",
-            birthday: "fa-solid fa-calendar-days",
-            lessonPrice: "fa-solid fa-sack-dollar",
-            discord: "fa-brands fa-discord",
-            phone: "fa-solid fa-phone",
-            telegram: "fa-brands fa-telegram",
-            whatsapp: "fa-brands fa-whatsapp"
-        }
+        this.login = userLogin
+
+        this.studentLogin = document.getElementById("student-login")
+        this.studentName = document.getElementById("student-name")
+        this.studentGender = document.getElementById("student-gender")
+        this.studentBirthday = document.getElementById("student-birthday")
+        this.studentLessonPrice = document.getElementById("student-lesson-price")
+        this.studentDiscord = document.getElementById("student-discord")
+        this.studentPhone = document.getElementById("student-phone")
+        this.studentTelegram = document.getElementById("student-telegram")
+        this.studentWhatsapp = document.getElementById("student-whatsapp")
+
+        this.updateImageButton = document.getElementById('btn-update-img')
+        this.updatePrimaryInfoButton = document.getElementById('btn-update-primary')
+        this.updateContactInfoButton = document.getElementById('btn-update-contact')
+        this.addParentButton = document.getElementById('btn-add-parent')
+        this.clearParentFormButton = document.getElementById('parent-add-clean')
     }
 
     loadStudentInfo() {
@@ -606,10 +572,29 @@ class StudentInfo {
         .then(response => response.json())
         .then(data => {
             this.fillInfo(data)
-            new EditStudentPrimaryInfoForm()
-            new EditStudentContactInfoForm()
-            new EditStudentImageForm()
-            new AddParentForm(this.parentTable)
+
+            const updatePrimaryInfoForm = new UpdateStudentPrimaryInfoForm()
+            this.updatePrimaryInfoButton.onclick = () => {
+                updatePrimaryInfoForm.fillUpdatePrimaryInfoForm()
+            }
+
+            const updateContactInfoForm = new UpdateStudentContactInfoForm()
+            this.updateContactInfoButton.onclick = () => {
+                updateContactInfoForm.fillUpdateContactInfoForm()
+            }
+
+            const updateImageForm = new UpdateStudentImageForm()
+            this.updateImageButton.onclick = () => {
+                updateImageForm.fillUpdateImageForm()
+            }
+
+            const addParentForm = new AddParentForm(this.parentTable)
+            this.addParentButton.onclick = () => {
+                addParentForm.fillAddParentForm()
+            }
+            this.clearParentFormButton.onclick = () => {
+                addParentForm.fillAddParentForm()
+            }
         })
         .catch(error => {
             console.error(error)
@@ -622,33 +607,20 @@ class StudentInfo {
         const studentImage = document.getElementById('student-img');
         studentImage.src = student.img_path;
 
-        fillStudentDataDiv("student-login", ` ${student.login}`, "login");
-        fillStudentDataDiv("student-first-name", ` ${student.first_name}`);
-        fillStudentDataDiv("student-second-name", ` ${student.second_name}`);
-        fillStudentDataDiv("student-gender", ` ${student.gender}`, "gender");
-        fillStudentDataDiv("student-birthday", ` ${student.birthday}`, "birthday");
-        fillStudentDataDiv("student-lesson-price", `Стоимость занятий: <strong>${student.lesson_price}</strong> рублей`, "lessonPrice");
-        fillStudentDataDiv("student-discord", ` ${student.discord}`, "discord");
-        fillStudentDataDiv("student-phone", ` ${student.phone}`, "phone");
-        fillStudentDataDiv("student-telegram", ` ${student.telegram}`, "telegram");
-        fillStudentDataDiv("student-whatsapp", ` ${student.whatsapp}`, "whatsapp");
-    }
 
-    fillInfoDiv(divId, data, iconTag) {
-        let fillDiv = document.getElementById(divId)
-        fillDiv.innerHTML = "";
-
-        let iconElement = document.createElement("i")
-        iconElement.className = this.iconLib[iconTag]
-        let textElement = document.createTextNode(data)
-
-        fillDiv.appendChild(iconElement)
-        fillDiv.appendChild(textElement)
+        this.studentLogin.innerText = student.login
+        this.studentName.innerText = `${student.second_name} ${student.first_name}`
+        this.studentGender.innerText = student.gender
+        this.studentBirthday.innerText = student.birthday
+        this.studentLessonPrice.innerHTML = `Стоимость занятий: <strong>${student.lesson_price} рублей</strong>`
+        this.studentDiscord.innerText = student.discord
+        this.studentPhone.innerText = student.phone
+        this.studentTelegram.innerText = student.telegram
+        this.studentWhatsapp.innerText = student.whatsapp
     }
 }
 
 class ParentTable {
-
     constructor() {
         this.table = document.getElementById('parents-table')
     }
@@ -688,7 +660,7 @@ class ParentTable {
     }
 
     fillRow(row, parent) {
-        this.addCell(row, parent.status)
+        this.addCell(row, parent.status, 'text-center')
         this.addCell(row, parent.first_name)
         this.addCell(row, parent.second_name)
         this.addCell(row, parent.phone)
@@ -696,28 +668,29 @@ class ParentTable {
         this.addCell(row, parent.whatsapp)
 
         const controllers = document.createElement('div')
-        controllers.classList.add('text-end')
         controllers.style.right = '0px'
         controllers.appendChild(this.createUpdateButton(row))
         controllers.appendChild(this.createDeleteButton(row))
-        this.addCell(row, controllers)
+        this.addCell(row, controllers, 'text-center')
     }
 
-    addCell(row, content) {
+    addCell(row, content, position='text-start') {
         let cell = row.insertCell()
         cell.classList.add('align-middle')
+        cell.classList.add(position)
         if (typeof content === 'object') cell.appendChild(content)
         else cell.innerHTML = content
     }
 
     createUpdateButton(row) {
         const btn = document.createElement('button')
-        btn.classList.add('btn', 'btn-sm', 'btn-info')
+        btn.classList.add('btn', 'table-controller')
+        btn.style.color = '#228B22'
         btn.setAttribute('type', 'button')
         btn.setAttribute('title', 'Обновить данные родителя')
         btn.setAttribute('data-bs-toggle', 'modal')
         btn.setAttribute('data-bs-target', '#modal-parent-update')
-        btn.innerHTML = '<i class="fa-solid fa-pen"></i>'
+        btn.innerHTML = '<i class="fa-solid fa-pen fa-lg"></i>'
         btn.onclick = () => {
             const form = new UpdateParentForm(row)
             form.fillUpdateForm()
@@ -728,12 +701,13 @@ class ParentTable {
 
     createDeleteButton(row) {
         const btn = document.createElement('button')
-        btn.classList.add('btn', 'btn-sm', 'btn-danger')
+        btn.classList.add('btn', 'table-controller')
+        btn.style.color = '#B22222'
         btn.setAttribute('type', 'button')
-        btn.setAttribute('title', 'Удалить родителя')
+        btn.setAttribute('title', 'Удалить данные о родителе')
         btn.setAttribute('data-bs-toggle', 'modal')
         btn.setAttribute('data-bs-target', '#modal-parent-delete')
-        btn.innerHTML = '<i class="fa-solid fa-trash"></i>'
+        btn.innerHTML = '<i class="fa-solid fa-trash fa-lg"></i>'
         btn.onclick = () => {
             const form = new DeleteParentForm(row)
             form.fillDeleteForm()
@@ -749,8 +723,6 @@ document.addEventListener('DOMContentLoaded', function (event) {
 
     const studentInfo = new StudentInfo(parentTable)
     studentInfo.loadStudentInfo()
-
-
 })
 
 document.getElementById('image-input').addEventListener('change', function(event) {

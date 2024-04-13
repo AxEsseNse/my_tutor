@@ -18,24 +18,21 @@
     position: relative;
 }
 
-#btn-edit-img {
+#btn-update-img {
     position: absolute;
     top: 0;
     left: 0;
 }
 
-#btn-edit-img,
-#btn-edit-primary,
-#btn-edit-contact,
-#btn-add-parent {
+.profile-button {
     color: black;
-    background-color: #4A918B;
+    background-color: #B4B7FA;
 }
-#btn-edit-img:hover,
-#btn-edit-primary:hover,
-#btn-edit-contact:hover,
-#btn-add-parent:hover {
-    background-color: #14A9A5;
+.profile-button:hover {
+    background-color: #F6E6AE;
+}
+.profile-button:focus-visible {
+    background-color: #F6E6AE;
 }
 
 #hr-under-info,
@@ -43,14 +40,29 @@
     margin-top: 0px;
 }
 
-#btn-edit-primary,
-#btn-edit-contact {
+#btn-update-primary,
+#btn-update-contact {
     margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.info-element {
     margin-bottom: 5px;
 }
 
 .parent-table-title {
     margin-top: 50px;
+}
+
+.table-controller {
+    margin-left: 5px;
+    background-color: #B4B7FA;
+}
+.table-controller:hover {
+    background-color: #F6E6AE;
+}
+.table-controller:focus-visible {
+    background-color: #F6E6AE;
 }
 
 .table {
@@ -95,6 +107,7 @@
     background-position: -600% 0;
 }
 
-#parent-add-cleaner {
+#parent-add-clean {
     margin-right: 15px;
+    color: #007BFF;
 }

@@ -7,17 +7,16 @@
     <div class="row">
         <!-- Изображение пользователя -->
         <div class="col-3 text-end">
-            <img width="300" height="300" class="rounded-circle" style="object-fit: cover" id="student-img">
+            <img width="300" height="300" class="rounded-circle" style="object-fit: cover; border: 3px solid #B4B7FA;" id="student-img">
         </div>
         <div class="col-1 text-start" id="student-image-btn">
             <button
-                class="btn btn-sm btn-secondary align-top align-middle"
+                class="btn align-top align-middle profile-button"
                 type="button"
                 title="Изменить аватар"
                 data-bs-toggle="modal"
-                data-bs-target="#modal-student-edit-img"
-                id="btn-edit-img"
-                onclick="fillEditImageForm()"
+                data-bs-target="#modal-student-update-img"
+                id="btn-update-img"
             ><i class="fa-solid fa-image text-dark"></i></i>
             </button>
         </div>
@@ -29,41 +28,52 @@
                 </div>
                 <div class="col-2 text-center">
                     <button
-                        class="btn btn-sm btn-secondary"
+                        class="btn profile-button"
                         type="button"
                         title="Изменить личную информацию"
                         data-bs-toggle="modal"
-                        data-bs-target="#modal-student-edit-primary-info"
-                        id="btn-edit-primary"
-                        onclick="fillEditPrimaryInfoForm()"
+                        data-bs-target="#modal-student-update-primary-info"
+                        id="btn-update-primary"
                     >
                         <i class="fa-solid fa-user-pen text-dark"></i>
                     </button>
                 </div>
             </div>
             <hr id="hr-under-info"/>
-            <div id="student-login">
-                <i class="fa-solid fa-user"></i>
-                -
+            <div class="row info-element">
+                <div class="col-1">
+                </div>
+                <div class="col-11" id="student-name">
+                </div>
             </div>
-            <div id="student-first-name">
-                -
+            <div class="row info-element">
+                <div class="col-1">
+                    <i class="fa-solid fa-user fa-lg" style="color: #1E90FF"></i>
+                </div>
+                <div class="col-11" id="student-login">
+                </div>
             </div>
-            <div id="student-second-name">
-                -
+            <div class="row info-element">
+                <div class="col-1">
+                    <i class="fa-solid fa-venus-mars fa-lg" style="color: #800080"></i>
+                </div>
+                <div class="col-11" id="student-gender">
+                </div>
             </div>
-            <div id="student-gender">
-                <i class="fa-solid fa-venus-mars"></i>
-                -
-            </div>
-            <div title="Дата рождения"  id="student-birthday">
-                <i class="fa-solid fa-calendar-days"></i>
-                -
+            <div class="row info-element">
+                <div class="col-1">
+                    <i class="fa-solid fa-calendar-days fa-lg" style="color: #1E90FF"></i>
+                </div>
+                <div class="col-11" id="student-birthday" title="Дата рождения">
+                </div>
             </div>
             <hr/>
-            <div id="student-lesson-price">
-                <i class="fa-solid fa-sack-dollar"></i>
-                Стоимость занятий: <strong>- рублей</strong>
+            <div class="row">
+                <div class="col-1">
+                    <i class="fa-solid fa-sack-dollar fa-lg" style="color: #228B22"></i>
+                </div>
+                <div class="col-11" id="student-lesson-price">
+                </div>
             </div>
         </div>
         <!-- Контактные данные пользователя -->
@@ -74,34 +84,45 @@
                 </div>
                 <div class="col-2 text-center">
                     <button
-                        class="btn btn-sm btn-secondary"
+                        class="btn profile-button"
                         type="button"
                         title="Изменить контактные данные"
                         data-bs-toggle="modal"
-                        data-bs-target="#modal-student-edit-contact-info"
-                        id="btn-edit-contact"
-                        onclick="fillEditContactInfoForm()"
+                        data-bs-target="#modal-student-update-contact-info"
+                        id="btn-update-contact"
                     >
-                        <i class="fa-solid fa-mobile text-dark"></i>
+                        <i class="fa-solid fa-mobile-screen"></i>
                     </button>
                 </div>
             </div>
             <hr id="hr-under-contact"/>
-            <div id="student-discord">
-                <i class="fa-brands fa-discord"></i>
-                -
+            <div class="row info-element">
+                <div class="col-1">
+                    <i class="fa-brands fa-discord fa-lg" style="color: #7289da"></i>
+                </div>
+                <div class="col-11" id="student-discord">
+                </div>
             </div>
-            <div id="student-phone">
-                <i class="fa-solid fa-phone"></i>
-                -
+            <div class="row info-element">
+                <div class="col-1">
+                    <i class="fa-solid fa-phone fa-lg" style="color: green"></i>
+                </div>
+                <div class="col-11" id="student-phone">
+                </div>
             </div>
-            <div id="student-telegram">
-                <i class="fa-brands fa-telegram"></i>
-                -
+            <div class="row info-element">
+                <div class="col-1">
+                    <i class="fa-brands fa-telegram fa-xl" style="color: #2AABEE"></i>
+                </div>
+                <div class="col-11" id="student-telegram">
+                </div>
             </div>
-            <div id="student-whatsapp">
-                <i class="fa-brands fa-whatsapp"></i>
-                -
+            <div class="row info-element">
+                <div class="col-1">
+                    <i class="fa-brands fa-whatsapp fa-xl" style="color: #25D366"></i>
+                </div>
+                <div class="col-11" id="student-whatsapp">
+                </div>
             </div>
         </div>
     </div>
@@ -115,20 +136,17 @@
             <hr/>
         </div>
         <div class="col-10 text-end">
-
             <button
-                class="btn btn-sm btn-secondary"
+                class="btn profile-button"
                 type="button"
                 title="Добавить родителя"
                 data-bs-toggle="modal"
                 data-bs-target="#modal-parent-add"
                 id="btn-add-parent"
-                onclick="fillAddParentForm()"
             >
                 <i class="fa-solid fa-plus text-dark"></i>
                 Добавить
             </button>
-
         </div>
     </div>
 </div>
@@ -136,20 +154,20 @@
 <table id="parents-table" class="table table-info">
     <thead class="thead-dark">
         <tr>
-            <th class="col-1"></th>
+            <th class="col-1 text-center"></th>
             <th class="col-2 text-start">Имя</th>
             <th class="col-2 text-start">Фамилия</th>
-            <th class="col-2 text-start">Телефон</th>
+            <th class="col-1 text-start">Телефон</th>
             <th class="col-2 text-start">Telegram</th>
             <th class="col-2 text-start">Whatsapp</th>
-            <th class="col-1"></th>
+            <th class="col-2 text-center">Действия</th>
         </tr>
     </thead>
     <tbody></tbody>
 </table>
-{% include "studentFormEditPrimaryInfo.html" %}
-{% include "studentFormEditContactInfo.html" %}
-{% include "studentFormEditImage.html" %}
+{% include "studentFormUpdatePrimaryInfo.html" %}
+{% include "studentFormUpdateContactInfo.html" %}
+{% include "studentFormUpdateImage.html" %}
 {% include "parentFormAdd.html" %}
 {% include "parentFormUpdate.html" %}
 {% include "parentFormDelete.html" %}

@@ -1,12 +1,12 @@
 <div
-    class="modal fade"
+    class="modal fade custom-modal"
     tabindex="-1"
     aria-labelledby="modal-parent-add"
     aria-hidden="true"
     id="modal-parent-add"
 >
     <div class="modal-dialog modal-md">
-        <div class="modal-content">
+        <div class="modal-content custom-modal-body">
             <!-- Header окна добавления нового пользователя -->
             <div class="modal-header">
                 <h5 class="modal-title">Добавление данных родителя</h5>
@@ -19,7 +19,7 @@
                     <div class="form-group row mt-2 mb-2">
                         <label class="col-4 col-form-label" for="parent-add-form-login">Пользователь</label>
                         <div class="col-8">
-                            <input class="form-control" type="text" id="parent-add-form-login" disabled />
+                            <input class="form-control disabled-input" type="text" id="parent-add-form-login" disabled />
                         </div>
                     </div>
                     <!-- Кнопка очистки формы -->
@@ -27,8 +27,7 @@
                         <i
                             class="fa-solid fa-eraser fa-lg"
                             title="Очистка формы"
-                            id="parent-add-cleaner"
-                            onclick="fillAddParentForm()"
+                            id="parent-add-clean"
                         ></i>
                     </div>
                     <!-- Поле выбора родителя -->
@@ -116,15 +115,15 @@
                     <!-- Поле ответа сервера -->
                     <hr/>
 
-                    <div class="form-group row mt-2 mb-2">
-                        <label class="col-4 col-form-label" for="parent-add-form-flash-msg"><strong>Feedback</strong></label>
-                        <div class="col-8" id="parent-add-form-flash-msg"></div>
+                    <div class="form-group row mt-2 mb-2 align-items-center">
+                        <label class="col-3 col-form-label" for="parent-add-form-flash-msg"><strong>Feedback</strong></label>
+                        <div class="col-9" id="parent-add-form-flash-msg"></div>
                     </div>
 
                     <hr />
                     <!-- Кнопка отправки формы -->
                     <div class="text-center">
-                        <button type="button" class="btn btn-dark btn-block" id="parent-add-form-button">
+                        <button type="button" class="btn profile-button" id="parent-add-form-button">
                             Добавить
                         </button>
                     </div>

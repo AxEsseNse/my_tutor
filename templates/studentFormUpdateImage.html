@@ -1,13 +1,13 @@
 <div
-    class="modal fade bd-example-modal-lg"
+    class="modal fade bd-example-modal-lg custom-modal"
     tabindex="-1"
     role="dialog"
-    aria-labelledby="modal-student-edit-img"
+    aria-labelledby="modal-student-update-img"
     aria-hidden="true"
-    id="modal-student-edit-img"
+    id="modal-student-update-img"
 >
     <div class="modal-dialog modal-md">
-        <div class="modal-content">
+        <div class="modal-content custom-modal-body">
             <!-- Header окна изменения пароля пользователя -->
             <div class="modal-header">
                 <h5 class="modal-title">Изменить аватар</h5>
@@ -15,12 +15,12 @@
             </div>
 
             <div class="modal-body text-center">
-                <form class="needs-validation" id="student-edit-contact-info-form" novalidate>
+                <form class="needs-validation" id="student-update-contact-info-form" novalidate>
                     <!-- Логин пользователя -->
                     <div class="form-group row mt-2 mb-2">
-                        <label class="col-6 col-form-label text-start" for="student-edit-image-form-login">Пользователь</label>
+                        <label class="col-6 col-form-label text-start" for="student-update-image-form-login">Пользователь</label>
                         <div class="col-6">
-                            <input class="form-control" type="text" id="student-edit-image-form-login" disabled />
+                            <input class="form-control disabled-input" type="text" id="student-update-image-form-login" disabled />
                         </div>
                     </div>
                     <!-- Поле загрузки нового изображения -->
@@ -31,22 +31,22 @@
                     <hr />
 
                     <div id="student-modal-image">
-                        <img id="preview-image" width="300" height="300" class="rounded-circle mx-auto" style="display: none; max-width: 100%;object-fit: cover" alt="Preview">
+                        <img id="preview-image" width="300" height="300" class="rounded-circle mx-auto" style="display: none; max-width: 100%;object-fit: cover; border: 3px solid #B4B7FA;" alt="Preview">
                     </div>
-                    <div class="text-center mt-2" id="student-modal-image-type"></div>
+                    <div class="text-center mt-2" id="student-modal-image-descr"></div>
 
                     <hr />
                     <!-- Поле ответа сервера -->
-                    <div class="form-group row">
-                        <label class="col-3 col-form-label" for="student-edit-image-form-flash-msg">
+                    <div class="form-group row align-items-center">
+                        <label class="col-3 col-form-label" for="student-update-image-form-flash-msg">
                             <strong>Feedback</strong>
                         </label>
-                        <div class="col-9" id="student-edit-image-form-flash-msg"></div>
+                        <div class="col-9" id="student-update-image-form-flash-msg"></div>
                     </div>
 
                     <hr />
                     <!-- Кнопка отправки формы -->
-                    <button type="button" class="btn btn-dark btn-block" id="student-edit-image-form-button">
+                    <button type="button" class="btn profile-button" id="student-update-image-form-button">
                         Применить изменения
                     </button>
                 </form>
