@@ -65,6 +65,8 @@ body {
 
 #header-logo {
     height: 100%;
+    position: relative;
+    z-index: 1000;
 }
 #logo {
     height: 90px;
