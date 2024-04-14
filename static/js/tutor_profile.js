@@ -22,6 +22,59 @@ function convertDate(dateString) {
   return `${year}-${month}-${day}`;
 }
 
+class Validator {
+    checkValidFirstName(data) {
+        if (data.length > 15) {
+            return 'Длина имени не может быть более 15 символов'
+        }
+        if (data.length < 3) {
+            return 'Длина имени не может менее 3 символов'
+        }
+        return false
+    }
+
+    checkValidSecondName(data) {
+        if (data.length > 25) {
+            return 'Длина фамилии не может быть более 25 символов'
+        }
+        if (data.length < 3) {
+            return 'Длина фамилии не может менее 3 символов'
+        }
+        return false
+    }
+
+    checkValidPhone(data) {
+        if (data.length !== 11) {
+            return 'Номер телефона должен состоять из 11 символов'
+        }
+        return false
+    }
+
+    checkValidTelegram(data) {
+        if (data.length !== 11) {
+            return 'Номер телеграма должен состоять из 11 символов'
+        }
+        return false
+    }
+
+    checkValidWhatsapp(data) {
+        if (data.length !== 11) {
+            return 'Номер whatsapp должен состоять из 11 символов'
+        }
+        return false
+    }
+
+    checkValidDiscord(data) {
+        if (data.length > 25) {
+            return 'Длина дискорда должна быть не более 25 символов'
+        }
+        if (data.length < 5) {
+            return 'Длина дискорда должна быть не менее 5 символов'
+        }
+        return false
+    }
+}
+
 class UpdateTutorImageForm {
     constructor() {
         this.tutorLogin = document.getElementById('tutor-login').textContent
@@ -98,7 +151,9 @@ class UpdateTutorImageForm {
 }
 
 class UpdateTutorPrimaryInfoForm {
-    constructor() {
+    constructor(validator) {
+        this.validator = validator
+
         this.tutorLogin = document.getElementById("tutor-login")
         this.tutorName = document.getElementById("tutor-name")
         this.tutorGender = document.getElementById("tutor-gender")
@@ -143,6 +198,19 @@ class UpdateTutorPrimaryInfoForm {
             return
         }
 
+        let errorFirstName = this.validator.checkValidFirstName(this.inputFirstName.value)
+        let errorSecondName = this.validator.checkValidSecondName(this.inputSecondName.value)
+        let errors = [errorFirstName, errorSecondName]
+
+        for (let error of errors) {
+            if (error) {
+                flashMsg(error, this.flashMsg, 'wrong')
+                return
+            }
+        }
+
+        this.flashMsg.innerHTML = ''
+
         fetch(`/api/tutors/tutor/${this.tutorLogin.textContent}/`, {
             method: 'PUT',
                 headers: {
@@ -181,7 +249,9 @@ class UpdateTutorPrimaryInfoForm {
 }
 
 class UpdateTutorContactInfoForm {
-    constructor() {
+    constructor(validator) {
+        this.validator = validator
+
         this.tutorLogin = document.getElementById("tutor-login")
         this.tutorDiscord = document.getElementById("tutor-discord")
         this.tutorPhone = document.getElementById("tutor-phone")
@@ -228,6 +298,21 @@ class UpdateTutorContactInfoForm {
             return
         }
 
+        let errorDiscord = this.validator.checkValidDiscord(this.inputDiscord.value)
+        let errorPhone = this.validator.checkValidPhone(this.inputPhone.value)
+        let errorTelegram = this.validator.checkValidTelegram(this.inputTelegram.value)
+        let errorWhatsapp = this.validator.checkValidWhatsapp(this.inputWhatsapp.value)
+        let errors = [errorDiscord, errorPhone, errorTelegram, errorWhatsapp]
+
+        for (let error of errors) {
+            if (error) {
+                flashMsg(error, this.flashMsg, 'wrong')
+                return
+            }
+        }
+
+        this.flashMsg.innerHTML = ''
+
         fetch(`/api/tutors/tutor/${this.tutorLogin.textContent}/`, {
             method: 'PUT',
                 headers: {
@@ -267,7 +352,8 @@ class UpdateTutorContactInfoForm {
 }
 
 class TutorInfo {
-    constructor() {
+    constructor(validator) {
+        this.validator = validator
         this.login = userLogin
 
         this.tutorLogin = document.getElementById("tutor-login")
@@ -303,12 +389,12 @@ class TutorInfo {
         .then(data => {
             this.fillInfo(data)
 
-            const updatePrimaryInfoForm = new UpdateTutorPrimaryInfoForm()
+            const updatePrimaryInfoForm = new UpdateTutorPrimaryInfoForm(this.validator)
             this.updatePrimaryInfoButton.onclick = () => {
                 updatePrimaryInfoForm.fillUpdatePrimaryInfoForm()
             }
 
-            const updateContactInfoForm = new UpdateTutorContactInfoForm()
+            const updateContactInfoForm = new UpdateTutorContactInfoForm(this.validator)
             this.updateContactInfoButton.onclick = () => {
                 updateContactInfoForm.fillUpdateContactInfoForm()
             }
@@ -340,7 +426,8 @@ class TutorInfo {
 }
 
 document.addEventListener('DOMContentLoaded', function (event) {
-    const tutorInfo = new TutorInfo()
+    const validator = new Validator()
+    const tutorInfo = new TutorInfo(validator)
     tutorInfo.loadTutorInfo()
 })
 

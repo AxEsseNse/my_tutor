@@ -22,6 +22,59 @@ function convertDate(dateString) {
   return `${year}-${month}-${day}`;
 }
 
+class Validator {
+    checkValidFirstName(data) {
+        if (data.length > 15) {
+            return 'Длина имени не может быть более 15 символов'
+        }
+        if (data.length < 3) {
+            return 'Длина имени не может менее 3 символов'
+        }
+        return false
+    }
+
+    checkValidSecondName(data) {
+        if (data.length > 25) {
+            return 'Длина фамилии не может быть более 25 символов'
+        }
+        if (data.length < 3) {
+            return 'Длина фамилии не может менее 3 символов'
+        }
+        return false
+    }
+
+    checkValidPhone(data) {
+        if (data.length !== 11) {
+            return 'Номер телефона должен состоять из 11 символов'
+        }
+        return false
+    }
+
+    checkValidTelegram(data) {
+        if (data.length !== 11) {
+            return 'Номер телеграма должен состоять из 11 символов'
+        }
+        return false
+    }
+
+    checkValidWhatsapp(data) {
+        if (data.length !== 11) {
+            return 'Номер whatsapp должен состоять из 11 символов'
+        }
+        return false
+    }
+
+    checkValidDiscord(data) {
+        if (data.length > 25) {
+            return 'Длина дискорда должна быть не более 25 символов'
+        }
+        if (data.length < 5) {
+            return 'Длина дискорда должна быть не менее 5 символов'
+        }
+        return false
+    }
+}
+
 class UpdateStudentImageForm {
     constructor() {
         this.studentLogin = document.getElementById("student-login").textContent
@@ -59,6 +112,8 @@ class UpdateStudentImageForm {
         if (token == undefined) {
             return
         }
+
+        this.flashMsg.innerHTML = ''
 
         fetch(`/api/students/student/image/${this.studentLogin}/`, {
             method: 'PUT',
@@ -98,7 +153,9 @@ class UpdateStudentImageForm {
 }
 
 class UpdateStudentPrimaryInfoForm {
-    constructor() {
+    constructor(validator) {
+        this.validator = validator
+
         this.studentLogin = document.getElementById("student-login")
         this.studentName = document.getElementById("student-name")
         this.studentGender = document.getElementById("student-gender")
@@ -143,6 +200,19 @@ class UpdateStudentPrimaryInfoForm {
             return
         }
 
+        let errorFirstName = this.validator.checkValidFirstName(this.inputFirstName.value)
+        let errorSecondName = this.validator.checkValidSecondName(this.inputSecondName.value)
+        let errors = [errorFirstName, errorSecondName]
+
+        for (let error of errors) {
+            if (error) {
+                flashMsg(error, this.flashMsg, 'wrong')
+                return
+            }
+        }
+
+        this.flashMsg.innerHTML = ''
+
         fetch(`/api/students/student/${this.studentLogin.textContent}/`, {
             method: 'PUT',
                 headers: {
@@ -181,7 +251,9 @@ class UpdateStudentPrimaryInfoForm {
 }
 
 class UpdateStudentContactInfoForm {
-    constructor() {
+    constructor(validator) {
+        this.validator = validator
+
         this.studentLogin = document.getElementById("student-login")
         this.studentDiscord = document.getElementById("student-discord")
         this.studentPhone = document.getElementById("student-phone")
@@ -227,6 +299,21 @@ class UpdateStudentContactInfoForm {
         if (token == undefined) {
             return
         }
+
+        let errorDiscord = this.validator.checkValidDiscord(this.inputDiscord.value)
+        let errorPhone = this.validator.checkValidPhone(this.inputPhone.value)
+        let errorTelegram = this.validator.checkValidTelegram(this.inputTelegram.value)
+        let errorWhatsapp = this.validator.checkValidWhatsapp(this.inputWhatsapp.value)
+        let errors = [errorDiscord, errorPhone, errorTelegram, errorWhatsapp]
+
+        for (let error of errors) {
+            if (error) {
+                flashMsg(error, this.flashMsg, 'wrong')
+                return
+            }
+        }
+
+        this.flashMsg.innerHTML = ''
 
         fetch(`/api/students/student/${this.studentLogin.textContent}/`, {
             method: 'PUT',
@@ -317,6 +404,22 @@ class AddParentForm {
             return
         }
 
+        let errorFirstName = this.parentTable.validator.checkValidFirstName(this.inputFirstName.value)
+        let errorSecondName = this.parentTable.validator.checkValidSecondName(this.inputSecondName.value)
+        let errorPhone = this.parentTable.validator.checkValidPhone(this.inputPhone.value)
+        let errorTelegram = this.parentTable.validator.checkValidTelegram(this.inputTelegram.value)
+        let errorWhatsapp = this.parentTable.validator.checkValidWhatsapp(this.inputWhatsapp.value)
+        let errors = [errorFirstName, errorSecondName, errorPhone, errorTelegram, errorWhatsapp]
+
+        for (let error of errors) {
+            if (error) {
+                flashMsg(error, this.flashMsg, 'wrong')
+                return
+            }
+        }
+
+        this.flashMsg.innerHTML = ''
+
         fetch('/api/students/parents', {
             method: 'POST',
             headers: {
@@ -359,8 +462,9 @@ class AddParentForm {
 }
 
 class UpdateParentForm {
-    constructor(updateRow) {
+    constructor(updateRow, validator) {
         this.updateRow = updateRow
+        this.validator = validator
 
         this.studentLogin = document.getElementById('student-login').textContent
         this.phone = this.updateRow.childNodes[3].innerText
@@ -371,7 +475,7 @@ class UpdateParentForm {
         this.inputSecondName = document.getElementById('parent-update-form-second-name')
         this.inputPhone = document.getElementById('parent-update-form-phone')
         this.inputTelegram = document.getElementById('parent-update-form-telegram')
-        this.inputWhatsApp = document.getElementById('parent-update-form-whatsapp')
+        this.inputWhatsapp = document.getElementById('parent-update-form-whatsapp')
 
         this.flashMsg = document.getElementById('parent-update-form-flash-msg')
 
@@ -389,7 +493,7 @@ class UpdateParentForm {
         this.inputSecondName.value = this.updateRow.childNodes[2].innerText
         this.inputPhone.value = this.updateRow.childNodes[3].innerText
         this.inputTelegram.value = this.updateRow.childNodes[4].innerText
-        this.inputWhatsApp.value = this.updateRow.childNodes[5].innerText
+        this.inputWhatsapp.value = this.updateRow.childNodes[5].innerText
 
         this.flashMsg.innerHTML = ''
     }
@@ -403,7 +507,7 @@ class UpdateParentForm {
             phoneKey: this.phone,
             new_phone: this.inputPhone.value,
             telegram: this.inputTelegram.value,
-            whatsApp: this.inputWhatsApp.value,
+            whatsApp: this.inputWhatsapp.value,
         }
 
         let token = getCookie('My-Tutor-Auth-Token')
@@ -411,6 +515,22 @@ class UpdateParentForm {
         if (token == undefined) {
             return
         }
+
+        let errorFirstName = this.validator.checkValidFirstName(this.inputFirstName.value)
+        let errorSecondName = this.validator.checkValidSecondName(this.inputSecondName.value)
+        let errorPhone = this.validator.checkValidPhone(this.inputPhone.value)
+        let errorTelegram = this.validator.checkValidTelegram(this.inputTelegram.value)
+        let errorWhatsapp = this.validator.checkValidWhatsapp(this.inputWhatsapp.value)
+        let errors = [errorFirstName, errorSecondName, errorPhone, errorTelegram, errorWhatsapp]
+
+        for (let error of errors) {
+            if (error) {
+                flashMsg(error, this.flashMsg, 'wrong')
+                return
+            }
+        }
+
+        this.flashMsg.innerHTML = ''
 
         fetch(`/api/students/parents/${this.studentLogin}/`, {
             method: 'PUT',
@@ -533,8 +653,9 @@ class DeleteParentForm {
 }
 
 class StudentInfo {
-    constructor(parentTable) {
+    constructor(parentTable, validator) {
         this.parentTable = parentTable
+        this.validator = validator
         this.login = userLogin
 
         this.studentLogin = document.getElementById("student-login")
@@ -573,12 +694,12 @@ class StudentInfo {
         .then(data => {
             this.fillInfo(data)
 
-            const updatePrimaryInfoForm = new UpdateStudentPrimaryInfoForm()
+            const updatePrimaryInfoForm = new UpdateStudentPrimaryInfoForm(this.validator)
             this.updatePrimaryInfoButton.onclick = () => {
                 updatePrimaryInfoForm.fillUpdatePrimaryInfoForm()
             }
 
-            const updateContactInfoForm = new UpdateStudentContactInfoForm()
+            const updateContactInfoForm = new UpdateStudentContactInfoForm(this.validator)
             this.updateContactInfoButton.onclick = () => {
                 updateContactInfoForm.fillUpdateContactInfoForm()
             }
@@ -621,7 +742,8 @@ class StudentInfo {
 }
 
 class ParentTable {
-    constructor() {
+    constructor(validator) {
+        this.validator = validator
         this.table = document.getElementById('parents-table')
     }
 
@@ -692,7 +814,7 @@ class ParentTable {
         btn.setAttribute('data-bs-target', '#modal-parent-update')
         btn.innerHTML = '<i class="fa-solid fa-pen fa-lg"></i>'
         btn.onclick = () => {
-            const form = new UpdateParentForm(row)
+            const form = new UpdateParentForm(row, this.validator)
             form.fillUpdateForm()
         }
 
@@ -718,10 +840,11 @@ class ParentTable {
 }
 
 document.addEventListener('DOMContentLoaded', function (event) {
-    const parentTable = new ParentTable()
+    const validator = new Validator()
+    const parentTable = new ParentTable(validator)
     parentTable.loadParents()
 
-    const studentInfo = new StudentInfo(parentTable)
+    const studentInfo = new StudentInfo(parentTable, validator)
     studentInfo.loadStudentInfo()
 })
 
