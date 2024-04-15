@@ -3,12 +3,12 @@
     padding: 0;
     text-decoration: none;
     list-style: none;
+    font-family: 'Segoe UI';
 }
 html,
 body {
     height: 100%;
     width: 100%;
-    //overflow: hidden;
 }
 .header-menu-row {
     display: flex;

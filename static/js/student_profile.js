@@ -156,6 +156,7 @@ class UpdateStudentPrimaryInfoForm {
     constructor(validator) {
         this.validator = validator
 
+        this.userName = document.getElementById("header-user-name")
         this.studentLogin = document.getElementById("student-login")
         this.studentName = document.getElementById("student-name")
         this.studentGender = document.getElementById("student-gender")
@@ -234,6 +235,7 @@ class UpdateStudentPrimaryInfoForm {
         })
         .then(student => {
             if (student.hasOwnProperty('first_name')) {
+                this.userName.innerText = `${student.second_name} ${student.first_name}`
                 this.studentName.innerText = `${student.second_name} ${student.first_name}`
                 this.studentGender.innerText = student.gender
                 this.studentBirthday.innerText = student.birthday
