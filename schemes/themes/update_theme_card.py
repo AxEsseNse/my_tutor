@@ -11,7 +11,6 @@ class UpdateThemePracticeCardRequest(BaseModel):
     image_path: Optional[str] = Field(None, alias="imagePath")
     descr: str
     answer: str
-    #tip: bool
     tip_image_path: Optional[str] = Field(None, alias="tipImagePath")
     tip_descr: Optional[str] = Field(None, alias="tipDescr")
 

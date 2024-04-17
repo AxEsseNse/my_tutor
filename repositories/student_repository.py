@@ -8,8 +8,19 @@ from sqlalchemy.orm import selectinload
 from datetime import datetime
 
 from my_tutor.repositories import UserRepository
-from my_tutor.exceptions import StudentNotFoundError, StudentSaveImageError, StudentAlreadyExistError, StudentPhoneAlreadyExistError
-from my_tutor.models import UserModel, StudentModel, StudyingModel, ThemeStatusModel, ThemeModel
+from my_tutor.exceptions import (
+    StudentNotFoundError,
+    StudentSaveImageError,
+    StudentAlreadyExistError,
+    StudentPhoneAlreadyExistError
+)
+from my_tutor.models import (
+    UserModel,
+    StudentModel,
+    StudyingModel,
+    ThemeStatusModel,
+    ThemeModel
+)
 from my_tutor.schemes import (
     AddStudentRequest,
     AddStudentResponse,
@@ -23,7 +34,13 @@ from my_tutor.schemes import (
     UpdateStudentRequest,
     UpdateStudentResponse
 )
-from my_tutor.domain import StudentInfo, Student, StudentOption, ThemeStudyingStatus
+from my_tutor.domain import (
+    StudentInfo,
+    Student,
+    StudentOption,
+    ThemeStudyingStatus,
+    StudentId
+)
 
 
 user_repository = UserRepository()
@@ -44,6 +61,7 @@ MONTHS = (
 
 
 class StudentRepository:
+    _student_id = StudentId
     _student = Student
     _student_option = StudentOption
     _info_domain = StudentInfo
@@ -63,6 +81,13 @@ class StudentRepository:
     _update_student_image_response = UpdateStudentImageResponse
     _default_male_image_path = "/storage/users/male_default_image.jpg"
     _default_female_image_path = "/storage/users/female_default_image.jpg"
+
+    def _to_student_id(self, student_model: StudentModel) -> StudentId:
+
+        return self._student_id(
+            student_id=student_model.student_id,
+            message="Ваш идентификатор студента успешно получен"
+        )
 
     def _to_student(self, student_model: StudentModel) -> Student:
 
@@ -182,6 +207,14 @@ class StudentRepository:
             raise StudentNotFoundError
 
         return student_model
+
+    async def get_my_student_id(self, session: AsyncSession, user_id: int) -> StudentId:
+        student_model = (await session.execute(select(self._student_model).filter_by(user_id=user_id))).scalars().first()
+
+        if not student_model:
+            raise StudentNotFoundError
+
+        return self._to_student_id(student_model=student_model)
 
     async def get_students(self, session: AsyncSession) -> list[Student]:
         students_models = (await session.execute(select(self._student_model).order_by(self._student_model.second_name, self._student_model.first_name))).scalars().all()

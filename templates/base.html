@@ -50,7 +50,7 @@
                                 <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                     <img src="{{ user.img_path }}" alt="Err" width="50" height="50" style="object-fit: cover; image-rendering: crisp-edges; border: 1px solid #B4D8FA;" class="rounded-circle" id="user-image">
                                 </a>
-                                <ul class="dropdown-menu text-small">
+                                <ul class="dropdown-menu text-small" style="background: #B4B7FA" id="user-dropdown-menu">
                                     <li><h6 class="dropdown-header">{{ user.role }}</h6></li>
                                     <li><hr class="dropdown-divider"></li>
                                     {% if user.role == "Администратор" %}

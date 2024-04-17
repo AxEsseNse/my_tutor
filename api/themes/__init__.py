@@ -8,5 +8,6 @@ from .delete_theme_card import delete_theme_card
 from .update_theme_card import update_theme_card
 from .get_exam_themes import get_exam_themes, get_exam_themes_options
 from .update_theme_student_answers import update_theme_student_answers
+from .update_theme_student_progress import update_theme_student_progress
 from .get_theme_cards import get_theme_cards
 from .upload_image import theme_upload_image

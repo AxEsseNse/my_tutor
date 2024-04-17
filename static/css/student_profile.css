@@ -27,13 +27,13 @@
 .profile-button {
     color: black;
     background-color: #B4B7FA;
+    transition: background-color 0.15s ease-in-out;
 }
-.profile-button:hover {
-    background-color: #F6E6AE;
-}
+.profile-button:hover,
 .profile-button:focus-visible {
     background-color: #F6E6AE;
 }
+
 .profile-button-mini {
     width: 50px;
     height: 50px;
@@ -64,10 +64,9 @@
     width: 50px;
     height: 50px;
     padding-left: 13px;
+    transition: background-color 0.15s ease-in-out;
 }
-.table-controller:hover {
-    background-color: #F6E6AE;
-}
+.table-controller:hover,
 .table-controller:focus-visible {
     background-color: #F6E6AE;
 }

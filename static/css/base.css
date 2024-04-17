@@ -107,6 +107,12 @@ body {
 #header-user-dropdown {
     margin-top: 10px;
 }
+#user-dropdown-menu {
+    background: #B4B7FA;
+}
+#user-dropdown-menu .dropdown-item:hover {
+    background: #B4D8FA;
+}
 
 #user-login {
     margin-top: 15px;
@@ -121,6 +127,8 @@ body {
 }
 
 #content {
+    max-height: calc(100vh - 130px - 1px);
+    overflow-y: auto;
     height: calc(100vh - 130px);
     background: #B4D8FA;
 }
@@ -165,7 +173,7 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-    background: #4A918B;
+    background: #B4B7FA;
 }
 
 ::-webkit-scrollbar-thumb {

@@ -17,8 +17,10 @@ from .students import (
     update_student,
     update_student_image,
     get_students,
+    get_students_options,
     add_student,
     delete_student,
+    get_my_student_id,
     get_student_progress
 )
 from .themes import (
@@ -33,6 +35,7 @@ from .themes import (
     get_exam_themes,
     get_exam_themes_options,
     update_theme_student_answers,
+    update_theme_student_progress,
     get_theme_cards,
     theme_upload_image
 )

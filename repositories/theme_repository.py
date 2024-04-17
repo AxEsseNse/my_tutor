@@ -1,6 +1,8 @@
 import aiofiles
 import os
+from datetime import datetime
 from random import choice
+from zoneinfo import ZoneInfo
 
 from fastapi import UploadFile
 from pydantic import ValidationError
@@ -14,9 +16,11 @@ from my_tutor.exceptions import (
     ThemeCardNotFoundError,
     LessonNotFoundError,
     SaveImageError,
-    DeleteImageError
+    DeleteImageError,
+    StudentNotFoundError,
+    ThemeProgressFoundError
 )
-from my_tutor.models import ThemeModel, StudyingModel, LessonModel
+from my_tutor.models import ThemeModel, StudyingModel, LessonModel, StudentModel
 from my_tutor.schemes import (
     AddThemeRequest,
     AddThemeResponse,
@@ -34,14 +38,23 @@ from my_tutor.schemes import (
     UpdateThemeCardResponse,
     UpdateStudentAnswersRequest,
     UpdateStudentAnswersResponse,
+    UpdateStudentProgressRequest,
+    UpdateStudentProgressResponse,
     UploadImageResponse
 )
 from my_tutor.domain import Theme, ThemeInfo, Lesson, CardTheory, CardPractice, CardPracticeTip, ThemeOption
 
 
+
+moscow_tz = ZoneInfo('Europe/Moscow')
 RUS_EXAMS = {
     1: "ЕГЭ",
     2: "ОГЭ"
+}
+THEME_STATUSES = {
+    1: "Запланировано",
+    2: "Изучено",
+    3: "В процессе"
 }
 VARIABLE_SYMBOLS = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
                     'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
@@ -60,6 +73,7 @@ class ThemeRepository:
     _material_practice = CardPractice
     _material_practice_tip = CardPracticeTip
     _theme_option = ThemeOption
+    _student_model = StudentModel
     _theme_model = ThemeModel
     _lesson_model = LessonModel
     _studying_model = StudyingModel
@@ -67,10 +81,13 @@ class ThemeRepository:
     _delete_theme_response = DeleteThemeResponse
     _update_theme_response = UpdateThemeResponse
     _update_theme_student_answers_response = UpdateStudentAnswersResponse
+    _update_theme_student_progress_response = UpdateStudentProgressResponse
     _add_theme_card_response = AddThemeCardResponse
     _delete_theme_card_response = DeleteThemeCardResponse
     _update_theme_card_response = UpdateThemeCardResponse
     _upload_image_response = UploadImageResponse
+    _date_pattern = "%Y-%m-%d"
+    _date_pattern_response = "%d.%m.%Y"
     _default_tip_image_path = "/storage/themes/default_image/default_tip_image.jpg"
     _default_theory_image_path = "/storage/themes/default_image/default_theory_image.jpg"
     _default_practice_image_path = "/storage/themes/default_image/default_practice_image.jpg"
@@ -142,6 +159,19 @@ class ThemeRepository:
         return self._update_theme_student_answers_response(
             message="Новые ответы студента успешно сохранены"
         )
+
+    def _to_update_theme_student_progress_response(self, studying_model: StudyingModel | None = None) -> UpdateStudentProgressResponse:
+        if studying_model:
+            return self._update_theme_student_progress_response(
+                status=THEME_STATUSES[studying_model.theme_status_id],
+                date=datetime.strftime(studying_model.date.astimezone(moscow_tz), self._date_pattern_response),
+                message="Статус изучения темы изменен"
+            )
+        return self._update_theme_student_progress_response(
+                status="Не изучалось",
+                date="",
+                message="Прогресс изучения темы обнулен"
+            )
 
     def _to_add_theme_card_response(self, theme_model: ThemeModel) -> AddThemeCardResponse:
 
@@ -282,7 +312,54 @@ class ThemeRepository:
 
         return self._to_update_theme_student_answers_response()
 
-    #async def get_theme_cards(self, session: AsyncSession, theme_id: int) -> dict[int, CardTheory | CardPractice]:
+    async def update_theme_student_progress(self, session: AsyncSession, theme_data: UpdateStudentProgressRequest) -> UpdateStudentProgressResponse:
+        if not theme_data.status:
+            studying_model = (await session.execute(
+                select(self._studying_model).filter_by(theme_id=theme_data.theme_id,
+                                                       student_id=theme_data.student_id))).scalars().first()
+            if studying_model:
+                await session.delete(studying_model)
+
+            return self._to_update_theme_student_progress_response()
+
+        if theme_data.date:
+            aware_datetime = datetime.strptime(theme_data.date, self._date_pattern).replace(tzinfo=moscow_tz)
+        else:
+            aware_datetime = datetime.now(moscow_tz)
+
+        studying_model = (await session.execute(
+            select(self._studying_model).filter_by(theme_id=theme_data.theme_id,
+                                                   student_id=theme_data.student_id))).scalars().first()
+
+        if not studying_model:
+            theme_model = (
+                await session.execute(
+                    select(self._theme_model).filter_by(theme_id=theme_data.theme_id))).scalars().first()
+
+            if not theme_model:
+                raise ThemeNotFoundError
+
+            student_model = (
+                await session.execute(select(self._student_model).filter_by(student_id=theme_data.student_id))).scalars().first()
+
+            if not student_model:
+                raise StudentNotFoundError
+
+            studying_model = self._studying_model(
+                student_id=theme_data.student_id,
+                theme_id=theme_data.theme_id,
+                date=aware_datetime,
+                theme_status_id=theme_data.status,
+                progress_cards=dict()
+            )
+        else:
+            studying_model.theme_status_id = theme_data.status
+            studying_model.date = aware_datetime
+
+        session.add(studying_model)
+
+        return self._to_update_theme_student_progress_response(studying_model=studying_model)
+
     async def get_theme_cards(self, session: AsyncSession, theme_id: int) -> list[CardTheory | CardPractice]:
         theme_model = (await session.execute(select(self._theme_model).filter_by(theme_id=theme_id))).scalars().first()
 

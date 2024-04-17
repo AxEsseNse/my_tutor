@@ -29,3 +29,7 @@ from .update_theme_student_answers import (
     UpdateStudentAnswersResponse
 )
 from .upload_image import UploadImageResponse
+from .update_theme_student_progress import (
+    UpdateStudentProgressRequest,
+    UpdateStudentProgressResponse
+)

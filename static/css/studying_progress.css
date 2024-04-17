@@ -1,9 +1,11 @@
-/*#content {
-    background: #4A918B;
-}
-*/
 .progress-content {
     margin-top: 20px;
+}
+.select-settings {
+    width: 30%
+}
+.label-settings {
+    width: 30%;
 }
 #text-start {
     margin-top: 200px;
@@ -19,38 +21,67 @@
     display: none
 }
 
-
 .btn-exam{
     display: inline-block;
-    width: 250px;
-    height: 60px;
+    width: 230px;
+    height: 45px;
     padding: 2px 8px;
-    margin-right: 10px;
+    margin-left: 10px;
     font-size: 20px;
     color: black;
     font-weight: 500;
-    background-color: #14A9A5;
-    border: 5px solid #F6E6AE;
-    border-radius: 30px;
+    background-color: #B4B7FA;
     text-align: center;
     vertical-align: middle;
     text-decoration: none;
     cursor: default;
     white-space: nowrap;
     user-select: none;
-    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    transition: background-color 0.15s ease-in-out
 }
-.btn-exam:hover {
-    background-color: #F6E6AE;
-    border-color: #14A9A5;
-    outline: 0;
-    box-shadow: 0 0 0 0.2rem #F6E6AE;
-}
+.btn-exam:hover,
 .btn-exam:focus-visible {
     background-color: #F6E6AE;
-    border-color: #14A9A5;
-    outline: 0;
-    box-shadow: 0 0 0 0.2rem #F6E6AE;
+}
+
+.theme-status {
+    display: inline-block;
+    padding: 2px 8px;
+    width: 45px;
+    height: 45px;
+    font-weight: 400;
+    color: #F6E6AE;
+    border: 5px solid #B4B7FA;
+    border-radius: 30px;
+    text-align: center;
+    vertical-align: middle;
+    text-decoration: none;
+    cursor: default;
+    user-select: none;
+    font-size: 20px;
+}
+.theme-done {
+    background-color: #72E179;
+}
+.theme-process {
+    background-color: #72E179;
+}
+.theme-planned {
+    background-color: #1E90FF;
+}
+.theme-undone {
+    background-color: #E68B8F;
+}
+
+.table-controller {
+    background-color: #B4B7FA;
+    width: 45px;
+    height: 45px;
+    padding-left: 10px;
+}
+.table-controller:hover,
+.table-controller:focus-visible {
+    background-color: #F6E6AE;
 }
 
 .table {

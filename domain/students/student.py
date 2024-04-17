@@ -32,3 +32,8 @@ class StudentInfo(BaseModel):
 class StudentOption(BaseModel):
     id: int
     name: str
+
+
+class StudentId(BaseModel):
+    student_id: int
+    message: str

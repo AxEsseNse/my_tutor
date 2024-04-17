@@ -3,5 +3,6 @@ from .theme import (
     ThemeAlreadyExistError,
     ThemeCardNotFoundError,
     SaveImageError,
-    DeleteImageError
+    DeleteImageError,
+    ThemeProgressFoundError
 )

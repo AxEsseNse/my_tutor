@@ -1,0 +1,102 @@
+<div
+    class="modal fade bd-example-modal-lg custom-modal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="modal-theme-progress-update"
+    aria-hidden="true"
+    id="modal-theme-progress-update"
+>
+    <div class="modal-dialog modal-md">
+        <div class="modal-content custom-modal-body">
+            <!-- Header окна изменения прогресса студента -->
+            <div class="modal-header">
+                <h5 class="modal-title">Личная информация</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="modal-body">
+                <form class="needs-validation" id="theme-progress-update-form" novalidate>
+                    <!-- ID студента -->
+                    <div class="form-group row mt-2 mb-2">
+                        <label class="col-4 col-form-label" for="theme-progress-update-form-student-id">ID студента</label>
+                        <div class="col-8">
+                            <input class="form-control disabled-input" type="text" id="theme-progress-update-form-student-id" disabled />
+                        </div>
+                    </div>
+                    <!-- Имя студента -->
+                    <div class="form-group row mt-2 mb-2">
+                        <label class="col-4 col-form-label" for="theme-progress-update-form-name">Студент</label>
+                        <div class="col-8">
+                            <input class="form-control disabled-input" type="text" id="theme-progress-update-form-name" disabled />
+                        </div>
+                    </div>
+                    <!-- Номер задания -->
+                    <div class="form-group row mt-2 mb-2">
+                        <label class="col-4 col-form-label" for="theme-progress-update-form-task-number">№ Задания</label>
+                        <div class="col-8">
+                            <input class="form-control disabled-input" type="text" id="theme-progress-update-form-task-number" disabled />
+                        </div>
+                    </div>
+                    <!-- Тема -->
+                    <div class="form-group row mb-1">
+                        <label class="col-3 col-form-label" for="theme-progress-update-form-title">Тема</label>
+                        <div class="col-9">
+                            <textarea
+                                class="form-control disabled-input"
+                                id="theme-progress-update-form-title"
+                                style="height: 120px"
+                                disabled
+                            ></textarea>
+                        </div>
+                    </div>
+                    <!-- Описание темы -->
+                    <div class="form-group row mb-1">
+                        <label class="col-3 col-form-label" for="theme-progress-update-form-descr">Описание</label>
+                        <div class="col-9">
+                            <textarea
+                                class="form-control disabled-input"
+                                id="theme-progress-update-form-descr"
+                                style="height: 330px"
+                                disabled
+                            ></textarea>
+                        </div>
+                    </div>
+                    <!-- Выбор статуса темы -->
+                    <div class="input-group mb-3">
+                        <label class="input-group-text" for="theme-progress-update-form-status">Статус</label>
+                        <select class="form-select" id="theme-progress-update-form-status">
+                            <option value="0">Не изучалось</option>
+                            <option value="1">Запланировано</option>
+                            <option value="3">В процессе</option>
+                            <option value="2">Изучено</option>
+                        </select>
+                    </div>
+                    <!-- Выбор даты -->
+                    <div class="form-group row mb-1">
+                        <label class="col-6 col-form-label" for="theme-progress-update-form-date">Последнее занятие</label>
+                        <div class="col-1"></div>
+                        <div class="col-5">
+                            <input type="date" class="form-control" id="theme-progress-update-form-date" required />
+                        </div>
+                    </div>
+                    <!-- Поле ответа сервера -->
+                    <hr />
+
+                    <div class="form-group row mt-2 mb-2 align-items-center">
+                        <label class="col-3 col-form-label" for="theme-progress-update-form-flash-msg">
+                            <strong>Feedback</strong>
+                        </label>
+                        <div class="col-9" id="theme-progress-update-form-flash-msg"></div>
+                    </div>
+
+                    <hr />
+                    <!-- Поле кнопки отправки формы -->
+                    <div class="text-center">
+                        <button type="button" class="btn profile-button" id="theme-progress-update-form-button">
+                            Применить изменения
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

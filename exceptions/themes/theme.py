@@ -1,4 +1,4 @@
-__all__ = ["ThemeNotFoundError", "ThemeAlreadyExistError", "ThemeCardNotFoundError", "SaveImageError", "DeleteImageError"]
+__all__ = ["ThemeNotFoundError", "ThemeAlreadyExistError", "ThemeCardNotFoundError", "SaveImageError", "DeleteImageError", "ThemeProgressFoundError"]
 
 
 class ThemeNotFoundError(Exception):
@@ -19,3 +19,7 @@ class SaveImageError(Exception):
 
 class DeleteImageError(Exception):
     message = "Ошибка удаления изображения из хранилища"
+
+
+class ThemeProgressFoundError(Exception):
+    message = "Данная тема не изучалась учеником"

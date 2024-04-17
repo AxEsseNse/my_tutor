@@ -51,39 +51,6 @@
 .label-position {
     width: 50%;
 }
-#rsend-card-data-to-server-button {
-    margin-left: 10px;
-    width: 300px;
-    height: 70px;
-    padding: 2px 8px;
-    font-size: 26px;
-    color: black;
-    background-color: #F6E6AE;
-    font-weight: 400;
-    border: 5px solid #14A9A5;
-    border-radius: 20px;
-    text-align: center;
-    vertical-align: middle;
-    text-decoration: none;
-    cursor: default;
-    white-space: nowrap;
-    user-select: none;
-    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-}
-#rsend-card-data-to-server-button:hover {
-    background-color: #F6E6AE;
-    border-color: #14A9A5;
-    color: black;
-    outline: 0;
-    box-shadow: 0 0 0 0.4rem #F6E6AE;
-}
-#rsend-card-data-to-server-button:focus-visible {
-    background-color: #F6E6AE;
-    border-color: #14A9A5;
-    color: black;
-    outline: 0;
-    box-shadow: 0 0 0 0.4rem #F6E6AE;
-}
 .send-field {
     display: flex;
     width: 100%;
