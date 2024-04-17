@@ -51,12 +51,20 @@ class Controller {
     setStudentsSelectOptions(students) {
         this.selectStudent.innerHTML = ""
 
+        const emptyOption = document.createElement('option')
+        emptyOption.value = ""
+        emptyOption.hidden = true
+        emptyOption.disabled = true
+        emptyOption.innerText = "Выберите студента"
+        this.selectStudent.append(emptyOption)
+
         for (let student of students) {
             const option = document.createElement('option')
             option.value = student.id
             option.textContent = student.name
             this.selectStudent.appendChild(option)
         }
+        this.selectStudent.options[0].selected = true
     }
 
     chooseStudent(studentId) {
