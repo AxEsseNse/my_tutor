@@ -19,7 +19,7 @@
 .list-menu li{
 	margin-top: 10px;
 }
-.list-menu a{
+.list-menu-item{
     text-decoration: none;
     font-family: Georgia;
 	font-size: 20px;
