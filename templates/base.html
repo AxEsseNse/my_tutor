@@ -29,9 +29,11 @@
                     <a href="/presentation"><strong>Об обучении</strong></a>
                     <a href="/reviews"><strong>Отзывы</strong></a>
                     {% if user.role and user.current_lesson_id != None %}
-                        <button type="button" class="lesson-enter-button" onclick="joinToLesson({{user.current_lesson_id}})">
-                            Войти на урок
-                        </button>
+                        <a href="/lesson/{{ user.current_lesson_id }}">
+                            <button type="button" class="lesson-enter-button" onclick="joinToLesson({{user.current_lesson_id}})">
+                                Войти на урок
+                            </button>
+                        </a>
                     {% endif %}
                 </div>
             </div>
