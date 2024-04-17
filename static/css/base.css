@@ -157,6 +157,21 @@ body {
     font-size: 20px;
     font-family: Georgia;
 }
+#btn-show-contact {
+    width: 120px;
+    height: 40px;
+    font-size: 18px;
+    background: #F6E6AE;
+    color: black;
+    outline: none;
+    border: 3px solid #B4B7FA;
+    border-radius: 8px;
+    transition: background-color 0.15s ease-in-out
+}
+#btn-show-contact:hover,
+#btn-show-contact:focus-visible {
+    background: #B4D8FA;
+}
 
 .flash-msg-success {
   color: #228B22;
