@@ -66,10 +66,15 @@ async def reviews(request: Request, authorized_user=Depends(get_authorized_user)
 
 
 async def users_list(request: Request, authorized_user=Depends(get_authorized_user)):
-    if authorized_user is None:
-        return RedirectResponse(LOGIN_URL)
-    if authorized_user.role != "Администратор":
-        return RedirectResponse(LOGIN_URL)
+    if authorized_user is None or authorized_user.role != "Администратор":
+        return templates.TemplateResponse(
+            "not_authorized.html",
+            {
+                "request": request,
+                "title": "Ошибка авторизации",
+                "user": authorized_user
+            }
+        )
     return templates.TemplateResponse(
         "users_list.html",
         {
@@ -81,10 +86,15 @@ async def users_list(request: Request, authorized_user=Depends(get_authorized_us
 
 
 async def tutors_list(request: Request, authorized_user=Depends(get_authorized_user)):
-    if authorized_user is None:
-        return RedirectResponse(LOGIN_URL)
-    if authorized_user.role != "Администратор":
-        return RedirectResponse(LOGIN_URL)
+    if authorized_user is None or authorized_user.role != "Администратор":
+        return templates.TemplateResponse(
+            "not_authorized.html",
+            {
+                "request": request,
+                "title": "Ошибка авторизации",
+                "user": authorized_user
+            }
+        )
     return templates.TemplateResponse(
         "tutors_list.html",
         {
@@ -96,10 +106,15 @@ async def tutors_list(request: Request, authorized_user=Depends(get_authorized_u
 
 
 async def students_list(request: Request, authorized_user=Depends(get_authorized_user)):
-    if authorized_user is None:
-        return RedirectResponse(LOGIN_URL)
-    if authorized_user.role != "Администратор":
-        return RedirectResponse(LOGIN_URL)
+    if authorized_user is None or authorized_user.role != "Администратор":
+        return templates.TemplateResponse(
+            "not_authorized.html",
+            {
+                "request": request,
+                "title": "Ошибка авторизации",
+                "user": authorized_user
+            }
+        )
     return templates.TemplateResponse(
         "students_list.html",
         {
@@ -111,10 +126,15 @@ async def students_list(request: Request, authorized_user=Depends(get_authorized
 
 
 async def themes_list(request: Request, authorized_user=Depends(get_authorized_user)):
-    if authorized_user is None:
-        return RedirectResponse(LOGIN_URL)
-    if authorized_user.role != "Администратор":
-        return RedirectResponse(LOGIN_URL)
+    if authorized_user is None or authorized_user.role != "Администратор":
+        return templates.TemplateResponse(
+            "not_authorized.html",
+            {
+                "request": request,
+                "title": "Ошибка авторизации",
+                "user": authorized_user
+            }
+        )
     return templates.TemplateResponse(
         "themes_list.html",
         {
@@ -126,10 +146,15 @@ async def themes_list(request: Request, authorized_user=Depends(get_authorized_u
 
 
 async def theme_cards(request: Request, authorized_user=Depends(get_authorized_user)):
-    if authorized_user is None:
-        return RedirectResponse(LOGIN_URL)
-    if authorized_user.role != "Администратор":
-        return RedirectResponse(LOGIN_URL)
+    if authorized_user is None or authorized_user.role != "Администратор":
+        return templates.TemplateResponse(
+            "not_authorized.html",
+            {
+                "request": request,
+                "title": "Ошибка авторизации",
+                "user": authorized_user
+            }
+        )
     return templates.TemplateResponse(
         "theme_card.html",
         {
@@ -142,7 +167,14 @@ async def theme_cards(request: Request, authorized_user=Depends(get_authorized_u
 
 async def join_lesson(request: Request, lesson_id: int, access: LessonAccess = Depends(check_access), authorized_user=Depends(get_authorized_user)):
     if authorized_user is None:
-        return RedirectResponse(LOGIN_URL)
+        return templates.TemplateResponse(
+            "not_authorized.html",
+            {
+                "request": request,
+                "title": "Ошибка авторизации",
+                "user": authorized_user
+            }
+        )
     match access:
         case LessonAccess.AVAILABLE:
             return templates.TemplateResponse(
@@ -155,7 +187,14 @@ async def join_lesson(request: Request, lesson_id: int, access: LessonAccess = D
                 }
             )
         case LessonAccess.NOT_AUTHORIZED:
-            raise HTTPException(status_code=401, detail="Не авторизован")
+            return templates.TemplateResponse(
+                "not_authorized.html",
+                {
+                    "request": request,
+                    "title": "Ошибка авторизации",
+                    "user": authorized_user
+                }
+            )
         case LessonAccess.NOT_AVAILABLE:
             raise HTTPException(status_code=403, detail="В данный момент ресурс не доступен")
         case LessonAccess.ERROR:
@@ -163,10 +202,15 @@ async def join_lesson(request: Request, lesson_id: int, access: LessonAccess = D
 
 
 async def tutor_profile(request: Request, authorized_user=Depends(get_authorized_user)):
-    if authorized_user is None:
-        return RedirectResponse(LOGIN_URL)
-    if authorized_user.role == "Студент":
-        return RedirectResponse(LOGIN_URL)
+    if authorized_user is None or authorized_user.role == "Студент":
+        return templates.TemplateResponse(
+            "not_authorized.html",
+            {
+                "request": request,
+                "title": "Ошибка авторизации",
+                "user": authorized_user
+            }
+        )
     return templates.TemplateResponse(
         "tutor_profile.html",
         {
@@ -179,7 +223,14 @@ async def tutor_profile(request: Request, authorized_user=Depends(get_authorized
 
 async def student_profile(request: Request, authorized_user=Depends(get_authorized_user)):
     if authorized_user is None:
-        return RedirectResponse(LOGIN_URL)
+        return templates.TemplateResponse(
+            "not_authorized.html",
+            {
+                "request": request,
+                "title": "Ошибка авторизации",
+                "user": authorized_user
+            }
+        )
     return templates.TemplateResponse(
         "student_profile.html",
         {
@@ -192,7 +243,14 @@ async def student_profile(request: Request, authorized_user=Depends(get_authoriz
 
 async def studying_progress(request: Request, authorized_user=Depends(get_authorized_user)):
     if authorized_user is None:
-        return RedirectResponse(LOGIN_URL)
+        return templates.TemplateResponse(
+            "not_authorized.html",
+            {
+                "request": request,
+                "title": "Ошибка авторизации",
+                "user": authorized_user
+            }
+        )
     return templates.TemplateResponse(
         "studying_progress.html",
         {
@@ -205,7 +263,14 @@ async def studying_progress(request: Request, authorized_user=Depends(get_author
 
 async def lesson_history(request: Request, authorized_user=Depends(get_authorized_user)):
     if authorized_user is None:
-        return RedirectResponse(LOGIN_URL)
+        return templates.TemplateResponse(
+            "not_authorized.html",
+            {
+                "request": request,
+                "title": "Ошибка авторизации",
+                "user": authorized_user
+            }
+        )
     return templates.TemplateResponse(
         "lesson_history.html",
         {
