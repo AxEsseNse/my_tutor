@@ -18,18 +18,17 @@ body {
     height: 50px;
 }
 .header-menu-item-button {
-    margin-top: 10px;
+    margin-top: 8px;
     width: 200px;
-    height: 40px;
-    height: 50px;
+    height: 52px;
     font-size: 24px;
     color: black;
     background-color: #B4D8FA;
     font-weight: 500;
-    border-top: 3px solid #14A9A5;
+    border-top: 6px solid #14A9A5;
     border-left: 3px solid #14A9A5;
     border-right: 3px solid #14A9A5;
-    border-bottom: 3px solid #B4B7FA;
+    border-bottom: 5px solid #B4B7FA;
     border-radius: 20px;
     vertical-align: middle;
     text-decoration: none;
@@ -40,15 +39,17 @@ body {
 }
 .header-menu-item-button:hover,
 .header-menu-item-button:focus-visible {
-    background-color: #F6E6AE;
-    border-bottom: 3px solid #F6E6AE;
+    border-top: 6px solid #F6E6AE;
+    border-left: 3px solid #F6E6AE;
+    border-right: 3px solid #F6E6AE;
+    border-bottom: 5px solid #B4D8FA;
 }
 .active-header-menu-item-button {
     background-color: #B4D8FA;
-    border-top: 3px solid #F6E6AE;
+    border-top: 6px solid #F6E6AE;
     border-left: 3px solid #F6E6AE;
     border-right: 3px solid #F6E6AE;
-    border-bottom: 3px solid #B4D8FA;
+    border-bottom: 5px solid #B4D8FA;
 }
 .lesson-enter-button {
     margin-left: 50px;
