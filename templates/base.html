@@ -14,7 +14,7 @@
 <body>
     <!-- Header -->
     <div class="container-fluid" id="header">
-        <div class="row" id="header-row">
+        <div class="row align-items-center" id="header-row">
             <!--Logo-->
             <div class="col-1" id="header-logo">
                 <a href="/">
@@ -78,15 +78,16 @@
             </div>
             {% else %}
             <div class="col-3 text-end" id="user-login">
-                <button
-                class="btn btn-sm btn-info"
-                type="button"
-                title="Авторизация"
-                id="btn-login"
-                onclick="logIn()"
-                >
-                    Войти в систему
-                </button>
+                <a href="/login">
+                    <button
+                    class="btn-login"
+                    type="button"
+                    title="Авторизация"
+                    id="btn-login"
+                    >
+                        Войти в систему
+                    </button>
+                </a>
             </div>
             {% endif %}
         </div>

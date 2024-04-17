@@ -90,6 +90,22 @@ body {
 #header-main-menu a:hover{
     color:#E6E39C;
 }
+
+.btn-login {
+    font-size: 24px;
+    width: 220px;
+    height: 45px;
+    padding-bottom: 5px;
+    margin-top: 0px;
+    margin-right: 10px;
+    background-color: #F6E6AE;
+    border: 3px solid #B4D8FA;
+    border-radius: 10px;
+}
+.btn-login:hover {
+    background-color: #B4D8FA;
+    border-color: #F6E6AE;
+}
 #header-user,
 #header-user .row,
 #header-user .row #header-user-name {
@@ -112,18 +128,6 @@ body {
 }
 #user-dropdown-menu .dropdown-item:hover {
     background: #B4D8FA;
-}
-
-#user-login {
-    margin-top: 15px;
-    margin-right: 0px;
-}
-#btn-login {
-    min-width: 200px;
-    background-color: #4A918B;
-}
-#btn-login:hover {
-    background-color: #14A9A5;
 }
 
 #content {
