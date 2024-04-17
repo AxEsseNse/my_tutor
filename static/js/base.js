@@ -66,11 +66,6 @@ function setTodayDate() {
     document.getElementById('lesson-add-form-date').value = today
 }
 
-function joinToLesson(lessonId) {
-    window.location.href = `/lesson/${lessonId}`
-}
-
-
 class PasswordFormUpdate {
     constructor() {
         this.inputCurrentPassword = document.getElementById('user-update-password-form-current-password')

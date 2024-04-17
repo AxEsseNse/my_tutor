@@ -30,7 +30,7 @@
                     <a href="/reviews"><strong>Отзывы</strong></a>
                     {% if user.role and user.current_lesson_id != None %}
                         <a href="/lesson/{{ user.current_lesson_id }}">
-                            <button type="button" class="lesson-enter-button" onclick="joinToLesson({{user.current_lesson_id}})">
+                            <button type="button" class="lesson-enter-button">
                                 Войти на урок
                             </button>
                         </a>
