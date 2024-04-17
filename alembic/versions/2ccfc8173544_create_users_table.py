@@ -5,6 +5,7 @@ Revises:
 Create Date: 2024-01-04 20:58:23.129531
 
 """
+from os import getenv
 from typing import Sequence, Union
 
 from alembic import op
@@ -18,6 +19,7 @@ down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
+app_type = getenv('APPTYPE', 'development')
 BEGIN_ADMIN_LOGIN = "admin"
 BEGIN_ADMIN_SECRET = "WDxIAs1kUrFaib45e3494e3fa2038e87fbba8b0cf3c50"
 BEGIN_TEST_TUTOR_LOGIN = "axessense"
@@ -55,6 +57,38 @@ def upgrade() -> None:
     )
 
     connection = op.get_bind()
+    if app_type == 'development':
+        upgrade_development(connection)
+    else:
+        upgrade_product(connection)
+
+
+def downgrade() -> None:
+    op.drop_table("user_tokens")
+    op.drop_table("users")
+    op.drop_table("roles")
+
+    op.execute(sa.schema.DropSequence(sa.Sequence("users_user_id_seq")))
+    op.execute(sa.schema.DropSequence(sa.Sequence("roles_role_id_seq")))
+
+
+def upgrade_product(connection) -> None:
+    #  Добавление ролей в таблицу ролей
+    connection.execute(
+        sa.text(
+            """INSERT INTO "roles" (title) VALUES ('Администратор'), ('Преподаватель'), ('Ученик')"""
+        )
+    )
+    #  Регистрация первой учетной записи администратора
+    connection.execute(
+        sa.text(
+            """INSERT INTO "users" (login, secret, role_id, have_profile) VALUES (:login, :secret, 1, False)"""
+        ),
+        dict(login=BEGIN_ADMIN_LOGIN, secret=BEGIN_ADMIN_SECRET)
+    )
+
+
+def upgrade_development(connection) -> None:
     # Добавление роли "Администратор" и регистрация первой учетной записи администратора
     connection.execute(
         sa.text(
@@ -97,12 +131,3 @@ def upgrade() -> None:
         ),
         dict(login=BEGIN_TEST_STUDENT_LOGIN, secret=BEGIN_TEST_STUDENT_SECRET, role_id=student_role_id)
     )
-
-
-def downgrade() -> None:
-    op.drop_table("user_tokens")
-    op.drop_table("users")
-    op.drop_table("roles")
-
-    op.execute(sa.schema.DropSequence(sa.Sequence("users_user_id_seq")))
-    op.execute(sa.schema.DropSequence(sa.Sequence("roles_role_id_seq")))

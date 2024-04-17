@@ -5,6 +5,7 @@ Revises: 2ccfc8173544
 Create Date: 2024-01-17 02:13:06.402886
 
 """
+from os import getenv
 from typing import Sequence, Union
 from datetime import datetime
 
@@ -18,6 +19,7 @@ down_revision: Union[str, None] = '2ccfc8173544'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
+app_type = getenv('APPTYPE', 'development')
 TEST_TUTOR_USER_ID = 2
 TEST_STUDENT_USER_ID = 3
 
@@ -49,8 +51,10 @@ def upgrade() -> None:
     )
     op.create_table(
         "students",
-        sa.Column("student_id", sa.Integer(), student_id_seq, primary_key=True, server_default=student_id_seq.next_value()),
-        sa.Column("user_id", sa.Integer(), sa.ForeignKey("users.user_id", ondelete="CASCADE"), unique=True, nullable=False),
+        sa.Column("student_id", sa.Integer(), student_id_seq, primary_key=True,
+                  server_default=student_id_seq.next_value()),
+        sa.Column("user_id", sa.Integer(), sa.ForeignKey("users.user_id", ondelete="CASCADE"), unique=True,
+                  nullable=False),
         sa.Column("first_name", sa.String(length=15), nullable=False),
         sa.Column("second_name", sa.String(length=25), nullable=False),
         sa.Column("gender", sa.String()),
@@ -64,7 +68,8 @@ def upgrade() -> None:
     )
     op.create_table(
         "parents",
-        sa.Column("parent_id", sa.Integer(), parent_id_seq, primary_key=True, server_default=parent_id_seq.next_value()),
+        sa.Column("parent_id", sa.Integer(), parent_id_seq, primary_key=True,
+                  server_default=parent_id_seq.next_value()),
         sa.Column("student_id", sa.Integer(), sa.ForeignKey("students.student_id", ondelete="CASCADE"), nullable=False),
         sa.Column("status", sa.String(length=6), nullable=False),
         sa.Column("first_name", sa.String(length=15), nullable=False),
@@ -75,6 +80,21 @@ def upgrade() -> None:
         sa.Column("node", sa.String())
     )
 
+    if app_type == 'development':
+        upgrade_development()
+
+
+def downgrade() -> None:
+    op.drop_table("parents")
+    op.drop_table("students")
+    op.drop_table("tutors")
+
+    op.execute(sa.schema.DropSequence(sa.Sequence("parents_parent_id_seq")))
+    op.execute(sa.schema.DropSequence(sa.Sequence("students_student_id_seq")))
+    op.execute(sa.schema.DropSequence(sa.Sequence("tutors_tutor_id_seq")))
+
+
+def upgrade_development() -> None:
     connection = op.get_bind()
     # Добавление профиля преподавателя первой учетной записи преподавателя
     roman_birthday = datetime.utcnow()
@@ -114,13 +134,3 @@ def upgrade() -> None:
         ),
         dict(student_id=student_id)
     )
-
-
-def downgrade() -> None:
-    op.drop_table("parents")
-    op.drop_table("students")
-    op.drop_table("tutors")
-
-    op.execute(sa.schema.DropSequence(sa.Sequence("parents_parent_id_seq")))
-    op.execute(sa.schema.DropSequence(sa.Sequence("students_student_id_seq")))
-    op.execute(sa.schema.DropSequence(sa.Sequence("tutors_tutor_id_seq")))

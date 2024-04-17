@@ -5,6 +5,7 @@ Revises: f73374f24848
 Create Date: 2024-02-07 15:41:34.388654
 
 """
+from os import getenv
 from typing import Sequence, Union
 from datetime import datetime
 
@@ -18,6 +19,7 @@ down_revision: Union[str, None] = 'f73374f24848'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
+app_type = getenv('APPTYPE', 'development')
 TEST_STUDENT_ID = 1
 TEST_TUTOR_ID = 1
 TEST_THEME_ID = 3
@@ -42,6 +44,19 @@ def upgrade() -> None:
         sa.Column("is_paid", sa.Boolean(), nullable=False, default=False)
     )
 
+    if app_type == 'development':
+        upgrade_development()
+
+
+def downgrade() -> None:
+    op.drop_table("lessons")
+
+    op.execute(sa.schema.DropSequence(sa.Sequence("lessons_lesson_id_seq")))
+
+    op.execute("DROP TYPE IF EXISTS lesson_status")
+
+
+def upgrade_development() -> None:
     connection = op.get_bind()
     # Создание тестового урока
     lesson_date = datetime.utcnow()
@@ -52,11 +67,3 @@ def upgrade() -> None:
         ),
         dict(tutor_id=TEST_TUTOR_ID, student_id=TEST_STUDENT_ID, theme_id=TEST_THEME_ID, date=lesson_date)
     )
-
-
-def downgrade() -> None:
-    op.drop_table("lessons")
-
-    op.execute(sa.schema.DropSequence(sa.Sequence("lessons_lesson_id_seq")))
-
-    op.execute("DROP TYPE IF EXISTS lesson_status")

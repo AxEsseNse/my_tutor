@@ -5,6 +5,7 @@ Revises: 68a720858db9
 Create Date: 2024-01-26 06:07:58.900818
 
 """
+from os import getenv
 import json
 from typing import Sequence, Union
 
@@ -18,6 +19,8 @@ revision: str = 'f73374f24848'
 down_revision: Union[str, None] = '68a720858db9'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
+
+app_type = getenv('APPTYPE', 'development')
 
 
 def upgrade() -> None:
@@ -45,6 +48,30 @@ def upgrade() -> None:
     )
 
     connection = op.get_bind()
+    if app_type == 'development':
+        upgrade_development(connection)
+    else:
+        upgrade_product(connection)
+
+
+def downgrade() -> None:
+    op.drop_table("themes")
+    op.drop_table("exams")
+
+    op.execute(sa.schema.DropSequence(sa.Sequence("themes_card_id_seq")))
+    op.execute(sa.schema.DropSequence(sa.Sequence("themes_theme_id_seq")))
+    op.execute(sa.schema.DropSequence(sa.Sequence("exams_exam_id_seq")))
+
+
+def upgrade_product(connection) -> None:
+    connection.execute(
+        sa.text(
+            """INSERT INTO "exams" (title) VALUES ('ЕГЭ'), ('ОГЭ')"""
+        )
+    )
+
+
+def upgrade_development(connection) -> None:
     # Добавление экзамена "ЕГЭ" и создание первой темы этого экзамена
     connection.execute(
         sa.text(
@@ -52,8 +79,10 @@ def upgrade() -> None:
         )
     )
     ege_exam_id = connection.execute(sa.text("SELECT currval('exams_exam_id_seq')")).fetchone()[0]
-    ege_first_theme_theory_material_id = connection.execute(sa.text("SELECT nextval('themes_card_id_seq')")).fetchone()[0]
-    ege_first_theme_practice_material_id = connection.execute(sa.text("SELECT nextval('themes_card_id_seq')")).fetchone()[0]
+    ege_first_theme_theory_material_id = connection.execute(sa.text("SELECT nextval('themes_card_id_seq')")).fetchone()[
+        0]
+    ege_first_theme_practice_material_id = \
+    connection.execute(sa.text("SELECT nextval('themes_card_id_seq')")).fetchone()[0]
     test_material_ege = [
         {
             "card_id": ege_first_theme_theory_material_id,
@@ -92,9 +121,12 @@ def upgrade() -> None:
     oge_exam_id = connection.execute(sa.text("SELECT currval('exams_exam_id_seq')")).fetchone()[0]
 
     #  Создание первой темы
-    oge_first_theme_theory_material_id = connection.execute(sa.text("SELECT nextval('themes_card_id_seq')")).fetchone()[0]
-    oge_first_theme_first_practice_material_id = connection.execute(sa.text("SELECT nextval('themes_card_id_seq')")).fetchone()[0]
-    oge_first_theme_second_practice_material_id = connection.execute(sa.text("SELECT nextval('themes_card_id_seq')")).fetchone()[0]
+    oge_first_theme_theory_material_id = connection.execute(sa.text("SELECT nextval('themes_card_id_seq')")).fetchone()[
+        0]
+    oge_first_theme_first_practice_material_id = \
+    connection.execute(sa.text("SELECT nextval('themes_card_id_seq')")).fetchone()[0]
+    oge_first_theme_second_practice_material_id = \
+    connection.execute(sa.text("SELECT nextval('themes_card_id_seq')")).fetchone()[0]
     test_material_oge_first_theme = [
         {
             "card_id": oge_first_theme_theory_material_id,
@@ -136,9 +168,12 @@ def upgrade() -> None:
     )
 
     #  Создание второй темы
-    oge_second_theme_theory_material_id = connection.execute(sa.text("SELECT nextval('themes_card_id_seq')")).fetchone()[0]
-    oge_second_theme_first_practice_material_id = connection.execute(sa.text("SELECT nextval('themes_card_id_seq')")).fetchone()[0]
-    oge_second_theme_second_practice_material_id = connection.execute(sa.text("SELECT nextval('themes_card_id_seq')")).fetchone()[0]
+    oge_second_theme_theory_material_id = \
+    connection.execute(sa.text("SELECT nextval('themes_card_id_seq')")).fetchone()[0]
+    oge_second_theme_first_practice_material_id = \
+    connection.execute(sa.text("SELECT nextval('themes_card_id_seq')")).fetchone()[0]
+    oge_second_theme_second_practice_material_id = \
+    connection.execute(sa.text("SELECT nextval('themes_card_id_seq')")).fetchone()[0]
     test_material_oge_second_theme = [
         {
             "card_id": oge_second_theme_theory_material_id,
@@ -180,9 +215,12 @@ def upgrade() -> None:
     )
 
     #  Создание третьей темы
-    oge_third_theme_theory_material_id = connection.execute(sa.text("SELECT nextval('themes_card_id_seq')")).fetchone()[0]
-    oge_third_theme_first_practice_material_id = connection.execute(sa.text("SELECT nextval('themes_card_id_seq')")).fetchone()[0]
-    oge_third_theme_second_practice_material_id = connection.execute(sa.text("SELECT nextval('themes_card_id_seq')")).fetchone()[0]
+    oge_third_theme_theory_material_id = connection.execute(sa.text("SELECT nextval('themes_card_id_seq')")).fetchone()[
+        0]
+    oge_third_theme_first_practice_material_id = \
+    connection.execute(sa.text("SELECT nextval('themes_card_id_seq')")).fetchone()[0]
+    oge_third_theme_second_practice_material_id = \
+    connection.execute(sa.text("SELECT nextval('themes_card_id_seq')")).fetchone()[0]
     test_material_oge_third_theme = [
         {
             "card_id": oge_third_theme_theory_material_id,
@@ -222,12 +260,3 @@ def upgrade() -> None:
         ),
         dict(exam_id=oge_exam_id, material=test_material_oge_third_theme_json)
     )
-
-
-def downgrade() -> None:
-    op.drop_table("themes")
-    op.drop_table("exams")
-
-    op.execute(sa.schema.DropSequence(sa.Sequence("themes_card_id_seq")))
-    op.execute(sa.schema.DropSequence(sa.Sequence("themes_theme_id_seq")))
-    op.execute(sa.schema.DropSequence(sa.Sequence("exams_exam_id_seq")))
