@@ -141,13 +141,15 @@ class PasswordFormUpdate {
 
 document.addEventListener('DOMContentLoaded', function (event) {
 
-    if (!userRole) {
-        return
+    if (userRole) {
+        passwordFormUpdate = new PasswordFormUpdate()
+        const updatePasswordButton = document.getElementById('user-update-password-button')
+        updatePasswordButton.onclick = () => {
+            passwordFormUpdate.clearUpdateForm()
+        }
     }
 
-    passwordFormUpdate = new PasswordFormUpdate()
-    const updatePasswordButton = document.getElementById('user-update-password-button')
-    updatePasswordButton.onclick = () => {
-        passwordFormUpdate.clearUpdateForm()
-    }
+    window.addEventListener('load', function() {
+        document.body.style.display = "block"
+    })
 })

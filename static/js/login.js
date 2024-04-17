@@ -75,3 +75,9 @@ function deleteCookie(name) {
   const deletedCookie = name + options
   document.cookie = deletedCookie
 }
+
+
+window.addEventListener('load', function() {
+    console.log('xuy')
+    document.body.style.display = "block"
+})
