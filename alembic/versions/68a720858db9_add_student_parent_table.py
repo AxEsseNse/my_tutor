@@ -116,7 +116,7 @@ def upgrade_development() -> None:
     connection.execute(
         sa.text(
             """INSERT INTO "students" (user_id, first_name, second_name, gender, lesson_price, img_path, birthday, discord, phone, telegram, whatsapp) 
-               VALUES (:user_id, 'Кира', 'Фазмафобовна', 'девушка', 1200, '/storage/users/female_default_image.jpg', :date, 'ya_discord', '88008000808', '88008000808', '88008000808')"""
+               VALUES (:user_id, 'Кира', 'Фазмафобовна', 'девушка', 1500, '/storage/users/female_default_image.jpg', :date, 'ya_discord', '88008000808', '88008000808', '88008000808')"""
         ),
         dict(user_id=TEST_STUDENT_USER_ID, date=kira_birthday)
     )
