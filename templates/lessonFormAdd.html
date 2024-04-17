@@ -1,12 +1,12 @@
 <div
-    class="modal fade"
+    class="modal fade custom-modal"
     tabindex="-1"
     aria-labelledby="modal-lesson-add"
     aria-hidden="true"
     id="modal-lesson-add"
 >
     <div class="modal-dialog modal-md">
-        <div class="modal-content">
+        <div class="modal-content custom-modal-body">
             <!-- Header окна создания нового профиля студента -->
             <div class="modal-header">
                 <h5 class="modal-title">Создание урока</h5>
@@ -32,18 +32,6 @@
                         <label class="input-group-text" for="lesson-add-form-theme">Тема</label>
                         <select class="form-select" id="lesson-add-form-theme">
                         </select>
-                    </div>
-                    <!-- Кнопка очистки формы -->
-                    <div class="form-group text-end mb-3 mt-4">
-                        <button
-                            class="btn btn-sm btn-secondary"
-                            type="button"
-                            title="Очистить форму"
-                            id="btn-add-lesson"
-                            onclick="clearAddLessonForm()"
-                        >
-                            <i class="fa-solid fa-eraser fa-lg"></i>
-                        </button>
                     </div>
                     <!-- Поле ввода даты урока -->
                     <div class="form-group row mb-1">
@@ -111,7 +99,7 @@
                     <hr />
                     <!-- Кнопка отправки формы -->
                     <div class="text-center">
-                        <button type="button" class="btn btn-dark btn-block" id="lesson-add-form-button">
+                        <button type="button" class="btn send-form-button" id="lesson-add-form-button">
                             Создать
                         </button>
                     </div>

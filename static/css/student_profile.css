@@ -112,8 +112,3 @@
 .table tr:hover td:nth-child(7) {
     background-position: -600% 0;
 }
-
-#parent-add-clean {
-    margin-right: 15px;
-    color: #007BFF;
-}
