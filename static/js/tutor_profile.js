@@ -428,6 +428,10 @@ class TutorInfo {
 }
 
 document.addEventListener('DOMContentLoaded', function (event) {
+    const currentTutorMenuItem = document.getElementById('menu-list-profile')
+    currentTutorMenuItem.classList.add('list-menu-item')
+    currentTutorMenuItem.classList.add('active-menu-item')
+
     const validator = new Validator()
     const tutorInfo = new TutorInfo(validator)
     tutorInfo.loadTutorInfo()

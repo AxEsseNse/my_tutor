@@ -13,24 +13,25 @@
     background: linear-gradient(to top, #F6E6AE, #B4B7FA 110%);
     pointer-events: none;
 }
-.list_menu{
+.list-menu{
 	margin-top: 60px;
 }
-.list_menu li{
+.list-menu li{
 	margin-top: 10px;
 }
-.list_menu a{
+.list-menu-item {
     text-decoration: none;
     font-family: Georgia;
 	font-size: 20px;
 	color: #096F67;
-	border-left: 2px solid #035E57;
-	transition: 0.3s ease;
+	border-left: 4px solid #035E57;
+	border-radius: 5px;
+	transition: 0.15s ease;
 	padding-left: 5px;
 }
-.list_menu a:hover{
+.list-menu-item:hover {
 	border-left: 4px solid #F6E6AE;
-	border-radius: 3px;
-	transition: 0.3s ease;
-	padding-left: 10px;
+}
+.active-menu-item {
+    border-left: 4px solid #F6E6AE;
 }

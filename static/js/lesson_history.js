@@ -564,6 +564,10 @@ class CancelLessonForm {
 }
 
 document.addEventListener('DOMContentLoaded', function (event) {
+    const currentTutorMenuItem = document.getElementById('menu-list-lesson-history')
+    currentTutorMenuItem.classList.add('list-menu-item')
+    currentTutorMenuItem.classList.add('active-menu-item')
+
     const lessonsTable = new LessonsTable()
     lessonsTable.loadLessons()
 })

@@ -369,6 +369,10 @@ class UpdateThemeProgressForm {
 }
 
 document.addEventListener('DOMContentLoaded', function (event) {
+    const currentTutorMenuItem = document.getElementById('menu-list-progress')
+    currentTutorMenuItem.classList.add('list-menu-item')
+    currentTutorMenuItem.classList.add('active-menu-item')
+
     const controller = new Controller()
     const studentSelectField = document.getElementById('student-select-field')
     const title = document.getElementById('title')
