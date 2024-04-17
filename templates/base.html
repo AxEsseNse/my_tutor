@@ -23,13 +23,29 @@
             </div>
             <!-- Main menu -->
             <div class="col-8" id="header-main-menu">
-                <div class="header-menu-row">
-                    <a href="/"><strong>Главная</strong></a>
-                    <a href="/price-list"><strong>Услуги</strong></a>
-                    <a href="/presentation"><strong>Об обучении</strong></a>
-                    <a href="/reviews"><strong>Отзывы</strong></a>
+                <div class="header-menu-row align-items-center">
+                    <a class="header-menu-item" href="/">
+                        <button type="button" id="header-menu-list-main-page">
+                            Главная
+                        </button>
+                    </a>
+                    <a class="header-menu-item" href="/price-list">
+                        <button type="button" id="header-menu-list-price-list">
+                            Услуги
+                        </button>
+                    </a>
+                    <a class="header-menu-item" href="/presentation">
+                        <button type="button" id="header-menu-list-presentation">
+                            Об обучении
+                        </button>
+                    </a>
+                    <a class="header-menu-item" href="/reviews">
+                        <button type="button" id="header-menu-list-reviews">
+                            Отзывы
+                        </button>
+                    </a>
                     {% if user.role and user.current_lesson_id != None %}
-                        <a href="/lesson/{{ user.current_lesson_id }}">
+                        <a class="header-menu-item" href="/lesson/{{ user.current_lesson_id }}">
                             <button type="button" class="lesson-enter-button">
                                 Войти на урок
                             </button>

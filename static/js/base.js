@@ -62,6 +62,17 @@ function setTodayDate() {
     document.getElementById('lesson-add-form-date').value = today
 }
 
+function setHeaderMenuItemsStyle() {
+    const mainPage = document.getElementById('header-menu-list-main-page')
+    mainPage.classList.add('header-menu-item-button')
+    const priceList = document.getElementById('header-menu-list-price-list')
+    priceList.classList.add('header-menu-item-button')
+    const presentation = document.getElementById('header-menu-list-presentation')
+    presentation.classList.add('header-menu-item-button')
+    const reviews = document.getElementById('header-menu-list-reviews')
+    reviews.classList.add('header-menu-item-button')
+}
+
 class PasswordFormUpdate {
     constructor() {
         this.inputCurrentPassword = document.getElementById('user-update-password-form-current-password')
@@ -140,6 +151,7 @@ class PasswordFormUpdate {
 }
 
 document.addEventListener('DOMContentLoaded', function (event) {
+    setHeaderMenuItemsStyle()
 
     if (userRole) {
         passwordFormUpdate = new PasswordFormUpdate()
