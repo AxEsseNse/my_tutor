@@ -13,34 +13,34 @@
 </head>
 <body style="display: none">
     <!-- Header -->
-    <div class="container-fluid" id="header">
-        <div class="row align-items-center" id="header-row">
+    <div id="header">
+        <div id="header-row">
             <!--Logo-->
-            <div class="col-1" id="header-logo">
+            <div id="header-logo">
                 <a href="/">
                     <img src="/static/img/logo.png" alt="logo" id="logo">
                 </a>
             </div>
             <!-- Main menu -->
-            <div class="col-8" id="header-main-menu">
+            <div id="header-main-menu">
                 <div class="header-menu-row align-items-center">
                     <a class="header-menu-item" href="/">
-                        <button type="button" id="header-menu-list-main-page">
+                        <button type="button" id="header-menu-list-main-page" onclick="setActiveStatusMenuItem(this)">
                             Главная
                         </button>
                     </a>
                     <a class="header-menu-item" href="/price-list">
-                        <button type="button" id="header-menu-list-price-list">
+                        <button type="button" id="header-menu-list-price-list" onclick="setActiveStatusMenuItem(this)">
                             Услуги
                         </button>
                     </a>
                     <a class="header-menu-item" href="/presentation">
-                        <button type="button" id="header-menu-list-presentation">
+                        <button type="button" id="header-menu-list-presentation" onclick="setActiveStatusMenuItem(this)">
                             Об обучении
                         </button>
                     </a>
                     <a class="header-menu-item" href="/reviews">
-                        <button type="button" id="header-menu-list-reviews">
+                        <button type="button" id="header-menu-list-reviews" onclick="setActiveStatusMenuItem(this)">
                             Отзывы
                         </button>
                     </a>
@@ -55,7 +55,7 @@
             </div>
             <!--User space-->
             {% if user %}
-            <div class="col-3" id="header-user">
+            <div id="header-user">
                 <div class="row">
                     <!--Username-->
                     <div class="col-9 text-end" id="header-user-name">
@@ -93,7 +93,7 @@
                 </div>
             </div>
             {% else %}
-            <div class="col-3 text-end" id="user-login">
+            <div class="text-end" id="user-login">
                 <a href="/login">
                     <button
                     class="btn-login"

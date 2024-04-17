@@ -11,16 +11,16 @@ body {
     width: 100%;
 }
 .header-menu-row {
-    height: 40px;
+    height: 62px;
 }
 .header-menu-item {
     margin-left: 30px;
-    height: 50px;
+    height: 62px;
 }
 .header-menu-item-button {
-    margin-top: 8px;
+    margin-top: 12px;
     width: 200px;
-    height: 52px;
+    height: 50px;
     font-size: 24px;
     color: black;
     background-color: #B4D8FA;
@@ -38,6 +38,7 @@ body {
     clip-path: polygon(0% 0%, 100% 0%, 85% 100%, 15% 100%);
 }
 .header-menu-item-button:hover,
+.header-menu-item-button:active,
 .header-menu-item-button:focus-visible {
     border-top: 6px solid #F6E6AE;
     border-left: 3px solid #F6E6AE;
@@ -89,12 +90,14 @@ body {
 
 #header,
 #header-row {
+    vertical-align: top;
     width: 100%;
-    height: 70px;
+    height: 62px;
     background: #B4B7FA;
 }
 
 #header-logo {
+    display: inline-block;
     height: 100%;
     position: relative;
     z-index: 1000;
@@ -103,12 +106,12 @@ body {
     height: 90px;
     width: 90px;
     margin-left: 20px;
-    margin-top: 20px;
+    margin-top: 12px;
 }
 #header-main-menu {
+    display: inline-block;
+    vertical-align: top;
     height: 100%;
-    padding-top: 10px;
-    padding-bottom: 10px;
     font-size: 20px;
     font-family: Georgia;
 }
@@ -131,21 +134,27 @@ body {
     background-color: #B4D8FA;
     border-color: #F6E6AE;
 }
-#header-user,
+#header-user {
+    width: 350px;
+    display: inline-block;
+    vertical-align: top;
+    position: absolute;
+    right: 15px;
+    top: 10px;
+}
+
 #header-user .row,
 #header-user .row #header-user-name {
     height: 100%;
 }
 #header-user-name {
-    padding-top: 20px;
+    padding-top: 10px;
     padding-right: 0px;
     font-size: 18px;
+    display: inline-block;
 }
 #header-user-space {
     height: 100%;
-    margin-top: 10px;
-}
-#header-user-dropdown {
     margin-top: 10px;
 }
 #user-dropdown-menu {

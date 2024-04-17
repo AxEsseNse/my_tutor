@@ -62,15 +62,33 @@ function setTodayDate() {
     document.getElementById('lesson-add-form-date').value = today
 }
 
-function setHeaderMenuItemsStyle() {
+function setHeaderMenuItemsStyle(currentUrl) {
     const mainPage = document.getElementById('header-menu-list-main-page')
-    mainPage.classList.add('header-menu-item-button')
     const priceList = document.getElementById('header-menu-list-price-list')
-    priceList.classList.add('header-menu-item-button')
     const presentation = document.getElementById('header-menu-list-presentation')
-    presentation.classList.add('header-menu-item-button')
     const reviews = document.getElementById('header-menu-list-reviews')
+    if (currentUrl == 'reviews') {
+        reviews.classList.add('active-header-menu-item-button')
+    }
+    if (currentUrl == 'presentation') {
+        presentation.classList.add('active-header-menu-item-button')
+    }
+    if (currentUrl == 'price-list') {
+        priceList.classList.add('active-header-menu-item-button')
+    }
+    if (currentUrl == '') {
+        mainPage.classList.add('active-header-menu-item-button')
+    }
+
+    mainPage.classList.add('header-menu-item-button')
+    priceList.classList.add('header-menu-item-button')
+    presentation.classList.add('header-menu-item-button')
     reviews.classList.add('header-menu-item-button')
+}
+
+function setActiveStatusMenuItem(obj) {
+    console.log()
+    obj.classList.add('active-header-menu-item-button')
 }
 
 class PasswordFormUpdate {
@@ -151,8 +169,9 @@ class PasswordFormUpdate {
 }
 
 document.addEventListener('DOMContentLoaded', function (event) {
-    setHeaderMenuItemsStyle()
-
+    const currentUrl = window.location.href.split('/')[window.location.href.split('/').length-1]
+    setHeaderMenuItemsStyle(currentUrl)
+    console.log(currentUrl)
     if (userRole) {
         passwordFormUpdate = new PasswordFormUpdate()
         const updatePasswordButton = document.getElementById('user-update-password-button')
