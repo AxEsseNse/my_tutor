@@ -189,6 +189,8 @@ def upgrade_development(connection) -> None:
             "image_path": "/storage/themes/oge/7/practice1.jpg",
             "descr": "Введите в поле ниже правильную последовательность символов",
             "answer": "CABD",
+            "file_path": "/storage/themes/oge/7/siru2.xls",
+            "file_name": "Таблица с тестовыми баллами",
             "tip": {"image_path": "/storage/themes/oge/7/practice1tip.jpg",
                     "descr": "Здесь есть подсказка хехе"
                     }

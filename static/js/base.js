@@ -171,7 +171,7 @@ class PasswordFormUpdate {
 document.addEventListener('DOMContentLoaded', function (event) {
     const currentUrl = window.location.href.split('/')[window.location.href.split('/').length-1]
     setHeaderMenuItemsStyle(currentUrl)
-    console.log(currentUrl)
+
     if (userRole) {
         passwordFormUpdate = new PasswordFormUpdate()
         const updatePasswordButton = document.getElementById('user-update-password-button')

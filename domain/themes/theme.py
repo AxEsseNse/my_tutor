@@ -21,9 +21,11 @@ class CardPractice(BaseModel):
     title: str
     image_path: str
     descr: str
+    file_path: str | None = None
+    file_name: str | None = None
     answer: str
-    #tip: CardPracticeTip | None
     tip: CardPracticeTip
+
 
 class Theme(BaseModel):
     theme_id: int

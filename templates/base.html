@@ -44,15 +44,16 @@
                             Отзывы
                         </button>
                     </a>
-                    {% if user.role and user.current_lesson_id != None %}
-                        <a class="header-menu-item" href="/lesson/{{ user.current_lesson_id }}">
-                            <button type="button" class="lesson-enter-button">
-                                Войти на урок
-                            </button>
-                        </a>
-                    {% endif %}
                 </div>
             </div>
+            <!--Enter lesson button-->
+            {% if user.role and user.current_lesson_id != None %}
+                <a class="header-menu-item" href="/lesson/{{ user.current_lesson_id }}" id="lesson-enter-button-field">
+                    <button type="button" class="lesson-enter-button">
+                        Войти на урок
+                    </button>
+                </a>
+            {% endif %}
             <!--User space-->
             {% if user %}
             <div id="header-user">

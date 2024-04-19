@@ -2,13 +2,6 @@
     background: #B4D8FA;
 }
 
-#theory-content,
-#practice-content,
-#practice-tip-field,
-#start-content {
-    display: none;
-}
-
 .ready-field {
     margin-top: 15px;
     margin-bottom: 15px;
@@ -162,7 +155,6 @@
 
 #lesson-exam {
     font-size: 34px;
-    display: none;
 }
 
 .exam-btn {
@@ -188,7 +180,6 @@
     margin-top: 35px;
     margin-left: 28px;
     color: #9510CC;
-    display: none;
     font-size: 25px;
     font-weight: 400;
 }
@@ -340,6 +331,41 @@ hr {
     margin-right: 20px;
     border: 3px solid black;
     border-radius: 10px;
+}
+
+#practice-download-file-field {
+    margin-top: 10px;
+}
+#practice-download-file-button {
+    margin-left: 10px;
+    display: inline-block;
+    padding: 2px 8px;
+    width: 45px;
+    height: 45px;
+    font-weight: 400;
+    color: #2E8B57;
+    background-color: #B4B7FA;
+    box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
+    border: none;
+    outline: none;
+    border-radius: 10px;
+    outline: none;
+    text-align: center;
+    vertical-align: middle;
+    text-decoration: none;
+    cursor: pointer;
+    user-select: none;
+    font-size: 20px;
+    transition: 0.2s ease;
+}
+#practice-download-file-button:hover {
+    background-color: #F6E6AE;
+    transform: scale(1.15);
+}
+#practice-download-file-name {
+    color: #2E8B57;
+    font-weight: bold;
+    display: inline-block;
 }
 
 #practice-answer-field {

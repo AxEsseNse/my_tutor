@@ -10,7 +10,7 @@
             <!-- Строка состояния урока -->
             <div class="row" id="title-row">
                 <div class="col-1 text-center">
-                    <div id="lesson-timer">
+                    <div class="hidden-field" id="lesson-timer">
                         53 : 00
                     </div>
                 </div>
@@ -32,7 +32,7 @@
                 </div>
             </div>
             <!-- Cлайд начала работы -->
-            <div id="start-content">
+            <div class="hidden-field" id="start-content">
                 <div class="row">
                     <div class="col-4 text-end">
                         <div class="ready-field">
@@ -68,7 +68,7 @@
                 </div>
             </div>
             <!-- Слайд с теорией -->
-            <div id="theory-content">
+            <div class="hidden-field" id="theory-content">
                 <div class="row">
                     <div class="col-4 text-end">
                         <img src="" id="theory-image">
@@ -79,7 +79,7 @@
                 </div>
             </div>
             <!-- Слайд с практикой -->
-            <div id="practice-content">
+            <div class="hidden-field" id="practice-content">
                 <div class="row">
                     <div class="col-4 text-end" id="practice-image-field">
                         <img src="" id="practice-image">
@@ -87,6 +87,12 @@
                     <div class="col-8 text-start" id="practice-descr">
                         <div id="practice">
                             <div id="practice-descr-field"></div>
+                            <div class="hidden-field" id="practice-download-file-field">
+                                <div id="practice-download-file-name"></div>
+                                <a id="practice-download-file">
+                                    <button id="practice-download-file-button"><i class="fa-solid fa-file-arrow-down fa-lg"></i></i></button>
+                                </a>
+                            </div>
                             <div id="practice-answer-field">
                                 <input
                                     class="answer-input"
@@ -102,7 +108,7 @@
                                     Показать решение
                                 </button>
                             </div>
-                            <div id="practice-tip-field">
+                            <div class="hidden-field" id="practice-tip-field">
                                 <div class="text-end">
                                     <button type="button" class="hide-tip-student" id="practice-tip-student-button" title="Показать решение студенту">
                                         <i class="fa-solid fa-eye-slash"></i>
@@ -121,7 +127,7 @@
         <!-- Меню урока -->
         <div class="col menu-col" id="lesson-menu">
             <div class="row align-items-center" id="lesson-header">
-                <div class="col-3" id="lesson-exam">
+                <div class="col-3 hidden-field" id="lesson-exam">
                     <button class="exam-btn" id="lesson-exam-btn">
                     </button>
                 </div>

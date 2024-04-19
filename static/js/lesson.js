@@ -48,6 +48,9 @@ class LessonController {
         this.practiceField = document.getElementById('practice-content')
         this.practiceImage = document.getElementById('practice-image')
         this.practiceDescr = document.getElementById('practice-descr-field')
+        this.practiceDownloadFileField = document.getElementById('practice-download-file-field')
+        this.practiceDownloadFileName = document.getElementById('practice-download-file-name')
+        this.practiceDownloadFile = document.getElementById('practice-download-file')
         this.practiceAnswerField = document.getElementById('practice-answer')
         this.practiceAnswerButton = document.getElementById('practice-answer-button')
         this.practiceTipButton = document.getElementById('practice-tip-button')
@@ -55,6 +58,36 @@ class LessonController {
         this.practiceTipField = document.getElementById('practice-tip-field')
         this.practiceTipImage = document.getElementById('practice-tip-image')
         this.practiceTipDescr = document.getElementById('practice-tip-descr')
+    }
+
+    hideField(field) {
+        switch (field) {
+            case 'startField':
+                if (!this.startField.classList.contains('hidden-field')) {
+                        this.startField.classList.add('hidden-field')
+                    }
+                break
+            case 'theoryField':
+                if (!this.theoryField.classList.contains('hidden-field')) {
+                        this.theoryField.classList.add('hidden-field')
+                    }
+                break
+            case 'practiceField':
+                if (!this.practiceField.classList.contains('hidden-field')) {
+                        this.practiceField.classList.add('hidden-field')
+                    }
+                break
+            case 'practiceTipField':
+                if (!this.practiceTipField.classList.contains('hidden-field')) {
+                        this.practiceTipField.classList.add('hidden-field')
+                    }
+                break
+            case 'downloadFile':
+                if (!this.practiceDownloadFileField.classList.contains('hidden-field')) {
+                        this.practiceDownloadFileField.classList.add('hidden-field')
+                    }
+                break
+        }
     }
 
     studentReady(wsMessage = false) {
@@ -216,7 +249,7 @@ class LessonController {
         }
 
         updateTimerDisplay(timer / 60, timer % 60);
-        lessonTimer.style.display = 'block'
+        lessonTimer.classList.remove('hidden-field')
 
         var interval = setInterval(function () {
             updateTimerDisplay(timer / 60, timer % 60)
@@ -261,10 +294,9 @@ class LessonController {
             if (userRole == "Преподаватель") {
                 new FinishLessonForm(this.wsConnection, this, lesson.student_id, lesson.theme.theme_id, lesson.theme.title)
             }
-
-            this.startField.style.display = 'none'
+            console.log(lesson)
+            this.hideField('startField')
             this.studentAnswers = lesson.progress_cards
-            console.log(this.studentAnswers)
             this.themeId = lesson.theme.theme_id
             this.studentId = lesson.student_id
             this.fillThemeMenu(lesson.theme)
@@ -277,7 +309,7 @@ class LessonController {
 
     fillThemeMenu(theme) {
         this.examFieldButton.innerText = theme.exam
-        this.examField.style.display = 'block'
+        this.examField.classList.remove('hidden-field')
         this.titleField.innerText = theme.title
         this.examItemIdField.innerText = `Задание № ${theme.exam_task_number}`
         this.menu.innerHTML = ''
@@ -339,7 +371,6 @@ class LessonController {
     }
 
     fillContent(card, menuCardId, wsMessage=false) {
-
         if (wsMessage == false) {
             let data = {
                     data: card,
@@ -351,21 +382,31 @@ class LessonController {
         }
 
         this.setActiveMenuItem(menuCardId)
-        this.practiceTipField.style.display = 'none';
+        this.hideField('practiceTipField')
         this.practiceTipButton.innerText = 'Показать решение'
         this.currentPracticeCardId = card.card_id
 
         if (card.type === 'theory') {
-            this.practiceField.style.display = 'none';
+            this.hideField('practiceField')
             this.cardTitle.innerText = card.title
             this.theoryImage.src = card.image_path
             this.theoryDescr.innerText = card.descr
-            this.theoryField.style.display = 'block';
+            this.theoryField.classList.remove('hidden-field')
         } else {
-            this.theoryField.style.display = 'none';
+            this.hideField('theoryField')
             this.cardTitle.innerText = card.title
             this.practiceImage.src = card.image_path
             this.practiceDescr.innerText = card.descr
+
+            if (card.file_name && card.file_path) {
+                this.practiceDownloadFileField.classList.remove('hidden-field')
+                this.practiceDownloadFileName.innerText = card.file_name
+                this.practiceDownloadFile.href = card.file_path
+                this.practiceDownloadFile.download = card.file_name
+            } else {
+                this.hideField('downloadFile')
+            }
+
             this.currentPracticeCardAnswer = card.answer
             this.practiceAnswerButton.onclick = () => {
                 this.checkAnswer(false, true)
@@ -406,7 +447,7 @@ class LessonController {
                 this.practiceAnswerField.value = ''
             }
 
-            this.practiceField.style.display = 'block';
+            this.practiceField.classList.remove('hidden-field')
         }
     }
 
@@ -503,12 +544,12 @@ class LessonController {
         if (displayStyle === 'none') {
             this.practiceTipImage.src = tip.image_path
             this.practiceTipDescr.innerText = tip.descr
-            this.practiceTipField.style.display = 'block';
+            this.practiceTipField.classList.remove('hidden-field')
             this.practiceTipButton.innerText = 'Скрыть решение'
         } else {
             this.practiceTipImage.src = ""
             this.practiceTipDescr.innerText = ""
-            this.practiceTipField.style.display = 'none';
+            this.hideField('practiceTipField')
             this.practiceTipButton.innerText = 'Показать решение'
         }
     }
@@ -547,11 +588,11 @@ class LessonController {
         if (status == 'show') {
             this.practiceTipImage.src = tip.image_path
             this.practiceTipDescr.innerText = tip.descr
-            this.practiceTipField.style.display = 'block';
+            this.practiceTipField.classList.remove('hidden-field')
         } else {
             this.practiceTipImage.src = ""
             this.practiceTipDescr.innerText = ""
-            this.practiceTipField.style.display = 'none';
+            this.hideField('practiceTipField')
         }
     }
 
@@ -758,7 +799,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
     const tutorReadyButton = document.getElementById('tutor-ready-button')
 
     if (userRole == "Студент") {
-        practiceTipButton.style.display = 'none';
+        practiceTipButton.style.display = 'none'
         practiceTipStudentButton.style.display = 'none'
     }
 
@@ -790,7 +831,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
             await lessonController.loadLesson()
             lessonController.startLessonTimer(response.time_left)
         } else {
-            startField.style.display = 'block'
+            startField.classList.remove('hidden-field')
             lessonController.cardTitle.innerText = 'Подтвердите готовность к уроку'
         }
     })
