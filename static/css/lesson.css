@@ -166,8 +166,8 @@
     font-size: 18px;
     color: black;
     font-weight: 600;
-    background-color: #4A918B;
-    border: 3px solid black;
+    background-color: #B4B7FA;
+    border: none;
     border-radius: 10px;
     text-align: center;
     vertical-align: middle;
@@ -178,7 +178,7 @@
 #lesson-timer {
     width: 75px;
     margin-top: 35px;
-    margin-left: 28px;
+    margin-left: 12px;
     color: #9510CC;
     font-size: 25px;
     font-weight: 400;
@@ -190,8 +190,8 @@
     margin-top: 35px;
     margin-bottom: 2px;
     margin-right: 2px;
-    background-color: #80C4C3;
-    border: 3px solid #14A9A5;
+    background-color: #B4B7FA;
+    border: none;
     border-radius: 30px;
     text-align: center;
     vertical-align: middle;
@@ -201,10 +201,11 @@
 }
 .lesson-end-btn:hover {
     background-color: #F6E6AE;
-    border-color: #F6E6AE;
     outline: 0;
 }
-
+.lesson-end-btn:focus-visible {
+    outline: 0;
+}
 
 #lesson-exam-task-id {
     margin-left: 10px;
@@ -247,40 +248,62 @@ hr {
 }
 
 .lesson-button {
-  display: inline-block;
-  width: 270px;
-  padding: 2px 8px;
-  font-size: 12px;
-  color: black;
-  font-weight: 400;
-  background-color: #80C4C3;
-  border: 5px solid #14A9A5;
-  border-radius: 30px;
-  text-align: center;
-  vertical-align: middle;
-  text-decoration: none;
-  cursor: default;
-  white-space: nowrap;
-  user-select: none;
-  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    display: inline-block;
+    width: 270px;
+    padding: 2px 8px;
+    font-size: 12px;
+    color: black;
+    font-weight: 400;
+    background-color: #B4B7FA;
+    border: none;
+    border-radius: 30px;
+    text-align: center;
+    vertical-align: middle;
+    text-decoration: none;
+    cursor: default;
+    white-space: nowrap;
+    user-select: none;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
-.lesson-button:hover {
-    background-color: #14A9A5;
-    outline: 0;
-    box-shadow: 0 0 0 0.2rem #F6E6AE;
-}
+.lesson-button:hover,
 .lesson-button:focus-visible {
-    background-color: #14A9A5;
+    background-color: #F6E6AE;
     outline: 0;
-    box-shadow: 0 0 0 0.2rem #F6E6AE;
 }
-
+.lesson-menu-button {
+    display: inline-block;
+    width: 270px;
+    padding: 2px 8px;
+    font-size: 12px;
+    color: black;
+    font-weight: 400;
+    background-color: #B4B7FA;
+    border: 3px solid #B4B7FA;
+    border-radius: 30px;
+    text-align: center;
+    vertical-align: middle;
+    text-decoration: none;
+    cursor: default;
+    white-space: nowrap;
+    user-select: none;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+.lesson-menu-button:hover,
+.lesson-menu-button:focus-visible {
+    background-color: #F6E6AE;
+    border-color: #F6E6AE;
+    outline: 0;
+}
 .lesson-button-success {
     background-color: #72E179;
-    border-color: #F6E6AE;
+    border-color: #72E179;
 }
 .lesson-button-wrong {
     background-color: #E68B8F;
+    border-color: #E68B8F;
+}
+.lesson-button-success:hover,
+.lesson-button-wrong:hover {
     border-color: #F6E6AE;
 }
 
@@ -412,8 +435,8 @@ hr {
     padding: 2px 8px;
     color: black;
     font-weight: 400;
-    background-color: #80C4C3;
-    border: 5px solid #14A9A5;
+    background-color: #B4B7FA;
+    border: none;
     border-radius: 30px;
     text-align: center;
     vertical-align: middle;
@@ -424,6 +447,9 @@ hr {
     margin-left: 30px;
     font-size: 20px;
 }
+.practice-answer-button:hover {
+    background-color: #F6E6AE;
+}
 .practice-answer-button-success {
     display: inline-block;
     padding: 2px 8px;
@@ -432,9 +458,8 @@ hr {
     margin-left: 30px;
     background-color: #72E179;
     color: #F6E6AE;
-    border: 5px solid #14A9A5;
+    border: 5px solid #72E179;
     border-radius: 30px;
-    border-color: #F6E6AE;
     text-align: center;
     vertical-align: middle;
     text-decoration: none;
@@ -453,15 +478,15 @@ hr {
 
 #practice-tip-student-button {
     display: inline-block;
-    width: 100px;
-    height: 50px;
+    width: 70px;
+    height: 40px;
     padding: 2px 8px;
     margin-right: 5px;
     margin-bottom: 15px;
     font-size: 20px;
     color: black;
     font-weight: 500;
-    border: 5px solid #F6E6AE;
+    border: none;
     border-radius: 30px;
     text-align: center;
     vertical-align: middle;
@@ -471,17 +496,10 @@ hr {
     user-select: none;
     transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
-#practice-tip-student-button:hover {
-    background-color: #F6E6AE;
-    border-color: #14A9A5;
-    outline: 0;
-    box-shadow: 0 0 0 0.2rem #F6E6AE;
-}
+#practice-tip-student-button:hover,
 #practice-tip-student-button:focus-visible {
     background-color: #F6E6AE;
-    border-color: #14A9A5;
     outline: 0;
-    box-shadow: 0 0 0 0.2rem #F6E6AE;
 }
 .show-tip-student {
     background-color: #72E179;

@@ -48,13 +48,16 @@
         </div>
     </div>
     <!-- Поля для управления созданием карточки -->
-    <div class="hidden-field mt-3" id="create-content">
-        <button type="button" class="custom-sand-button card-type-button" id="create-theory-card-button">
-            Теория
-        </button>
-        <button type="button" class="custom-sand-button card-type-button" id="create-practice-card-button">
-            Практика
-        </button>
+    <div class="hidden-field form-group row mt-3 input-field" id="create-content">
+        <label class="col-2 col-form-label label-input-field" for="card-practice-tip-descr">Тип</label>
+        <div class="col-10">
+            <button type="button" class="custom-sand-button card-type-button" id="create-theory-card-button">
+                Теория
+            </button>
+            <button type="button" class="custom-sand-button card-type-button" id="create-practice-card-button">
+                Практика
+            </button>
+        </div>
     </div>
     <!-- Поля для карточки теории -->
     <div class="hidden-field" id="card-theory-field">
@@ -63,7 +66,7 @@
             <label class="col-2 col-form-label label-input-field" for="card-theory-title">Название</label>
             <div class="col-10">
                 <textarea
-                    class="form-control text-input"
+                    class="form-control text-input-field"
                     id="card-theory-title"
                     style="height: 80px"
                     required
@@ -75,38 +78,43 @@
             <label class="col-2 col-form-label label-input-field" for="card-theory-descr">Содержимое</label>
             <div class="col-10">
                 <textarea
-                    class="form-control text-input"
+                    class="form-control text-input-field"
                     id="card-theory-descr"
                     style="height: 200px"
                     required
                 ></textarea>
             </div>
         </div>
+        <hr />
         <!-- Поле изображения карточки -->
-        <div id="card-theory-image-button-add-field">
-            <button type="button" class="custom-sand-button enable-add-image" id="card-theory-image-button-add">
-                Добавить изображение
-            </button>
-        </div>
-        <div id="card-theory-image-button-delete-field">
-            <button type="button" class="custom-sand-button enable-add-image" id="card-theory-image-button-delete">
-                Удалить изображение
-            </button>
+        <div class="group-field">
+            <div class="title-field">Изображение</div>
+            <div id="card-theory-image-button-add-field">
+                <button type="button" class="custom-sand-button control-buttons" id="card-theory-image-button-add">
+                    <i class="fa-solid fa-plus fa-lg" style="color: #228B22"></i>
+                    Добавить
+                </button>
+            </div>
+            <div id="card-theory-image-button-delete-field">
+                <button type="button" class="custom-sand-button control-buttons" id="card-theory-image-button-delete">
+                    <i class="fa-solid fa-xmark fa-lg" style="color: #DC3545"></i>
+                    Удалить
+                </button>
+            </div>
         </div>
         <div class="hidden-field" id="card-theory-image-field">
             <div class="form-group row mt-3 input-field">
-                <label class="col-2 col-form-label label-input-field" for="card-theory-image-preview">Изображение</label>
-                <div class="col-5">
+                <div class="col-8">
                     <img class="image-preview" id="card-theory-image-preview" alt="Preview">
                 </div>
-                <div class="col-5">
-                    <!-- Поле загрузки изображения -->
+                <div class="col-4">
                     <div class="input-group mb-3 upload-image-field">
                         <input type="file" class="form-control" accept="image/*" id="card-theory-image">
                     </div>
                 </div>
             </div>
         </div>
+        <hr />
     </div>
     <!-- Поля для карточки практики -->
     <div class="hidden-field" id="card-practice-field">
@@ -115,7 +123,7 @@
             <label class="col-2 col-form-label label-input-field" for="card-practice-title">Название</label>
             <div class="col-10">
                 <textarea
-                    class="form-control"
+                    class="form-control text-input-field"
                     id="card-practice-title"
                     style="height: 80px"
                     required
@@ -127,7 +135,7 @@
             <label class="col-2 col-form-label label-input-field" for="card-practice-descr">Содержимое</label>
             <div class="col-10">
                 <textarea
-                    class="form-control"
+                    class="form-control text-input-field"
                     id="card-practice-descr"
                     style="height: 200px"
                     required
@@ -147,52 +155,99 @@
                 />
             </div>
         </div>
+        <hr />
         <!-- Поле изображения карточки -->
-        <div id="card-practice-image-button-add-field">
-            <button type="button" class="custom-sand-button enable-add-image" id="card-practice-image-button-add">
-                Добавить изображение
-            </button>
-        </div>
-        <div id="card-practice-image-button-delete-field">
-            <button type="button" class="custom-sand-button enable-add-image" id="card-practice-image-button-delete">
-                Удалить изображение
-            </button>
+        <div class="group-field">
+            <div class="title-field">Изображение</div>
+            <div id="card-practice-image-button-add-field">
+                <button type="button" class="custom-sand-button control-buttons" id="card-practice-image-button-add">
+                    <i class="fa-solid fa-plus fa-lg" style="color: #228B22"></i>
+                    Добавить
+                </button>
+            </div>
+            <div id="card-practice-image-button-delete-field">
+                <button type="button" class="custom-sand-button control-buttons" id="card-practice-image-button-delete">
+                    <i class="fa-solid fa-xmark fa-lg" style="color: #DC3545"></i>
+                    Удалить
+                </button>
+            </div>
         </div>
         <div class="hidden-field" id="card-practice-image-field">
             <div class="form-group row mt-3 input-field">
-                <label class="col-2 col-form-label label-input-field" for="card-practice-image-preview">Изображение</label>
-                <div class="col-5">
+                <div class="col-8">
                     <img class="image-preview" id="card-practice-image-preview" alt="Preview">
                 </div>
-                <!-- Поле загрузки изображения -->
-                <div class="col-5">
+                <div class="col-4">
                     <div class="input-group mb-3 upload-image-field">
                         <input type="file" class="form-control" accept="image/*" id="card-practice-image">
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Кнопка решения -->
-        <div id="card-practice-tip-button-add-field">
-            <button type="button" class="custom-sand-button enable-add-tip" id="card-practice-tip-button-add">
-                Добавить решение
-            </button>
+        <hr />
+        <!-- Поле файла карточки -->
+        <div class="group-field">
+            <div class="title-field">Загружаемый файл</div>
+            <div id="card-practice-file-button-add-field">
+                <button type="button" class="custom-sand-button control-buttons" id="card-practice-file-button-add">
+                    <i class="fa-solid fa-plus fa-lg" style="color: #228B22"></i>
+                    Добавить
+                </button>
+            </div>
+            <div id="card-practice-file-button-delete-field">
+                <button type="button" class="custom-sand-button control-buttons" id="card-practice-file-button-delete">
+                    <i class="fa-solid fa-xmark fa-lg" style="color: #DC3545"></i>
+                    Удалить
+                </button>
+            </div>
         </div>
-        <div id="card-practice-tip-button-delete-field">
-            <button type="button" class="custom-sand-button enable-add-tip" id="card-practice-tip-button-delete">
-                Удалить решение
-            </button>
+        <div class="hidden-field" id="card-practice-file-field">
+            <div class="form-group row mt-3 input-field" id="card-practice-download-row">
+                <div class="col-4" id="card-practice-file-download-field">
+                    <div id="card-practice-download-file-name"></div>
+                    <a id="card-practice-file-download">
+                        <button class="download-button" id="card-practice-file-button"><i class="fa-solid fa-file-arrow-down fa-lg"></i></i></button>
+                    </a>
+                </div>
+                <div class="col-4">
+                    <input
+                        class="form-control filename-input-field"
+                        type="text"
+                        id="card-practice-file-name"
+                        placeholder="Введите название файла"
+                        value=""
+                    />
+                </div>
+                <div class="col-4">
+                    <div class="input-group upload-file-field">
+                        <input type="file" class="form-control" id="card-practice-file">
+                    </div>
+                </div>
+            </div>
         </div>
+        <hr />
         <!-- Поле решения задачи -->
+        <div class="group-field">
+            <div class="title-field">Решение</div>
+            <div class="control-button-field" id="card-practice-tip-button-add-field">
+                <button type="button" class="custom-sand-button control-buttons" id="card-practice-tip-button-add">
+                    <i class="fa-solid fa-plus fa-lg" style="color: #228B22"></i>
+                    Добавить
+                </button>
+            </div>
+            <div class="control-button-field" id="card-practice-tip-button-delete-field">
+                <button type="button" class="custom-sand-button control-buttons" id="card-practice-tip-button-delete">
+                    <i class="fa-solid fa-xmark fa-lg" style="color: #DC3545"></i>
+                    Удалить
+                </button>
+            </div>
+        </div>
         <div class="hidden-field" id="card-practice-tip-field">
-            <div id="card-tip">Решение</div>
-            <hr />
-            <!-- Поле ввода решения задачи -->
             <div class="form-group row mt-3 input-field">
                 <label class="col-2 col-form-label label-input-field" for="card-practice-tip-descr">Описание решения</label>
                 <div class="col-10">
                     <textarea
-                        class="form-control"
+                        class="form-control text-input-field"
                         id="card-practice-tip-descr"
                         style="height: 200px"
                         required
@@ -200,32 +255,35 @@
                 </div>
             </div>
             <!-- Поле изображения решения -->
-            <div id="card-practice-tip-image-button-add-field">
-                <button type="button" class="custom-sand-button enable-add-image" id="card-practice-tip-image-button-add">
-                    Добавить изображение
-                </button>
-            </div>
-            <div id="card-practice-tip-image-button-delete-field">
-                <button type="button" class="custom-sand-button enable-add-image" id="card-practice-tip-image-button-delete">
-                    Удалить изображение
-                </button>
+            <div class="group-field" style="margin-top: 20px;">
+                <div class="title-field">Изображение решения</div>
+                <div id="card-practice-tip-image-button-add-field">
+                    <button type="button" class="custom-sand-button control-buttons" id="card-practice-tip-image-button-add">
+                        <i class="fa-solid fa-plus fa-lg" style="color: #228B22"></i>
+                        Добавить
+                    </button>
+                </div>
+                <div id="card-practice-tip-image-button-delete-field">
+                    <button type="button" class="custom-sand-button control-buttons" id="card-practice-tip-image-button-delete">
+                        <i class="fa-solid fa-xmark fa-lg" style="color: #DC3545"></i>
+                        Удалить
+                    </button>
+                </div>
             </div>
             <div class="hidden-field" id="card-practice-tip-image-field">
                 <div class="form-group row mt-3 input-field">
-                    <label class="col-2 col-form-label label-input-field" for="card-practice-tip-image-preview">Изображение решения</label>
-                    <div class="col-5">
+                    <div class="col-8">
                         <img class="image-preview" id="card-practice-tip-image-preview" alt="Preview">
                     </div>
-                    <div class="col-5">
-                        <!-- Поле загрузки изображения решения -->
+                    <div class="col-4">
                         <div class="input-group mb-3 upload-image-field">
                             <input type="file" class="form-control" accept="image/*" id="card-practice-tip-image">
                         </div>
                     </div>
                 </div>
             </div>
-            <hr />
         </div>
+        <hr />
     </div>
     <!-- Поле отправки данных на сервер -->
     <div class="send-field">
@@ -274,6 +332,12 @@
                 <div class="col-8 text-start" id="practice-descr">
                     <div id="practice">
                         <div id="practice-descr-field"></div>
+                        <div class="hidden-field" id="practice-download-file-field">
+                            <div id="practice-download-file-name"></div>
+                            <a id="practice-download-file">
+                                <button class="download-button" id="practice-download-file-button"><i class="fa-solid fa-file-arrow-down fa-lg"></i></i></button>
+                            </a>
+                        </div>
                         <div id="practice-answer-field">
                             <input
                                 class="answer-input"

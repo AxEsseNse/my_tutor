@@ -40,6 +40,10 @@ class Controller {
         this.PreviewCardPracticeField = document.getElementById('practice-content')
         this.PreviewCardPracticeImage = document.getElementById('practice-image')
         this.PreviewCardPracticeDescr = document.getElementById('practice-descr-field')
+        this.PreviewCardPracticeFileField = document.getElementById('practice-download-file-field')
+        this.PreviewCardPracticeFileDownloadButton = document.getElementById('practice-download-file-button')
+        this.PreviewCardPracticeFileDownload = document.getElementById('practice-download-file')
+        this.PreviewCardPracticeFileName = document.getElementById('practice-download-file-name')
         this.PreviewCardPracticeAnswerField = document.getElementById('practice-answer')
         this.PreviewCardPracticeAnswerButton = document.getElementById('practice-answer-button')
 
@@ -47,7 +51,6 @@ class Controller {
         this.PreviewCardPracticeTipButton = document.getElementById('practice-tip-button')
         this.PreviewCardPracticeTipImage = document.getElementById('practice-tip-image')
         this.PreviewCardPracticeTipDescr = document.getElementById('practice-tip-descr')
-
 
         //инпут поля для редактирования и создания
         this.createTheoryCardButton = document.getElementById('create-theory-card-button')
@@ -70,6 +73,18 @@ class Controller {
         this.practiceTitle = document.getElementById('card-practice-title')
         this.practiceDescr = document.getElementById('card-practice-descr')
         this.practiceAnswer = document.getElementById('card-practice-answer')
+
+        this.practiceFileButtonAddField = document.getElementById('card-practice-file-button-add-field')
+        this.practiceFileButtonAdd = document.getElementById('card-practice-file-button-add')
+        this.practiceFileButtonDeleteField = document.getElementById('card-practice-file-button-delete-field')
+        this.practiceFileButtonDelete = document.getElementById('card-practice-file-button-delete')
+        this.practiceFileField = document.getElementById('card-practice-file-field')
+
+        this.practiceFileDownloadButton = document.getElementById('card-practice-file-button')
+        this.practiceFileDownload = document.getElementById('card-practice-file-download')
+        this.practiceFileNameLink = document.getElementById('card-practice-download-file-name')
+        this.practiceFileName = document.getElementById('card-practice-file-name')
+        this.practiceFile = document.getElementById('card-practice-file')
 
         this.practiceImageButtonAddField = document.getElementById('card-practice-image-button-add-field')
         this.practiceImageButtonAdd = document.getElementById('card-practice-image-button-add')
@@ -182,6 +197,22 @@ class Controller {
                     this.practiceImagePreview.classList.add('hidden-field')
                 }
                 break
+            // Кнопки загружаемого файла
+            case 'practiceCardFileButtonAddField':
+                if (!this.practiceFileButtonAddField.classList.contains('hidden-field')) {
+                    this.practiceFileButtonAddField.classList.add('hidden-field')
+                }
+                break
+            case 'practiceCardFileButtonDeleteField':
+                if (!this.practiceFileButtonDeleteField.classList.contains('hidden-field')) {
+                    this.practiceFileButtonDeleteField.classList.add('hidden-field')
+                }
+                break
+            case 'practiceCardFileField':
+                if (!this.practiceFileField.classList.contains('hidden-field')) {
+                    this.practiceFileField.classList.add('hidden-field')
+                }
+                break
             // Кнопки изображения решения
             case 'practiceCardTipImageButtonAddField':
                 if (!this.practiceTipImageButtonAddField.classList.contains('hidden-field')) {
@@ -237,6 +268,11 @@ class Controller {
             case 'previewCardPractice':
                 if (!this.PreviewCardPracticeField.classList.contains('hidden-field')) {
                     this.PreviewCardPracticeField.classList.add('hidden-field')
+                }
+                break
+            case 'previewCardPracticeFile':
+                if (!this.PreviewCardPracticeFileField.classList.contains('hidden-field')) {
+                    this.PreviewCardPracticeFileField.classList.add('hidden-field')
                 }
                 break
             case 'previewCardPracticeTip':
@@ -608,6 +644,28 @@ class Controller {
             this.PreviewCardTitle.innerText = card.title
             this.PreviewCardPracticeImage.src = card.image_path
             this.PreviewCardPracticeDescr.innerText = card.descr
+
+            if (card.file_name && card.file_path) {
+                this.PreviewCardPracticeFileField.classList.remove('hidden-field')
+                this.PreviewCardPracticeFileName.innerText = card.file_name
+                this.PreviewCardPracticeFileDownload.href = card.file_path
+                this.PreviewCardPracticeFileDownload.download = card.file_name
+
+                if (!this.PreviewCardPracticeFileDownloadButton.classList.contains('file-download-enable')) {
+                    this.PreviewCardPracticeFileDownloadButton.classList.add('file-download-enable')
+                }
+                this.PreviewCardPracticeFileDownloadButton.classList.remove('file-download-disable')
+            } else {
+                this.PreviewCardPracticeFileName.innerText =''
+                this.PreviewCardPracticeFileDownload.removeAttribute('href')
+                this.PreviewCardPracticeFileDownload.removeAttribute('download')
+                this.hideField('previewCardPracticeFile')
+                if (!this.PreviewCardPracticeFileDownloadButton.classList.contains('file-download-disable')) {
+                    this.PreviewCardPracticeFileDownloadButton.classList.add('file-download-disable')
+                }
+                this.PreviewCardPracticeFileDownloadButton.classList.remove('file-download-enable')
+            }
+
             this.PreviewCardPracticeAnswerField.classList.remove('input-answer-success')
             this.PreviewCardPracticeAnswerField.classList.remove('input-answer-wrong')
             this.PreviewCardPracticeAnswerButton.innerText = 'Проверить'
@@ -673,6 +731,28 @@ class Controller {
             this.practiceImage.value = ''
             this.practiceAnswer.value = card.answer
 
+            if (card.file_name && card.file_path) {
+                this.practiceFileName.value = card.file_name
+                this.practiceFileNameLink.innerText = card.file_name
+                this.practiceFileDownload.href = card.file_path
+                this.practiceFileDownload.download = card.file_name
+
+                if (!this.practiceFileDownloadButton.classList.contains('file-download-enable')) {
+                    this.practiceFileDownloadButton.classList.add('file-download-enable')
+                }
+                this.practiceFileDownloadButton.classList.remove('file-download-disable')
+            } else {
+                this.practiceFileDownload.removeAttribute('href')
+                this.practiceFileDownload.removeAttribute('download')
+                this.practiceFileNameLink.innerText = ''
+                this.practiceFileName.value = ''
+                this.practiceFile.value = ''
+                if (!this.practiceFileDownloadButton.classList.contains('file-download-disable')) {
+                    this.practiceFileDownloadButton.classList.add('file-download-disable')
+                }
+                this.practiceFileDownloadButton.classList.remove('file-download-enable')
+            }
+
             if (card.tip) {
                 this.practiceTipDescr.value = card.tip.descr
                 this.practiceTipImagePreview.src = card.tip.image_path
@@ -703,12 +783,20 @@ class Controller {
             this.hideField('theoryCardInput')
 
             if (action == 'create') {
+                this.deletePracticeCardFile()
                 this.deletePracticeCardImage()
                 this.deletePracticeCardTip()
             } else {
                 this.showPracticeCardImageField()
                 this.showPracticeCardTipField()
-                this.showPracticeCardTipImageField()
+
+                if (this.currentCard.file_name && this.currentCard.file_path) {
+                    this.showPracticeCardFileField()
+                } else {
+                    this.hideField('practiceCardFileField')
+                    this.hideField('practiceCardFileButtonDeleteField')
+                    this.practiceFileButtonAddField.classList.remove('hidden-field')
+                }
             }
 
             this.practiceField.classList.remove('hidden-field')
@@ -733,6 +821,30 @@ class Controller {
         this.hideField('previewCardTheoryImage')
         this.theoryImage.value = ''
         this.currentCardImagePath = null
+    }
+
+    showPracticeCardFileField() {
+        this.hideField('practiceCardFileButtonAddField')
+        this.practiceFileButtonDeleteField.classList.remove('hidden-field')
+        this.practiceFileField.classList.remove('hidden-field')
+        this.PreviewCardPracticeFileField.classList.remove('hidden-field')
+    }
+
+    deletePracticeCardFile() {
+        this.hideField('practiceCardFileField')
+        this.hideField('practiceCardFileButtonDeleteField')
+        this.practiceFileButtonAddField.classList.remove('hidden-field')
+
+        this.practiceFileDownload.removeAttribute('href')
+        this.practiceFileDownload.download = ''
+        this.practiceFileNameLink.innerText = ''
+        this.practiceFileName.value = ''
+        this.practiceFile.value = ''
+
+        this.hideField('previewCardPracticeFile')
+        this.PreviewCardPracticeFileDownload.removeAttribute('href')
+        this.PreviewCardPracticeFileDownload.download = ''
+        this.PreviewCardPracticeFileName.innerText = ''
     }
 
     showPracticeCardImageField() {
@@ -771,12 +883,14 @@ class Controller {
 
     showPracticeCardTipField() {
         this.hideField('practiceCardTipButtonAddField')
+        this.hideField('practiceCardTipImageButtonAddField')
+//        this.hideField('practiceCardTipImageButtonDeleteField')
+//        this.practiceTipImageButtonAddField.classList.remove('hidden-field')
+//        this.hideField('practiceCardTipImageField')
         this.practiceTipButtonDeleteField.classList.remove('hidden-field')
-        this.hideField('practiceCardTipImageButtonDeleteField')
-        this.practiceTipImageButtonAddField.classList.remove('hidden-field')
-        this.hideField('practiceCardTipImageField')
-
+        this.practiceTipImageButtonDeleteField.classList.remove('hidden-field')
         this.practiceTipField.classList.remove('hidden-field')
+        this.practiceTipImageField.classList.remove('hidden-field')
     }
 
     deletePracticeCardTip() {
@@ -1317,6 +1431,24 @@ class Controller {
             self.PreviewCardPracticeAnswerButton.innerText = 'Проверить'
         })
     }
+
+//    handleDownloadClick(controller) {
+//        console.log('click ebana')
+//        let file = controller.practiceFile.files[0];
+//
+//        if (file) {
+//            controller.practiceFileDownload.removeAttribute('href')
+//            controller.PreviewCardPracticeFileDownload.removeAttribute('href')
+//            let url = URL.createObjectURL(file);
+//            let a = document.createElement('a');
+//            a.href = url;
+//            a.download = controller.practiceFileName.value;
+//            document.body.appendChild(a);
+//            a.click();
+//            document.body.removeChild(a);
+//            URL.revokeObjectURL(url);
+//        }
+//    }
 }
 
 
@@ -1344,9 +1476,17 @@ document.addEventListener('DOMContentLoaded', function (event) {
 
     // Выбор вида создаваемой карточки
     controller.createTheoryCardButton.onclick = () => {
+        if (!controller.createTheoryCardButton.classList.contains('active-type-button')) {
+            controller.createTheoryCardButton.classList.add('active-type-button')
+        }
+        controller.createPracticeCardButton.classList.remove('active-type-button')
         controller.chooseCreateCard('theory')
     }
     controller.createPracticeCardButton.onclick = () => {
+        if (!controller.createPracticeCardButton.classList.contains('active-type-button')) {
+            controller.createPracticeCardButton.classList.add('active-type-button')
+        }
+        controller.createTheoryCardButton.classList.remove('active-type-button')
         controller.chooseCreateCard('practice')
     }
     // Кнопки изображения теории
@@ -1355,6 +1495,13 @@ document.addEventListener('DOMContentLoaded', function (event) {
     }
     controller.theoryImageButtonDelete.onclick = () => {
         controller.deleteTheoryCardImage()
+    }
+    // Кнопки файла практики
+    controller.practiceFileButtonAdd.onclick = () => {
+        controller.showPracticeCardFileField()
+    }
+    controller.practiceFileButtonDelete.onclick = () => {
+        controller.deletePracticeCardFile()
     }
     // Кнопки изображения практики
     controller.practiceImageButtonAdd.onclick = () => {
@@ -1392,6 +1539,47 @@ document.addEventListener('DOMContentLoaded', function (event) {
         controller.PreviewCardPracticeAnswerField.classList.remove('input-answer-success')
         controller.PreviewCardPracticeAnswerField.classList.remove('input-answer-wrong')
         controller.PreviewCardPracticeAnswerButton.innerText = 'Проверить'
+    })
+
+    // Слушатели файла и его названия
+    controller.practiceFile.addEventListener('change', function() {
+        let file = this.files[0]
+        if (file) {
+            let url = URL.createObjectURL(file)
+            controller.practiceFileDownload.href = url
+            controller.practiceFileDownload.download = controller.practiceFileNameLink.innerText
+            controller.PreviewCardPracticeFileDownload.href = url
+            controller.PreviewCardPracticeFileDownload.download = controller.practiceFileNameLink.innerText
+
+            if (!controller.practiceFileDownloadButton.classList.contains('file-download-enable')) {
+                controller.practiceFileDownloadButton.classList.add('file-download-enable')
+            }
+            controller.practiceFileDownloadButton.classList.remove('file-download-disable')
+            if (!controller.PreviewCardPracticeFileDownloadButton.classList.contains('file-download-enable')) {
+                controller.PreviewCardPracticeFileDownloadButton.classList.add('file-download-enable')
+            }
+            controller.PreviewCardPracticeFileDownloadButton.classList.remove('file-download-disable')
+        } else {
+            controller.practiceFileDownload.removeAttribute('href')
+            controller.practiceFileDownload.removeAttribute('download')
+            controller.PreviewCardPracticeFileDownload.removeAttribute('href')
+            controller.PreviewCardPracticeFileDownload.removeAttribute('download')
+
+            if (!controller.practiceFileDownloadButton.classList.contains('file-download-disable')) {
+                controller.practiceFileDownloadButton.classList.add('file-download-disable')
+            }
+            controller.practiceFileDownloadButton.classList.remove('file-download-enable')
+            if (!controller.PreviewCardPracticeFileDownloadButton.classList.contains('file-download-disable')) {
+                controller.PreviewCardPracticeFileDownloadButton.classList.add('file-download-disable')
+            }
+            controller.PreviewCardPracticeFileDownloadButton.classList.remove('file-download-enable')
+        }
+    })
+    controller.practiceFileName.addEventListener('input', function() {
+        controller.practiceFileDownload.download = this.value
+        controller.PreviewCardPracticeFileDownload.download = this.value
+        controller.practiceFileNameLink.innerText = this.value
+        controller.PreviewCardPracticeFileName.innerText = this.value
     })
 
     controller.setImageEventListener(controller.theoryImage, controller.theoryImagePreview, controller.PreviewCardTheoryImage, 'main')

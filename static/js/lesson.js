@@ -26,7 +26,7 @@ class LessonController {
         this.studentAnswers = {
         }
 
-        this.theoryIcon = '<i class="fa-solid fa-book"></i>'
+        //this.theoryIcon = '<i class="fa-solid fa-book"></i>'
         this.practiceIcon = '<i class="fa-solid fa-keyboard"></i>'
 
         this.lessonTimer = document.getElementById('lesson-timer')
@@ -332,7 +332,7 @@ class LessonController {
         let newLiItem = document.createElement('li')
 
         let liButton = document.createElement('button')
-        liButton.className = 'lesson-button'
+        liButton.className = 'lesson-menu-button'
 
         if (card.type == 'practice' && card.card_id in this.studentAnswers) {
 
@@ -354,7 +354,7 @@ class LessonController {
         }
 
         if (card.type === 'theory') {
-            liButton.innerHTML = `${this.theoryIcon} ${cardName}`
+            liButton.innerHTML = cardName
         } else {
             liButton.innerHTML = `${this.practiceIcon} ${cardName}`
         }
@@ -363,7 +363,7 @@ class LessonController {
     }
 
     setActiveMenuItem(menuItemId) {
-        document.querySelectorAll('.lesson-button.active-lesson-menu-item').forEach(button => {
+        document.querySelectorAll('.lesson-menu-button.active-lesson-menu-item').forEach(button => {
             button.classList.remove('active-lesson-menu-item')
         })
         const menuItem = document.getElementById(menuItemId)
@@ -473,11 +473,11 @@ class LessonController {
         if (studentAnswer != this.currentPracticeCardAnswer) {
             this.practiceAnswerField.classList.remove('input-answer-success');
             this.practiceAnswerField.classList.add('input-answer-wrong');
-            document.querySelectorAll('.lesson-button.active-lesson-menu-item').forEach(button => {
+            document.querySelectorAll('.lesson-menu-button.active-lesson-menu-item').forEach(button => {
                 button.classList.add('lesson-button-wrong');
             })
         } else {
-            document.querySelectorAll('.lesson-button.active-lesson-menu-item').forEach(button => {
+            document.querySelectorAll('.lesson-menu-button.active-lesson-menu-item').forEach(button => {
                 button.classList.remove('lesson-button-wrong');
                 button.classList.add('lesson-button-success');
             })
@@ -853,7 +853,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
 
     const practiceAnswerInput = document.getElementById('practice-answer')
     practiceAnswerInput.addEventListener('input', () => {
-        const currentAnswer = practiceAnswerInput.value;
-        wsConnection.send('changeAnswerField', currentAnswer)
+        practiceAnswerInput.classList.remove('input-answer-wrong')
+        wsConnection.send('changeAnswerField', practiceAnswerInput.value)
     })
 })
