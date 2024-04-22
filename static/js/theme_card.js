@@ -349,12 +349,14 @@ class Controller {
         selectDiv.options[0].selected = true
     }
 
-    prepareActionSelect() {
+    prepareActionSelect(filledTheme=true) {
         this.actionSelect.innerHTML = ""
         this.addActionOption("", "Выберите действие", true)
         this.addActionOption("1", "Добавить карточку")
-        this.addActionOption("2", "Изменить карточку")
-        this.addActionOption("3", "Удалить карточку")
+        if (filledTheme) {
+            this.addActionOption("2", "Изменить карточку")
+            this.addActionOption("3", "Удалить карточку")
+        }
     }
 
     addActionOption(value, text, isPrimary = false) {
@@ -397,11 +399,18 @@ class Controller {
     prepareCardsSelect(themeId) {
         this.loadCards(themeId)
         .then(() => {
-            this.setCardsSelectOptions(this.cards, this.deleteCardSelect)
-            this.setCardsSelectOptions(this.cards, this.updateCardSelect)
+            if (this.cards.length !== 0) {
+                this.setCardsSelectOptions(this.cards, this.deleteCardSelect)
+                this.setCardsSelectOptions(this.cards, this.updateCardSelect)
+            }
             this.setCardPositionSelectOptions(Object.keys(this.cards).length, this.cardPositionSelect)
+
+            if (this.cards.length == 0) {
+                this.prepareActionSelect(false)
+            } else {
+                this.prepareActionSelect()
+            }
             this.actionSelectField.classList.remove('hidden-field')
-            this.prepareActionSelect()
         })
     }
 
@@ -435,7 +444,9 @@ class Controller {
             selectDiv.appendChild(option);
         }
 
-        selectDiv.options[selectDiv.options.length - 1].selected = true
+        if (amountCards) {
+            selectDiv.options[selectDiv.options.length - 1].selected = true
+        }
     }
 
     chooseExam(examId) {
