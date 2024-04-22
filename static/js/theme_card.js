@@ -1013,6 +1013,8 @@ class Controller {
         })
         .then(response => {
             flashMsg(response.message, this.flashMsg, 'success')
+            this.PreviewCardTheoryImage.src = response.image_path
+            this.PreviewCardTheoryImage.classList.remove('hidden-field')
             this.cardAction.innerText = 'Измененная карточка'
             this.chooseTheme(this.currentThemeId, true)
         })
@@ -1120,6 +1122,10 @@ class Controller {
         })
         .then(response => {
             flashMsg(response.message, this.flashMsg, 'success')
+            this.PreviewCardPracticeImage.src = response.image_path
+            this.PreviewCardPracticeImage.classList.remove('hidden-field')
+            this.PreviewCardPracticeTipImage.src = response.tip_image_path
+            this.PreviewCardPracticeTipImage.classList.remove('hidden-field')
             this.cardAction.innerText = 'Измененная карточка'
             this.chooseTheme(this.currentThemeId, true)
         })
@@ -1263,6 +1269,8 @@ class Controller {
             flashMsg(response.message, this.flashMsg, 'success')
             this.hideField('theoryCardInput')
             this.hideField('cardDataButtons')
+            this.PreviewCardTheoryImage.src = response.image_path
+            this.PreviewCardTheoryImage.classList.remove('hidden-field')
             this.cardAction.innerText = 'Созданная карточка'
             this.chooseTheme(this.currentThemeId, true)
         })
@@ -1370,6 +1378,10 @@ class Controller {
             flashMsg(response.message, this.flashMsg, 'success')
             this.hideField('theoryCardInput')
             this.hideField('cardDataButtons')
+            this.PreviewCardPracticeImage.src = response.image_path
+            this.PreviewCardPracticeImage.classList.remove('hidden-field')
+            this.PreviewCardPracticeTipImage.src = response.tip_image_path
+            this.PreviewCardPracticeTipImage.classList.remove('hidden-field')
             this.cardAction.innerText = 'Созданная карточка'
             this.chooseTheme(this.currentThemeId, true)
         })
@@ -1440,24 +1452,6 @@ class Controller {
             self.PreviewCardPracticeAnswerButton.innerText = 'Проверить'
         })
     }
-
-//    handleDownloadClick(controller) {
-//        console.log('click ebana')
-//        let file = controller.practiceFile.files[0];
-//
-//        if (file) {
-//            controller.practiceFileDownload.removeAttribute('href')
-//            controller.PreviewCardPracticeFileDownload.removeAttribute('href')
-//            let url = URL.createObjectURL(file);
-//            let a = document.createElement('a');
-//            a.href = url;
-//            a.download = controller.practiceFileName.value;
-//            document.body.appendChild(a);
-//            a.click();
-//            document.body.removeChild(a);
-//            URL.revokeObjectURL(url);
-//        }
-//    }
 }
 
 

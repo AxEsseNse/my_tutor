@@ -172,12 +172,12 @@ class ThemeRepository:
                 message="Прогресс изучения темы обнулен"
             )
 
-    def _to_add_theme_card_response(self, theme_model: ThemeModel) -> AddThemeCardResponse:
+    def _to_add_theme_card_response(self, new_card: CardPractice | CardTheory, theme_model: ThemeModel) -> AddThemeCardResponse:
 
         return self._add_theme_card_response(
-            exam=RUS_EXAMS[theme_model.exam_id],
-            title=theme_model.title,
-            message="В тему успешно добавлена карточка"
+            image_path=new_card.image_path,
+            tip_image_path=new_card.tip.image_path if hasattr(new_card, 'tip') else None,
+            message=f'В тему "{theme_model.title}" по профилю {RUS_EXAMS[theme_model.exam_id]} успешно добавлена карточка'
         )
 
     def _to_delete_theme_card_response(self, theme_model: ThemeModel, card_position: int) -> DeleteThemeCardResponse:
@@ -186,9 +186,11 @@ class ThemeRepository:
             message=f'В теме "{theme_model.title}" по профилю {RUS_EXAMS[theme_model.exam_id]} успешно удалена карточка № {card_position}'
         )
 
-    def _to_update_theme_card_response(self, theme_model: ThemeModel, new_position: int) -> UpdateThemeCardResponse:
+    def _to_update_theme_card_response(self, updated_card: CardPractice | CardTheory, theme_model: ThemeModel, new_position: int) -> UpdateThemeCardResponse:
 
         return self._update_theme_card_response(
+            image_path=updated_card.image_path,
+            tip_image_path=updated_card.tip.image_path if hasattr(updated_card, 'tip') else None,
             message=f'В теме "{theme_model.title}" по профилю {RUS_EXAMS[theme_model.exam_id]} успешно изменена карточка № {new_position}'
         )
 
@@ -454,7 +456,7 @@ class ThemeRepository:
         flag_modified(theme_model, "material")
         session.add(theme_model)
 
-        return self._to_add_theme_card_response(theme_model=theme_model)
+        return self._to_add_theme_card_response(new_card=new_card, theme_model=theme_model)
 
     async def delete_theme_card(
             self,
@@ -555,4 +557,4 @@ class ThemeRepository:
         theme_model.material.insert(theme_card_data.new_position - 1, serialized_card)
         flag_modified(theme_model, "material")
         session.add(theme_model)
-        return self._to_update_theme_card_response(theme_model=theme_model, new_position=theme_card_data.new_position)
+        return self._to_update_theme_card_response(updated_card=updated_card, theme_model=theme_model, new_position=theme_card_data.new_position)

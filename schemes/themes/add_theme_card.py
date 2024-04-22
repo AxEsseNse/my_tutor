@@ -25,3 +25,5 @@ class AddThemeTheoryCardRequest(BaseModel):
 
 class AddThemeCardResponse(BaseModel):
     message: str
+    image_path: Optional[str] = None
+    tip_image_path: Optional[str] = None
