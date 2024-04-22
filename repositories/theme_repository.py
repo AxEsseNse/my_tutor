@@ -419,7 +419,7 @@ class ThemeRepository:
             random_file = choice(files)
             return f"{os.sep}{os.path.join(directory, random_file)}"
         except ValueError:
-            return f"{os.sep}{os.path.join(directory, "default_image.svg")}"
+            return f"{os.sep}{os.path.join(directory, 'default_image.svg')}"
 
     async def add_theme_card(
             self,
