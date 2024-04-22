@@ -73,6 +73,16 @@
     background-color: #E68B8F;
 }
 
+.send-form-button {
+    color: black;
+    background-color: #B4B7FA;
+    transition: background-color 0.15s ease-in-out;
+}
+.send-form-button:hover,
+.send-form-button:focus-visible {
+    background-color: #F6E6AE;
+}
+
 .table-controller {
     background-color: #B4B7FA;
     width: 45px;

@@ -1,5 +1,5 @@
 <div
-    class="modal fade bd-example-modal-lg"
+    class="modal fade bd-example-modal-lg custom-modal"
     tabindex="-1"
     role="dialog"
     aria-labelledby="modal-lesson-finish"
@@ -7,7 +7,7 @@
     id="modal-lesson-finish"
 >
     <div class="modal-dialog modal-md">
-        <div class="modal-content">
+        <div class="modal-content custom-modal-body">
             <!-- Header окна завершения урока -->
             <div class="modal-header">
                 <h5 class="modal-title">Завершение урока</h5>
@@ -20,7 +20,7 @@
                     <div class="form-group row mt-2 mb-2">
                         <label class="col-3 col-form-label" for="lesson-finish-form-theme">Тема</label>
                         <div class="col-9">
-                            <textarea class="form-control" id="lesson-finish-form-theme" disabled></textarea>
+                            <textarea class="form-control disabled-input" id="lesson-finish-form-theme" disabled></textarea>
                         </div>
                     </div>
                     <!-- Поле выбора статуса урока -->
@@ -55,7 +55,7 @@
                     <hr id="lesson-finish-hr"/>
                     <!-- Кнопка отправки формы -->
                     <div class="text-center">
-                        <button type="button" class="btn btn-dark btn-block" id="lesson-finish-form-button">
+                        <button type="button" class="btn send-form-button" id="lesson-finish-form-button">
                             Завершить урок
                         </button>
                     </div>
