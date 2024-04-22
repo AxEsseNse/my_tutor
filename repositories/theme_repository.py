@@ -62,7 +62,7 @@ VARIABLE_SYMBOLS = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
                     'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
                     'U', 'V', 'W', 'X', 'Y', 'Z',
                     '0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-
+CURRENT_DIRECTORY = os.getcwd()
 
 class ThemeRepository:
     _theme = Theme
@@ -87,9 +87,10 @@ class ThemeRepository:
     _upload_file_response = UploadFileResponse
     _date_pattern = "%Y-%m-%d"
     _date_pattern_response = "%d.%m.%Y"
-    _default_tip_image_path = "/storage/themes/default_image/default_tip_image.jpg"
-    _default_theory_image_path = "/storage/themes/default_image/default_theory_image.jpg"
-    _default_practice_image_path = "/storage/themes/default_image/default_practice_image.jpg"
+    _default_image_directory = ["storage", "themes", "default_image"]
+    _default_theory_image_directory = ["storage", "themes", "default_image", "theory"]
+    _default_practice_image_directory = ["storage", "themes", "default_image", "practice"]
+    _default_tip_image_directory = ["storage", "themes", "default_image", "tip"]
 
     async def _get_new_theme_card_id(self, session: AsyncSession) -> int:
         return (await session.execute(self._theme_model.theme_card_id_seq.next_value())).scalar()
@@ -367,17 +368,14 @@ class ThemeRepository:
         if not theme_model:
             raise ThemeNotFoundError
 
-        print(theme_model.material)
-
         return theme_model.material
-        #return {card["card_id"]: card for card in theme_model.material}
 
     @staticmethod
     def create_random_name(amount_symbols, extension):
         return "".join([choice(VARIABLE_SYMBOLS) for _ in range(amount_symbols)]) + extension
 
     async def save_file_to_storage(self, path: str, file_data: UploadFile) -> UploadFileResponse:
-        exam_task_number_folder = "storage/themes/" + path
+        exam_task_number_folder = os.path.join("storage", "themes", path)# "storage/themes/" + path
         extension = os.path.splitext(file_data.filename)[1]
 
         try:
@@ -392,20 +390,36 @@ class ThemeRepository:
                     if not file_part:
                         break
                     await file.write(file_part)
-            return self._to_upload_file_response(file_path=f"/{file_path}")
+            return self._to_upload_file_response(file_path=f"{os.sep}{file_path}")
         except Exception:
             raise SaveFileError
 
     async def delete_file_from_storage(self, file_path: str) -> bool:
         try:
-            if os.path.exists(file_path[1:]):
-                if file_path in (
-                self._default_theory_image_path, self._default_practice_image_path, self._default_tip_image_path):
+            full_path = os.path.join(CURRENT_DIRECTORY, file_path[1:])
+            default_directory: str = os.path.join(*self._default_image_directory)
+            if os.path.exists(full_path):
+                if file_path[1:].startswith(default_directory):
                     return False
                 os.remove(file_path[1:])
             return False
         except Exception as e:
             return True
+
+    @staticmethod
+    def _get_random_default_image_path(directory):
+        """
+        Возвращает случайный путь к файлу изображения из указанной директории.
+        """
+        try:
+            directory = os.path.join(*directory)
+            files = [file for file in os.listdir(directory) if file.lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.svg'))]
+            if not files:
+                raise ValueError("В директории нет изображений")
+            random_file = choice(files)
+            return f"{os.sep}{os.path.join(directory, random_file)}"
+        except ValueError:
+            return f"{os.sep}{os.path.join(directory, "default_image.svg")}"
 
     async def add_theme_card(
             self,
@@ -425,11 +439,11 @@ class ThemeRepository:
                     type="theory",
                     title=theme_card_data.title,
                     descr=theme_card_data.descr,
-                    image_path=theme_card_data.image_path or self._default_theory_image_path
+                    image_path=theme_card_data.image_path or self._get_random_default_image_path(self._default_theory_image_directory)
                 )
             case AddThemePracticeCardRequest():
                 new_tip = self._material_practice_tip(
-                    image_path=theme_card_data.tip_image_path or self._default_tip_image_path,
+                    image_path=theme_card_data.tip_image_path or self._get_random_default_image_path(self._default_tip_image_directory),
                     descr=theme_card_data.tip_descr if theme_card_data.tip_descr else ""
                 )
                 new_card = self._material_practice(
@@ -437,7 +451,7 @@ class ThemeRepository:
                     type="practice",
                     title=theme_card_data.title,
                     descr=theme_card_data.descr,
-                    image_path=theme_card_data.image_path or self._default_practice_image_path,
+                    image_path=theme_card_data.image_path or self._get_random_default_image_path(self._default_practice_image_directory),
                     answer=theme_card_data.answer,
                     file_path=theme_card_data.file_path,
                     file_name=theme_card_data.file_name,
@@ -517,7 +531,7 @@ class ThemeRepository:
                     type="theory",
                     title=theme_card_data.title,
                     descr=theme_card_data.descr,
-                    image_path=theme_card_data.image_path or self._default_theory_image_path
+                    image_path=theme_card_data.image_path or self._get_random_default_image_path(self._default_theory_image_directory)
                 )
             case UpdateThemePracticeCardRequest():
                 current_tip_image_path = theme_model.material[theme_card_data.current_position - 1]["tip"]["image_path"]
@@ -535,7 +549,7 @@ class ThemeRepository:
                         raise DeleteFileError
 
                 new_tip = self._material_practice_tip(
-                    image_path=theme_card_data.tip_image_path or self._default_tip_image_path,
+                    image_path=theme_card_data.tip_image_path or self._get_random_default_image_path(self._default_tip_image_directory),
                     descr=theme_card_data.tip_descr if theme_card_data.tip_descr else ""
                 )
                 updated_card = self._material_practice(
@@ -543,7 +557,7 @@ class ThemeRepository:
                     type="practice",
                     title=theme_card_data.title,
                     descr=theme_card_data.descr,
-                    image_path=theme_card_data.image_path or self._default_practice_image_path,
+                    image_path=theme_card_data.image_path or self._get_random_default_image_path(self._default_practice_image_directory),
                     answer=theme_card_data.answer,
                     file_path=theme_card_data.file_path,
                     file_name=theme_card_data.file_name,
