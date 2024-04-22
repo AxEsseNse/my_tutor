@@ -18,8 +18,8 @@ from .themes import (
     ThemeNotFoundError,
     ThemeAlreadyExistError,
     ThemeCardNotFoundError,
-    SaveImageError,
-    DeleteImageError,
+    SaveFileError,
+    DeleteFileError,
     ThemeProgressFoundError
 )
 from .tutors import (

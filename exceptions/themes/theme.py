@@ -1,4 +1,4 @@
-__all__ = ["ThemeNotFoundError", "ThemeAlreadyExistError", "ThemeCardNotFoundError", "SaveImageError", "DeleteImageError", "ThemeProgressFoundError"]
+__all__ = ["ThemeNotFoundError", "ThemeAlreadyExistError", "ThemeCardNotFoundError", "SaveFileError", "DeleteFileError", "ThemeProgressFoundError"]
 
 
 class ThemeNotFoundError(Exception):
@@ -13,12 +13,12 @@ class ThemeCardNotFoundError(Exception):
     message = "В данной теме отсутствует карточка под таким номером"
 
 
-class SaveImageError(Exception):
-    message = "Ошибка сохранения изображения в файл"
+class SaveFileError(Exception):
+    message = "Ошибка сохранения файла на сервере"
 
 
-class DeleteImageError(Exception):
-    message = "Ошибка удаления изображения из хранилища"
+class DeleteFileError(Exception):
+    message = "Ошибка удаления файла из хранилища"
 
 
 class ThemeProgressFoundError(Exception):

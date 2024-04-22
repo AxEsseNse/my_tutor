@@ -28,7 +28,9 @@ from .update_theme_student_answers import (
     UpdateStudentAnswersRequest,
     UpdateStudentAnswersResponse
 )
-from .upload_image import UploadImageResponse
+from .upload_file import (
+    UploadFileResponse
+)
 from .update_theme_student_progress import (
     UpdateStudentProgressRequest,
     UpdateStudentProgressResponse

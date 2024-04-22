@@ -37,7 +37,7 @@ from .themes import (
     update_theme_student_answers,
     update_theme_student_progress,
     get_theme_cards,
-    theme_upload_image
+    theme_upload_file
 )
 from .tutors import (
     get_tutors,

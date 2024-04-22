@@ -15,8 +15,8 @@ from my_tutor.exceptions import (
     ThemeAlreadyExistError,
     ThemeCardNotFoundError,
     LessonNotFoundError,
-    SaveImageError,
-    DeleteImageError,
+    SaveFileError,
+    DeleteFileError,
     StudentNotFoundError,
     ThemeProgressFoundError
 )
@@ -40,10 +40,9 @@ from my_tutor.schemes import (
     UpdateStudentAnswersResponse,
     UpdateStudentProgressRequest,
     UpdateStudentProgressResponse,
-    UploadImageResponse
+    UploadFileResponse
 )
 from my_tutor.domain import Theme, ThemeInfo, Lesson, CardTheory, CardPractice, CardPracticeTip, ThemeOption
-
 
 
 moscow_tz = ZoneInfo('Europe/Moscow')
@@ -85,7 +84,7 @@ class ThemeRepository:
     _add_theme_card_response = AddThemeCardResponse
     _delete_theme_card_response = DeleteThemeCardResponse
     _update_theme_card_response = UpdateThemeCardResponse
-    _upload_image_response = UploadImageResponse
+    _upload_file_response = UploadFileResponse
     _date_pattern = "%Y-%m-%d"
     _date_pattern_response = "%d.%m.%Y"
     _default_tip_image_path = "/storage/themes/default_image/default_tip_image.jpg"
@@ -193,10 +192,10 @@ class ThemeRepository:
             message=f'В теме "{theme_model.title}" по профилю {RUS_EXAMS[theme_model.exam_id]} успешно изменена карточка № {new_position}'
         )
 
-    def _to_upload_image_response(self, image_path) -> UploadImageResponse:
+    def _to_upload_file_response(self, file_path) -> UploadFileResponse:
 
-        return self._upload_image_response(
-            image_path=image_path
+        return self._upload_file_response(
+            file_path=file_path
         )
 
     async def get_themes(self, session: AsyncSession) -> list[ThemeInfo]:
@@ -372,35 +371,36 @@ class ThemeRepository:
         #return {card["card_id"]: card for card in theme_model.material}
 
     @staticmethod
-    def create_random_image_name():
-        return "".join([choice(VARIABLE_SYMBOLS) for _ in range(5)]) + ".jpg"
+    def create_random_name(amount_symbols, extension):
+        return "".join([choice(VARIABLE_SYMBOLS) for _ in range(amount_symbols)]) + extension
 
-    async def save_image_to_file(self, path: str, image_data: UploadFile) -> UploadImageResponse:
+    async def save_file_to_storage(self, path: str, file_data: UploadFile) -> UploadFileResponse:
         exam_task_number_folder = "storage/themes/" + path
+        extension = os.path.splitext(file_data.filename)[1]
 
         try:
             if not os.path.exists(exam_task_number_folder):
                 os.makedirs(exam_task_number_folder)
 
-            image_path = exam_task_number_folder + self.create_random_image_name()
+            file_path = os.path.join(exam_task_number_folder, self.create_random_name(amount_symbols=5, extension=extension))
 
-            async with aiofiles.open(image_path, 'wb') as file:
+            async with aiofiles.open(file_path, 'wb') as file:
                 while True:
-                    image_part = image_data.file.read(1024)
-                    if not image_part:
+                    file_part = file_data.file.read(1024)
+                    if not file_part:
                         break
-                    await file.write(image_part)
-            return self._to_upload_image_response(image_path=f"/{image_path}")
+                    await file.write(file_part)
+            return self._to_upload_file_response(file_path=f"/{file_path}")
         except Exception:
-            raise SaveImageError
+            raise SaveFileError
 
-    async def delete_image_from_storage(self, image_path: str) -> bool:
+    async def delete_file_from_storage(self, file_path: str) -> bool:
         try:
-            if os.path.exists(image_path[1:]):
-                if image_path in (
+            if os.path.exists(file_path[1:]):
+                if file_path in (
                 self._default_theory_image_path, self._default_practice_image_path, self._default_tip_image_path):
                     return False
-                os.remove(image_path[1:])
+                os.remove(file_path[1:])
             return False
         except Exception as e:
             return True
@@ -437,6 +437,8 @@ class ThemeRepository:
                     descr=theme_card_data.descr,
                     image_path=theme_card_data.image_path or self._default_practice_image_path,
                     answer=theme_card_data.answer,
+                    file_path=theme_card_data.file_path,
+                    file_name=theme_card_data.file_name,
                     tip=new_tip
                 )
             case _:
@@ -473,11 +475,11 @@ class ThemeRepository:
         image_path = card["image_path"]
         tip_image_path = card["tip"]["image_path"] if card["type"] == "practice" else None
 
-        image_exists = await self.delete_image_from_storage(image_path)
-        image_tip_exists = await self.delete_image_from_storage(tip_image_path) if tip_image_path else False
+        image_exists = await self.delete_file_from_storage(file_path=image_path)
+        image_tip_exists = await self.delete_file_from_storage(file_path=tip_image_path) if tip_image_path else False
 
         if image_exists or image_tip_exists:
-            raise DeleteImageError
+            raise DeleteFileError
 
         del theme_model.material[theme_card_data.card_position - 1]
         flag_modified(theme_model, "material")
@@ -501,10 +503,10 @@ class ThemeRepository:
 
         current_image_path = theme_model.material[theme_card_data.current_position - 1]["image_path"]
         if current_image_path != theme_card_data.image_path:
-            image_exists = await self.delete_image_from_storage(current_image_path)
+            image_exists = await self.delete_file_from_storage(file_path=current_image_path)
 
             if image_exists:
-                raise DeleteImageError
+                raise DeleteFileError
 
         match theme_card_data:
             case UpdateThemeTheoryCardRequest():
@@ -518,10 +520,17 @@ class ThemeRepository:
             case UpdateThemePracticeCardRequest():
                 current_tip_image_path = theme_model.material[theme_card_data.current_position - 1]["tip"]["image_path"]
                 if current_tip_image_path != theme_card_data.tip_image_path:
-                    image_tip_exists = await self.delete_image_from_storage(current_tip_image_path)
+                    image_tip_exists = await self.delete_file_from_storage(file_path=current_tip_image_path)
 
                     if image_tip_exists:
-                        raise DeleteImageError
+                        raise DeleteFileError
+
+                current_file_path = theme_model.material[theme_card_data.current_position - 1]["file_path"]
+                if current_file_path and current_file_path != theme_card_data.file_path:
+                    file_exists = await self.delete_file_from_storage(file_path=current_file_path)
+
+                    if file_exists:
+                        raise DeleteFileError
 
                 new_tip = self._material_practice_tip(
                     image_path=theme_card_data.tip_image_path or self._default_tip_image_path,
@@ -534,6 +543,8 @@ class ThemeRepository:
                     descr=theme_card_data.descr,
                     image_path=theme_card_data.image_path or self._default_practice_image_path,
                     answer=theme_card_data.answer,
+                    file_path=theme_card_data.file_path,
+                    file_name=theme_card_data.file_name,
                     tip=new_tip
                 )
             case _:

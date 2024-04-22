@@ -48,7 +48,7 @@ from .themes import (
     UpdateStudentAnswersResponse,
     UpdateStudentProgressRequest,
     UpdateStudentProgressResponse,
-    UploadImageResponse
+    UploadFileResponse
 )
 from .tutors import (
     AddTutorRequest,

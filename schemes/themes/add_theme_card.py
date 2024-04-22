@@ -8,7 +8,8 @@ class AddThemePracticeCardRequest(BaseModel):
     descr: str
     image_path: Optional[str] = Field(None, alias="imagePath")
     answer: str
-    #tip: bool
+    file_path: Optional[str] = Field(None, alias="filePath")
+    file_name: Optional[str] = Field(None, alias="fileName")
     tip_image_path: Optional[str] = Field(None, alias="tipImagePath")
     tip_descr: Optional[str] = Field(None, alias="tipDescr")
     card_position: int = Field(alias="cardPosition")

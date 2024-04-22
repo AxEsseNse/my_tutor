@@ -12,6 +12,7 @@ class Controller {
         this.currentCardId = null
         this.currentCardPosition = null
         this.currentCardAnswer = null
+        this.currentCardFilePath = null
         this.currentCardImagePath = null
         this.currentCardTipImagePath = null
         this.themes = []
@@ -532,6 +533,7 @@ class Controller {
     }
 
     chooseCreateCard(cardType) {
+        this.currentCardFilePath = null
         this.currentCardImagePath = null
         this.currentCardTipImagePath = null
 
@@ -602,6 +604,7 @@ class Controller {
 
         this.currentCard = this.cards[cardPosition - 1]
         this.currentCardAnswer = this.currentCard['answer']
+        this.currentCardFilePath = this.currentCard['file_path'] ? this.currentCard['file_path'] : null;
         this.currentCardImagePath = this.currentCard['image_path']
         this.currentCardTipImagePath = this.currentCard['tip'] ? this.currentCard['tip']['image_path'] : null;
 
@@ -845,6 +848,7 @@ class Controller {
         this.PreviewCardPracticeFileDownload.removeAttribute('href')
         this.PreviewCardPracticeFileDownload.download = ''
         this.PreviewCardPracticeFileName.innerText = ''
+        this.currentCardFilePath = null
     }
 
     showPracticeCardImageField() {
@@ -906,9 +910,9 @@ class Controller {
         this.currentCardTipImagePath = null
     }
 
-    uploadImage(image, path) {
+    uploadFile(file, path) {
         const imgData = new FormData()
-        imgData.append('image_data', image)
+        imgData.append('file_data', file)
 
         let token = getCookie('My-Tutor-Auth-Token')
 
@@ -916,7 +920,7 @@ class Controller {
             return
         }
 
-        return fetch('/api/themes/image/upload/', {
+        return fetch('/api/themes/file/upload/', {
             method: 'POST',
             headers: {
                 'My-Tutor-Auth-Token': token,
@@ -935,9 +939,9 @@ class Controller {
         .then(text => {
             return JSON.parse(text)
         })
-        .then(imageResponse => {
-            if (imageResponse.hasOwnProperty('image_path')) {
-                return imageResponse['image_path']
+        .then(fileResponse => {
+            if (fileResponse.hasOwnProperty('file_path')) {
+                return fileResponse['file_path']
             } else {
                 return false
             }
@@ -970,7 +974,7 @@ class Controller {
 
         if (this.theoryImage.files.length > 0) {
             const path = `${this.exams[this.currentExamId]}/${this.themes[this.currentThemeId].exam_task_number}/`
-            this.currentCardImagePath = await this.uploadImage(this.theoryImage.files[0], path)
+            this.currentCardImagePath = await this.uploadFile(this.theoryImage.files[0], path)
 
             if (!this.currentCardImagePath) {
                 flashMsg('Не удалось загрузить изображение на сервер. Попробуй еще раз, либо внесите изменения в карточку, не изменяя изображение', this.flashMsg, 'wrong')
@@ -987,8 +991,7 @@ class Controller {
             currentPosition: this.currentCardPosition,
             newPosition: this.cardPositionSelect.value
         }
-        console.log(updateTheoryCardData)
-        return
+
         fetch(`/api/themes/${this.currentThemeId}/cards/`, {
             method: 'PUT',
             headers: {
@@ -1046,12 +1049,21 @@ class Controller {
             return
         }
 
-        //let tipFilled = false
         let tipDescr = null
+
+        if (this.practiceFile.files.length > 0) {
+            const path = `${this.exams[this.currentExamId]}/${this.themes[this.currentThemeId].exam_task_number}/`
+            this.currentCardFilePath = await this.uploadFile(this.practiceFile.files[0], path)
+
+            if (!this.currentCardFilePath) {
+                flashMsg('Не удалось загрузить файл на сервер. Попробуйте еще раз, либо внесите изменения в карточку, не изменяя файл', this.flashMsg, 'wrong')
+                return
+            }
+        }
 
         if (this.practiceImage.files.length > 0) {
             const path = `${this.exams[this.currentExamId]}/${this.themes[this.currentThemeId].exam_task_number}/`
-            this.currentCardImagePath = await this.uploadImage(this.practiceImage.files[0], path)
+            this.currentCardImagePath = await this.uploadFile(this.practiceImage.files[0], path)
 
             if (!this.currentCardImagePath) {
                 flashMsg('Не удалось загрузить изображение карточки на сервер. Попробуй еще раз, либо внесите изменения в карточку, не изменяя изображение', this.flashMsg, 'wrong')
@@ -1061,7 +1073,7 @@ class Controller {
 
         if (this.practiceTipImage.files.length > 0) {
             const path = `${this.exams[this.currentExamId]}/${this.themes[this.currentThemeId].exam_task_number}/`
-            this.currentCardTipImagePath = await this.uploadImage(this.practiceTipImage.files[0], path)
+            this.currentCardTipImagePath = await this.uploadFile(this.practiceTipImage.files[0], path)
 
             if (!this.currentCardTipImagePath) {
                 flashMsg('Не удалось загрузить изображение решения на сервер. Попробуй еще раз, либо внесите изменения в карточку, не изменяя изображение', this.flashMsg, 'wrong')
@@ -1080,14 +1092,12 @@ class Controller {
             descr: this.practiceDescr.value,
             ...(this.currentCardImagePath && { imagePath: this.currentCardImagePath}),
             answer: this.practiceAnswer.value,
-            //tip: tipFilled,
+            ...(this.currentCardFilePath && { filePath: this.currentCardFilePath, fileName: this.practiceFileName.value}),
             ...(tipDescr && { tipDescr: tipDescr }),
             ...(this.currentCardTipImagePath && { tipImagePath: this.currentCardTipImagePath }),
             currentPosition: this.currentCardPosition,
             newPosition: this.cardPositionSelect.value
         }
-
-        console.log(updatePracticeCardData)
 
         fetch(`/api/themes/${this.currentThemeId}/cards/`, {
             method: 'PUT',
@@ -1130,8 +1140,6 @@ class Controller {
             cardId: this.currentCardId,
             cardPosition: this.currentCardPosition
         }
-
-        console.log(deleteCardData)
 
         fetch(`/api/themes/${this.currentThemeId}/cards/`, {
             method: 'DELETE',
@@ -1216,7 +1224,7 @@ class Controller {
 
         if (this.theoryImage.files.length > 0) {
             const path = `${this.exams[this.currentExamId]}/${this.themes[this.currentThemeId].exam_task_number}/`
-            this.currentCardImagePath = await this.uploadImage(this.theoryImage.files[0], path)
+            this.currentCardImagePath = await this.uploadFile(this.theoryImage.files[0], path)
 
             if (!this.currentCardImagePath) {
                 flashMsg('Не удалось загрузить изображение на сервер. Попробуй еще раз, либо внесите изменения в карточку, не изменяя изображение', this.flashMsg, 'wrong')
@@ -1231,8 +1239,6 @@ class Controller {
             ...(this.currentCardImagePath && { imagePath: this.currentCardImagePath}),
             cardPosition: this.cardPositionSelect.value
         }
-
-        console.log(createTheoryCardData)
 
         fetch(`/api/themes/${this.currentThemeId}/cards/`, {
             method: 'POST',
@@ -1293,12 +1299,21 @@ class Controller {
             return
         }
 
-        //let tipFilled = false
         let tipDescr = null
+
+        if (this.practiceFile.files.length > 0) {
+            const path = `${this.exams[this.currentExamId]}/${this.themes[this.currentThemeId].exam_task_number}/`
+            this.currentCardFilePath = await this.uploadFile(this.practiceFile.files[0], path)
+
+            if (!this.currentCardFilePath) {
+                flashMsg('Не удалось загрузить файл на сервер. Попробуйте еще раз, либо внесите изменения в карточку, не изменяя файл', this.flashMsg, 'wrong')
+                return
+            }
+        }
 
         if (this.practiceImage.files.length > 0) {
             const path = `${this.exams[this.currentExamId]}/${this.themes[this.currentThemeId].exam_task_number}/`
-            this.currentCardImagePath = await this.uploadImage(this.practiceImage.files[0], path)
+            this.currentCardImagePath = await this.uploadFile(this.practiceImage.files[0], path)
 
             if (!this.currentCardImagePath) {
                 flashMsg('Не удалось загрузить изображение на сервер. Попробуй еще раз, либо внесите изменения в карточку, не изменяя изображение', this.flashMsg, 'wrong')
@@ -1308,7 +1323,7 @@ class Controller {
 
         if (this.practiceTipImage.files.length > 0) {
             const path = `${this.exams[this.currentExamId]}/${this.themes[this.currentThemeId].exam_task_number}/`
-            this.currentCardTipImagePath = await this.uploadImage(this.practiceTipImage.files[0], path)
+            this.currentCardTipImagePath = await this.uploadFile(this.practiceTipImage.files[0], path)
 
             if (!this.currentCardTipImagePath) {
                 flashMsg('Не удалось загрузить изображение решения на сервер. Попробуй еще раз, либо внесите изменения в карточку, не изменяя изображение', this.flashMsg, 'wrong')
@@ -1320,23 +1335,17 @@ class Controller {
             tipDescr = this.practiceTipDescr.value
         }
 
-//        if (!(tipDescr == null && this.currentCardTipImagePath == null)) {
-//            tipFilled = true
-//        }
-
         const createPracticeCardData = {
             themeId: this.currentThemeId,
             title: this.practiceTitle.value,
             descr: this.practiceDescr.value,
             ...(this.currentCardImagePath && { imagePath: this.currentCardImagePath}),
             answer: this.practiceAnswer.value,
-            //tip: tipFilled,
+            ...(this.currentCardFilePath && {filePath: this.currentCardFilePath, fileName: this.practiceFileName.value}),
             ...(tipDescr && { tipDescr: tipDescr }),
             ...(this.currentCardTipImagePath && { tipImagePath: this.currentCardTipImagePath }),
             cardPosition: this.cardPositionSelect.value
         }
-
-        console.log(createPracticeCardData)
 
         fetch(`/api/themes/${this.currentThemeId}/cards/`, {
             method: 'POST',
