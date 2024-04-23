@@ -27,15 +27,17 @@ lesson_repository = LessonRepository()
 @lessons_router.put("/{lesson_id:int}/")
 async def update_lesson(
     lesson_id: int,
-    lesson_data: UpdateNoteLessonRequest | ChangeLessonPaidStatusRequest | CancelLessonRequest | RescheduleLessonRequest | FinishLessonRequest,
+    lesson_data: FinishLessonRequest | UpdateNoteLessonRequest | ChangeLessonPaidStatusRequest | CancelLessonRequest | RescheduleLessonRequest,
     session: AsyncSession = Depends(get_db_session)
-) -> UpdateNoteLessonResponse | CancelLessonResponse | RescheduleLessonResponse | ChangeLessonPaidStatusResponse | FinishLessonResponse:
+) -> FinishLessonResponse | UpdateNoteLessonResponse | CancelLessonResponse | RescheduleLessonResponse | ChangeLessonPaidStatusResponse:
     if lesson_id != lesson_data.lesson_id:
         raise HTTPException(HTTPStatus.BAD_REQUEST, "Bad request data")
 
     try:
         async with session.begin():
             match lesson_data:
+                case FinishLessonRequest():
+                    return await lesson_repository.finish_lesson(session=session, lesson_data=lesson_data)
                 case UpdateNoteLessonRequest():
                     return await lesson_repository.update_lesson_note(session=session, lesson_data=lesson_data)
                 case CancelLessonRequest():
@@ -44,8 +46,7 @@ async def update_lesson(
                     return await lesson_repository.reschedule_lesson(session=session, lesson_data=lesson_data)
                 case ChangeLessonPaidStatusRequest():
                     return await lesson_repository.change_paid_status_lesson(session=session, lesson_data=lesson_data)
-                case FinishLessonRequest():
-                    return await lesson_repository.finish_lesson(session=session, lesson_data=lesson_data)
+
     except ValidationError as e:
         raise HTTPException(HTTPStatus.BAD_REQUEST, str(e))
     except LessonNotFoundError as e:
