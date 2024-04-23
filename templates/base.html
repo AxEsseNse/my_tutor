@@ -80,7 +80,6 @@
                                         <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modal-lesson-add" onclick="setTodayDate()">Создать урок</button></li>
                                     {% elif user.role == "Студент" %}
                                         <li><a class="dropdown-item btn btn-primary" href="/student-profile" role="button">Мой профиль</a></li>
-                                        <li><a class="dropdown-item btn btn-primary" href="/schedule" role="button">Расписание</a></li>
                                     {% endif %}
 
                                     <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modal-user-update-password" id="user-update-password-button">Сменить пароль</button></li>
