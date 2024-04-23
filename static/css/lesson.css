@@ -325,7 +325,8 @@ hr {
 #practice-descr {
     max-height: calc(100vh - 122px - 100px);
     overflow-y: auto;
-    padding: 25px 5px 30px 5px;
+    padding: 25px 25px 30px 5px;
+    white-space: pre-wrap;
 }
 
 #practice-image {
@@ -499,6 +500,7 @@ hr {
 #practice-tip-descr {
     margin-top: 30px;
     margin-bottom: 30px;
+    white-space: pre-wrap;
 }
 
 #lesson-finish-hr {
