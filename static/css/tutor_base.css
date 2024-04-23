@@ -1,7 +1,9 @@
-.tutor-menu{
-    position: relative;
-	height: 100%;
-	border-right: 3px solid linear-gradient(to top, #F6E6AE, #B4B7FA 110%);
+.tutor-menu {
+    position: fixed;
+	max-height: calc(100vh - 122px);
+	height: calc(100vh - 122px);
+    overflow-y: auto;
+    width: 16.66666667%;
 }
 .tutor-menu::after {
     content: "";
@@ -13,10 +15,13 @@
     background: linear-gradient(to top, #F6E6AE, #B4B7FA 110%);
     pointer-events: none;
 }
-.list-menu{
+.list-menu {
 	margin-top: 60px;
 }
-.list-menu li{
+.list-menu ul {
+	padding-left: 0px;
+}
+.list-menu li {
 	margin-top: 10px;
 }
 .list-menu-item {
@@ -34,4 +39,8 @@
 }
 .active-menu-item {
     border-left: 4px solid #F6E6AE;
+}
+#tutor-content {
+    width: 83.33333333%;
+    margin-left: 16.66666667%;
 }

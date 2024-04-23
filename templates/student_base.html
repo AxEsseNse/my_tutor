@@ -6,9 +6,9 @@
 {% block content %}
 <div class="container-fluid" style="height: 100%">
     <div class="row" style="height: 100%">
-        <div class="col-2 student-menu">
+        <div class="student-menu">
 		    <div class="list-menu">
-                <ul style="padding-left: 15px">
+                <ul>
                     <li><a class="list-menu-item" href="/student-profile" id="menu-list-profile">Мой профиль</a></li>
                     <li><a class="list-menu-item" href="/progress" id="menu-list-progress">Мой прогресс</a></li>
                     <li><a class="list-menu-item" href="/lesson-history" id="menu-list-lesson-history">История занятий</a></li>
@@ -18,7 +18,7 @@
                 </ul>
             </div>
         </div>
-        <div class="col-10" id="student-content">
+        <div id="student-content">
             {% block student_content %}{% endblock student_content %}
         </div>
     </div>

@@ -182,7 +182,7 @@ body {
 }
 
 #content {
-    max-height: calc(100vh - 122px - 1px);
+    max-height: calc(100vh - 122px);
     overflow-y: auto;
     height: calc(100vh - 122px);
     background: #B4D8FA;
