@@ -326,6 +326,9 @@ hr {
     max-height: calc(100vh - 122px - 100px);
     overflow-y: auto;
     padding: 25px 25px 30px 5px;
+}
+#theory-descr,
+#practice-descr-field {
     white-space: pre-wrap;
 }
 

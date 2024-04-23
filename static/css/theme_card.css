@@ -190,6 +190,9 @@
     max-height: calc(100vh - 130px - 100px);
     overflow-y: auto;
     padding: 25px 25px 30px 5px;
+}
+#practice-descr-field {
+
     white-space: pre-wrap;
 }
 
