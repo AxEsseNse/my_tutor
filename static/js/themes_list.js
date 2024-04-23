@@ -320,8 +320,8 @@ class ThemeFormUpdate {
             if (theme.hasOwnProperty('title')) {
                 this.updateRow.childNodes[0].innerText = theme.theme_id
                 this.updateRow.childNodes[1].innerText = theme.exam
-                this.updateRow.childNodes[2].innerText = theme.title
-                this.updateRow.childNodes[3].innerText = theme.descr
+                this.updateRow.childNodes[3].innerText = theme.title
+                this.updateRow.childNodes[4].innerText = theme.descr
 
                 flashMsg(`В профиле "${theme.exam}" успешно изменена тема "${theme.title}"`, this.flashMsg, 'success')
                 console.log(theme.message)
