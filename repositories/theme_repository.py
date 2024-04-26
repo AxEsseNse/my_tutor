@@ -1,4 +1,5 @@
 import aiofiles
+import hashlib
 import os
 from datetime import datetime
 from random import choice
@@ -9,7 +10,6 @@ from pydantic import ValidationError
 from sqlalchemy import select, desc
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm.attributes import flag_modified
-
 from my_tutor.exceptions import (
     ThemeNotFoundError,
     ThemeAlreadyExistError,
@@ -371,42 +371,6 @@ class ThemeRepository:
         return theme_model.material
 
     @staticmethod
-    def create_random_name(amount_symbols, extension):
-        return "".join([choice(VARIABLE_SYMBOLS) for _ in range(amount_symbols)]) + extension
-
-    async def save_file_to_storage(self, path: str, file_data: UploadFile) -> UploadFileResponse:
-        exam_task_number_folder = os.path.join("storage", "themes", path)# "storage/themes/" + path
-        extension = os.path.splitext(file_data.filename)[1]
-
-        try:
-            if not os.path.exists(exam_task_number_folder):
-                os.makedirs(exam_task_number_folder)
-
-            file_path = os.path.join(exam_task_number_folder, self.create_random_name(amount_symbols=5, extension=extension))
-
-            async with aiofiles.open(file_path, 'wb') as file:
-                while True:
-                    file_part = file_data.file.read(1024)
-                    if not file_part:
-                        break
-                    await file.write(file_part)
-            return self._to_upload_file_response(file_path=f"{os.sep}{file_path}")
-        except Exception:
-            raise SaveFileError
-
-    async def delete_file_from_storage(self, file_path: str) -> bool:
-        try:
-            full_path = os.path.join(CURRENT_DIRECTORY, file_path[1:])
-            default_directory: str = os.path.join(*self._default_image_directory)
-            if os.path.exists(full_path):
-                if file_path[1:].startswith(default_directory):
-                    return False
-                os.remove(file_path[1:])
-            return False
-        except Exception as e:
-            return True
-
-    @staticmethod
     def _get_random_default_image_path(directory):
         """
         Возвращает случайный путь к файлу изображения из указанной директории.
@@ -434,6 +398,7 @@ class ThemeRepository:
 
         match theme_card_data:
             case AddThemeTheoryCardRequest():
+                print('add theory')
                 new_card = self._material_theory(
                     card_id=await self._get_new_theme_card_id(session=session),
                     type="theory",
@@ -442,6 +407,7 @@ class ThemeRepository:
                     image_path=theme_card_data.image_path or self._get_random_default_image_path(self._default_theory_image_directory)
                 )
             case AddThemePracticeCardRequest():
+                print('add practice')
                 new_tip = self._material_practice_tip(
                     image_path=theme_card_data.tip_image_path or self._get_random_default_image_path(self._default_tip_image_directory),
                     descr=theme_card_data.tip_descr if theme_card_data.tip_descr else ""
@@ -454,7 +420,7 @@ class ThemeRepository:
                     image_path=theme_card_data.image_path or self._get_random_default_image_path(self._default_practice_image_directory),
                     answer=theme_card_data.answer,
                     file_path=theme_card_data.file_path,
-                    file_name=theme_card_data.file_name,
+                    file_name=f"{theme_card_data.file_name}.{theme_card_data.file_path.split('.')[-1]}" if theme_card_data.file_path else theme_card_data.file_name,
                     tip=new_tip
                 )
             case _:
@@ -475,7 +441,8 @@ class ThemeRepository:
     async def delete_theme_card(
             self,
             session: AsyncSession,
-            theme_card_data: DeleteThemeCardRequest
+            theme_card_data: DeleteThemeCardRequest,
+            file_repository
     ) -> DeleteThemeCardResponse:
         theme_model = (
             await session.execute(select(self._theme_model).filter_by(theme_id=theme_card_data.theme_id))).scalars().first()
@@ -490,11 +457,15 @@ class ThemeRepository:
 
         image_path = card["image_path"]
         tip_image_path = card["tip"]["image_path"] if card["type"] == "practice" else None
+        file_path = card["file_path"] if "file_path" in card else None
 
-        image_exists = await self.delete_file_from_storage(file_path=image_path)
-        image_tip_exists = await self.delete_file_from_storage(file_path=tip_image_path) if tip_image_path else False
+        # image_exists = await self.delete_file_from_storage(file_path=image_path)
+        # image_tip_exists = await self.delete_file_from_storage(file_path=tip_image_path) if tip_image_path else False
+        image_exists = await file_repository.delete_file_from_storage(session=session, file_path=image_path)
+        image_tip_exists = await file_repository.delete_file_from_storage(session=session, file_path=tip_image_path) if tip_image_path else False
+        file_exists = await file_repository.delete_file_from_storage(session=session, file_path=file_path) if file_path else False
 
-        if image_exists or image_tip_exists:
+        if image_exists or image_tip_exists or file_exists:
             raise DeleteFileError
 
         del theme_model.material[theme_card_data.card_position - 1]
@@ -506,7 +477,8 @@ class ThemeRepository:
     async def update_theme_card(
             self,
             session: AsyncSession,
-            theme_card_data: UpdateThemeTheoryCardRequest | UpdateThemePracticeCardRequest
+            theme_card_data: UpdateThemeTheoryCardRequest | UpdateThemePracticeCardRequest,
+            file_repository
     ) -> UpdateThemeCardResponse:
         theme_model = (
             await session.execute(select(self._theme_model).filter_by(theme_id=theme_card_data.theme_id))).scalars().first()
@@ -519,10 +491,13 @@ class ThemeRepository:
 
         current_image_path = theme_model.material[theme_card_data.current_position - 1]["image_path"]
         if current_image_path != theme_card_data.image_path:
-            image_exists = await self.delete_file_from_storage(file_path=current_image_path)
+            image_exists = await file_repository.delete_file_from_storage(session=session, file_path=current_image_path)
 
             if image_exists:
                 raise DeleteFileError
+        else:
+            if theme_card_data.new_image_uploaded:
+                await file_repository.update_file_reference_count(session=session, file_path=current_image_path, change_value=-1)
 
         match theme_card_data:
             case UpdateThemeTheoryCardRequest():
@@ -536,17 +511,27 @@ class ThemeRepository:
             case UpdateThemePracticeCardRequest():
                 current_tip_image_path = theme_model.material[theme_card_data.current_position - 1]["tip"]["image_path"]
                 if current_tip_image_path != theme_card_data.tip_image_path:
-                    image_tip_exists = await self.delete_file_from_storage(file_path=current_tip_image_path)
+                    image_tip_exists = await file_repository.delete_file_from_storage(session=session, file_path=current_tip_image_path)
 
                     if image_tip_exists:
                         raise DeleteFileError
+                else:
+                    if theme_card_data.new_tip_image_uploaded:
+                        await file_repository.update_file_reference_count(session=session, file_path=current_tip_image_path,
+                                                                          change_value=-1)
 
                 current_file_path = theme_model.material[theme_card_data.current_position - 1]["file_path"]
-                if current_file_path and current_file_path != theme_card_data.file_path:
-                    file_exists = await self.delete_file_from_storage(file_path=current_file_path)
+                if current_file_path:
+                    if current_file_path != theme_card_data.file_path:
+                        file_exists = await file_repository.delete_file_from_storage(session=session,
+                                                                                     file_path=current_file_path)
 
-                    if file_exists:
-                        raise DeleteFileError
+                        if file_exists:
+                            raise DeleteFileError
+                    else:
+                        await file_repository.update_file_reference_count(session=session,
+                                                                          file_path=current_file_path,
+                                                                          change_value=-1)
 
                 new_tip = self._material_practice_tip(
                     image_path=theme_card_data.tip_image_path or self._get_random_default_image_path(self._default_tip_image_directory),
@@ -560,7 +545,7 @@ class ThemeRepository:
                     image_path=theme_card_data.image_path or self._get_random_default_image_path(self._default_practice_image_directory),
                     answer=theme_card_data.answer,
                     file_path=theme_card_data.file_path,
-                    file_name=theme_card_data.file_name,
+                    file_name=f"{theme_card_data.file_name}.{theme_card_data.file_path.split('.')[-1]}" if theme_card_data.file_path else theme_card_data.file_name,
                     tip=new_tip
                 )
             case _:

@@ -15,6 +15,9 @@ class Controller {
         this.currentCardFilePath = null
         this.currentCardImagePath = null
         this.currentCardTipImagePath = null
+        this.newImageUploaded = false
+        this.newTipImageUploaded = false
+        this.newFileUploaded = false
         this.themes = []
         this.themesSelectField = document.getElementById('theme-select')
         this.themesSelect = document.getElementById('theme-card-theme')
@@ -983,9 +986,11 @@ class Controller {
             return
         }
 
+        this.newImageUploaded = false
         if (this.theoryImage.files.length > 0) {
             const path = `${this.exams[this.currentExamId]}/${this.themes[this.currentThemeId].exam_task_number}/`
             this.currentCardImagePath = await this.uploadFile(this.theoryImage.files[0], path)
+            this.newImageUploaded = true
 
             if (!this.currentCardImagePath) {
                 flashMsg('Не удалось загрузить изображение на сервер. Попробуй еще раз, либо внесите изменения в карточку, не изменяя изображение', this.flashMsg, 'wrong')
@@ -999,6 +1004,7 @@ class Controller {
             title: this.theoryTitle.value,
             descr: this.theoryDescr.value,
             ...(this.currentCardImagePath && { imagePath: this.currentCardImagePath}),
+            newImageUploaded: this.newImageUploaded,
             currentPosition: this.currentCardPosition,
             newPosition: this.cardPositionSelect.value
         }
@@ -1064,9 +1070,11 @@ class Controller {
 
         let tipDescr = null
 
+        this.newFileUploaded = false
         if (this.practiceFile.files.length > 0) {
             const path = `${this.exams[this.currentExamId]}/${this.themes[this.currentThemeId].exam_task_number}/`
             this.currentCardFilePath = await this.uploadFile(this.practiceFile.files[0], path)
+            this.newFileUploaded = true
 
             if (!this.currentCardFilePath) {
                 flashMsg('Не удалось загрузить файл на сервер. Попробуйте еще раз, либо внесите изменения в карточку, не изменяя файл', this.flashMsg, 'wrong')
@@ -1074,9 +1082,11 @@ class Controller {
             }
         }
 
+        this.newImageUploaded = false
         if (this.practiceImage.files.length > 0) {
             const path = `${this.exams[this.currentExamId]}/${this.themes[this.currentThemeId].exam_task_number}/`
             this.currentCardImagePath = await this.uploadFile(this.practiceImage.files[0], path)
+            this.newImageUploaded = true
 
             if (!this.currentCardImagePath) {
                 flashMsg('Не удалось загрузить изображение карточки на сервер. Попробуй еще раз, либо внесите изменения в карточку, не изменяя изображение', this.flashMsg, 'wrong')
@@ -1084,9 +1094,11 @@ class Controller {
             }
         }
 
+        this.newTipImageUploaded = false
         if (this.practiceTipImage.files.length > 0) {
             const path = `${this.exams[this.currentExamId]}/${this.themes[this.currentThemeId].exam_task_number}/`
             this.currentCardTipImagePath = await this.uploadFile(this.practiceTipImage.files[0], path)
+            this.newTipImageUploaded = true
 
             if (!this.currentCardTipImagePath) {
                 flashMsg('Не удалось загрузить изображение решения на сервер. Попробуй еще раз, либо внесите изменения в карточку, не изменяя изображение', this.flashMsg, 'wrong')
@@ -1104,10 +1116,13 @@ class Controller {
             title: this.practiceTitle.value,
             descr: this.practiceDescr.value,
             ...(this.currentCardImagePath && { imagePath: this.currentCardImagePath}),
+            newImageUploaded: this.newImageUploaded,
             answer: this.practiceAnswer.value,
             ...(this.currentCardFilePath && { filePath: this.currentCardFilePath, fileName: this.practiceFileName.value}),
+            newFileUploaded: this.newFileUploaded,
             ...(tipDescr && { tipDescr: tipDescr }),
             ...(this.currentCardTipImagePath && { tipImagePath: this.currentCardTipImagePath }),
+            newTipImageUploaded: this.newTipImageUploaded,
             currentPosition: this.currentCardPosition,
             newPosition: this.cardPositionSelect.value
         }

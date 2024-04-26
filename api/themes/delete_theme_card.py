@@ -4,12 +4,13 @@ from fastapi import Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from my_tutor.exceptions import ThemeNotFoundError, DeleteFileError
-from my_tutor.repositories import ThemeRepository
+from my_tutor.repositories import ThemeRepository, FileRepository
 from my_tutor.routers import themes_router
 from my_tutor.session import get_db_session
 from my_tutor.schemes import DeleteThemeCardRequest, DeleteThemeCardResponse
 
 theme_repository = ThemeRepository()
+file_repository = FileRepository()
 
 
 @themes_router.delete("/{theme_id:int}/cards/")
@@ -25,7 +26,7 @@ async def delete_theme_card(
     try:
         async with session.begin():
 
-            return await theme_repository.delete_theme_card(session, theme_card_data=theme_card_data)
+            return await theme_repository.delete_theme_card(session, theme_card_data=theme_card_data, file_repository=file_repository)
     except ThemeNotFoundError as e:
         raise HTTPException(HTTPStatus.NOT_FOUND, e.message)
     except DeleteFileError as e:

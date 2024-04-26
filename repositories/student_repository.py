@@ -7,7 +7,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 from datetime import datetime
 
-from my_tutor.repositories import UserRepository
 from my_tutor.exceptions import (
     StudentNotFoundError,
     StudentSaveImageError,
@@ -43,7 +42,6 @@ from my_tutor.domain import (
 )
 
 
-user_repository = UserRepository()
 MONTHS = (
     "января",
     "февраля",
@@ -322,7 +320,6 @@ class StudentRepository:
         session.add(student_model)
 
         return self._to_update_student_response(student_model=student_model)
-
 
     async def update_primary_info(self, session: AsyncSession, student_data: UpdateStudentPrimaryInfoRequest, user_id: int) -> UpdateStudentPrimaryInfoResponse:
         student_model = (

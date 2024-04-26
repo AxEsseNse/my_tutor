@@ -6,3 +6,4 @@ from .themes import ThemeModel
 from .tutors import TutorModel
 from .lessons import LessonModel
 from .studying import StudyingModel, ThemeStatusModel
+from .files import FileModel

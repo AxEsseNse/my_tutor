@@ -5,12 +5,13 @@ from pydantic import ValidationError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from my_tutor.exceptions import ThemeNotFoundError, ThemeCardNotFoundError, DeleteFileError
-from my_tutor.repositories import ThemeRepository
+from my_tutor.repositories import ThemeRepository, FileRepository
 from my_tutor.routers import themes_router
 from my_tutor.schemes import UpdateThemeTheoryCardRequest, UpdateThemePracticeCardRequest, UpdateThemeCardResponse
 from my_tutor.session import get_db_session
 
 theme_repository = ThemeRepository()
+file_repository = FileRepository()
 
 
 @themes_router.put("/{theme_id:int}/cards/")
@@ -26,7 +27,7 @@ async def update_theme_card(
     try:
         async with session.begin():
 
-            return await theme_repository.update_theme_card(session, theme_card_data=theme_card_data)
+            return await theme_repository.update_theme_card(session, theme_card_data=theme_card_data, file_repository=file_repository)
     except ValidationError as e:
         raise HTTPException(HTTPStatus.BAD_REQUEST, str(e))
     except ThemeNotFoundError as e:

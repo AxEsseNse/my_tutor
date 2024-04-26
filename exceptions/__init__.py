@@ -18,7 +18,7 @@ from .themes import (
     ThemeNotFoundError,
     ThemeAlreadyExistError,
     ThemeCardNotFoundError,
-    SaveFileError,
+    #SaveFileError,
     DeleteFileError,
     ThemeProgressFoundError
 )
@@ -34,4 +34,9 @@ from .lessons import (
     LessonFinishError,
     LessonAlreadyFinished,
     LessonNotStarted
+)
+from .files import (
+    FileDataNotFoundError,
+    FileDataAlreadyExistError,
+    SaveFileError
 )
