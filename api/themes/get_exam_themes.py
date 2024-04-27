@@ -15,7 +15,7 @@ async def get_exam_themes(exam_id: int, session: AsyncSession = Depends(get_db_s
     return await theme_repository.get_exam_themes(session=session, exam_id=exam_id)
 
 
-@themes_router.get("/exam/{exam_id:int}/options/", response_model=dict[int, ThemeOption])
-async def get_exam_themes_options(exam_id: int, session: AsyncSession = Depends(get_db_session)) -> dict[int, ThemeOption]:
+@themes_router.get("/exam/{exam_id:int}/options/", response_model=list[ThemeOption])
+async def get_exam_themes_options(exam_id: int, session: AsyncSession = Depends(get_db_session)) -> list[ThemeOption]:
 
     return await theme_repository.get_exam_themes_options(session=session, exam_id=exam_id)

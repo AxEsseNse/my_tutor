@@ -211,10 +211,10 @@ class ThemeRepository:
 
         return [self._to_theme_info(theme_model=theme_model) for theme_model in themes_models]
 
-    async def get_exam_themes_options(self, session: AsyncSession, exam_id: int) -> dict[int, ThemeOption]:
+    async def get_exam_themes_options(self, session: AsyncSession, exam_id: int) -> list[ThemeOption]:
         themes_models = (await session.execute(select(self._theme_model).filter_by(exam_id=exam_id).order_by(self._theme_model.exam_task_number, self._theme_model.title))).scalars().all()
 
-        return {theme_model.theme_id: self._to_theme_option(theme_model=theme_model) for theme_model in themes_models}
+        return [self._to_theme_option(theme_model=theme_model) for theme_model in themes_models]
 
     async def get_theme(self, session: AsyncSession, theme_id: int) -> Theme:
         theme_model = (await session.execute(select(self._theme_model).filter_by(theme_id=theme_id))).scalars().first()
