@@ -4,6 +4,7 @@ class Controller {
             1: "ege",
             2: "oge"
         }
+        this.forbiddenSymbols = '<>:."/\\|?*'
 
         this.currentExamId = null
         this.currentThemeId = null
@@ -493,6 +494,8 @@ class Controller {
                 this.hideField('practiceCardInput')
                 this.hideField('cardDataButtons')
                 this.createCardField.classList.remove('hidden-field')
+                this.createTheoryCardButton.classList.remove('active-type-button')
+                this.createPracticeCardButton.classList.remove('active-type-button')
 
                 const lastOption = document.createElement('option')
                 lastOption.value = 0
@@ -571,6 +574,7 @@ class Controller {
             this.practiceDescr.value = ''
             this.practiceAnswer.value = ''
             this.practiceTipDescr.value = ''
+            this.practiceTipImagePreview.removeAttribute('src')
             this.sendCardDataButton.onclick = () => {
                 this.createPracticeCard()
             }
@@ -664,7 +668,7 @@ class Controller {
 
             if (card.file_name && card.file_path) {
                 this.PreviewCardPracticeFileField.classList.remove('hidden-field')
-                this.PreviewCardPracticeFileName.innerText = card.file_name
+                this.PreviewCardPracticeFileName.innerText = card.file_name.split('.')[0]
                 this.PreviewCardPracticeFileDownload.href = card.file_path
                 this.PreviewCardPracticeFileDownload.download = card.file_name
 
@@ -747,10 +751,11 @@ class Controller {
             this.practiceImagePreview.src = card.image_path
             this.practiceImage.value = ''
             this.practiceAnswer.value = card.answer
+            this.practiceFile.value = ''
 
             if (card.file_name && card.file_path) {
-                this.practiceFileName.value = card.file_name
-                this.practiceFileNameLink.innerText = card.file_name
+                this.practiceFileName.value = card.file_name.split('.')[0]
+                this.practiceFileNameLink.innerText = card.file_name.split('.')[0]
                 this.practiceFileDownload.href = card.file_path
                 this.practiceFileDownload.download = card.file_name
 
@@ -763,7 +768,6 @@ class Controller {
                 this.practiceFileDownload.removeAttribute('download')
                 this.practiceFileNameLink.innerText = ''
                 this.practiceFileName.value = ''
-                this.practiceFile.value = ''
                 if (!this.practiceFileDownloadButton.classList.contains('file-download-disable')) {
                     this.practiceFileDownloadButton.classList.add('file-download-disable')
                 }
@@ -902,13 +906,17 @@ class Controller {
     showPracticeCardTipField() {
         this.hideField('practiceCardTipButtonAddField')
         this.hideField('practiceCardTipImageButtonAddField')
-//        this.hideField('practiceCardTipImageButtonDeleteField')
-//        this.practiceTipImageButtonAddField.classList.remove('hidden-field')
-//        this.hideField('practiceCardTipImageField')
         this.practiceTipButtonDeleteField.classList.remove('hidden-field')
         this.practiceTipImageButtonDeleteField.classList.remove('hidden-field')
         this.practiceTipField.classList.remove('hidden-field')
         this.practiceTipImageField.classList.remove('hidden-field')
+
+        if (this.practiceTipImage.value == '' && this.currentCardTipImagePath == null) {
+            this.hideField('practiceCardTipImageButtonDeleteField')
+            this.hideField('practiceCardTipImageField')
+            this.hideField('practiceCardTipImageButtonDeleteField')
+            this.practiceTipImageButtonAddField.classList.remove('hidden-field')
+        }
     }
 
     deletePracticeCardTip() {
@@ -1229,6 +1237,17 @@ class Controller {
                     return 'Необходимо заполнить поле с ответом на задачу'
                 }
                 break
+            case 'practiceFileName':
+                if (this.practiceFileName.value == '') {
+                    return 'Необходимо заполнить поле с названием файла'
+                } else {
+                    for (let i = 0; i < this.forbiddenSymbols.length; i++) {
+                        if (this.practiceFileName.value.includes(this.forbiddenSymbols[i])) {
+                            return 'Имя файла содержит недопустимые символы - <>:."/\\|?*';
+                        }
+                    }
+                }
+                break
         }
         return null
     }
@@ -1330,6 +1349,13 @@ class Controller {
 
         if (validateAnswer) {
             flashMsg(validateAnswer, this.flashMsg, 'wrong')
+            return
+        }
+
+        const validateFileName = this.validateField('practiceFileName')
+
+        if (validateFileName) {
+            flashMsg(validateFileName, this.flashMsg, 'wrong')
             return
         }
 
