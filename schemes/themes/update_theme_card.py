@@ -35,3 +35,4 @@ class UpdateThemeCardResponse(BaseModel):
     message: str
     image_path: Optional[str] = None
     tip_image_path: Optional[str] = None
+    file_path: Optional[str] = None

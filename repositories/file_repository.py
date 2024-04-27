@@ -121,7 +121,6 @@ class FileRepository:
                 with open(existing_file_path, 'rb') as existing_file:
                     if uploaded_file_hash == hashlib.sha256(existing_file.read()).hexdigest():
                         await self.update_file_reference_count(session=session, file_path=f"{os.sep}{existing_file_path}", change_value=1)
-
                         return self._to_upload_file_response(file_path=f"{os.sep}{existing_file_path}")
 
             file_path = os.path.join(exam_task_number_folder,
@@ -135,7 +134,6 @@ class FileRepository:
                     await file.write(file_part)
 
             await self.add_file(session=session, file_path=f"{os.sep}{file_path}")
-
             return self._to_upload_file_response(file_path=f"{os.sep}{file_path}")
         except Exception as e:
             print(e)

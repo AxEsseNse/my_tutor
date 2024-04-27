@@ -479,6 +479,7 @@ class Controller {
             this.hideField('cardContent')
         }
 
+        this.currentExamTaskNumber = this.themes.find(theme => theme.id === 6).exam_task_number
         this.prepareCardsSelect(themeId)
     }
 
@@ -996,7 +997,7 @@ class Controller {
 
         this.newImageUploaded = false
         if (this.theoryImage.files.length > 0) {
-            const path = `${this.exams[this.currentExamId]}/${this.themes[this.currentThemeId].exam_task_number}/`
+            const path = `${this.exams[this.currentExamId]}/${this.currentExamTaskNumber}/`
             this.currentCardImagePath = await this.uploadFile(this.theoryImage.files[0], path)
             this.newImageUploaded = true
 
@@ -1076,11 +1077,20 @@ class Controller {
             return
         }
 
+        if (this.practiceFile.value !== '' && this.currentCardFilePath !== null) {
+            const validateFileName = this.validateField('practiceFileName')
+
+            if (validateFileName) {
+                flashMsg(validateFileName, this.flashMsg, 'wrong')
+                return
+            }
+        }
+
         let tipDescr = null
 
         this.newFileUploaded = false
         if (this.practiceFile.files.length > 0) {
-            const path = `${this.exams[this.currentExamId]}/${this.themes[this.currentThemeId].exam_task_number}/`
+            const path = `${this.exams[this.currentExamId]}/${this.currentExamTaskNumber}/`
             this.currentCardFilePath = await this.uploadFile(this.practiceFile.files[0], path)
             this.newFileUploaded = true
 
@@ -1092,7 +1102,7 @@ class Controller {
 
         this.newImageUploaded = false
         if (this.practiceImage.files.length > 0) {
-            const path = `${this.exams[this.currentExamId]}/${this.themes[this.currentThemeId].exam_task_number}/`
+            const path = `${this.exams[this.currentExamId]}/${this.currentExamTaskNumber}/`
             this.currentCardImagePath = await this.uploadFile(this.practiceImage.files[0], path)
             this.newImageUploaded = true
 
@@ -1104,7 +1114,7 @@ class Controller {
 
         this.newTipImageUploaded = false
         if (this.practiceTipImage.files.length > 0) {
-            const path = `${this.exams[this.currentExamId]}/${this.themes[this.currentThemeId].exam_task_number}/`
+            const path = `${this.exams[this.currentExamId]}/${this.currentExamTaskNumber}/`
             this.currentCardTipImagePath = await this.uploadFile(this.practiceTipImage.files[0], path)
             this.newTipImageUploaded = true
 
@@ -1158,6 +1168,7 @@ class Controller {
             flashMsg(response.message, this.flashMsg, 'success')
             this.PreviewCardPracticeImage.src = response.image_path
             this.PreviewCardPracticeImage.classList.remove('hidden-field')
+            this.PreviewCardPracticeFileDownload.href = response.file_path
             this.PreviewCardPracticeTipImage.src = response.tip_image_path
             this.PreviewCardPracticeTipImage.classList.remove('hidden-field')
             this.cardAction.innerText = 'Измененная карточка'
@@ -1274,7 +1285,7 @@ class Controller {
         }
 
         if (this.theoryImage.files.length > 0) {
-            const path = `${this.exams[this.currentExamId]}/${this.themes[this.currentThemeId].exam_task_number}/`
+            const path = `${this.exams[this.currentExamId]}/${this.currentExamTaskNumber}/`
             this.currentCardImagePath = await this.uploadFile(this.theoryImage.files[0], path)
 
             if (!this.currentCardImagePath) {
@@ -1352,17 +1363,19 @@ class Controller {
             return
         }
 
-        const validateFileName = this.validateField('practiceFileName')
+        if (this.practiceFile.value !== '') {
+            const validateFileName = this.validateField('practiceFileName')
 
-        if (validateFileName) {
-            flashMsg(validateFileName, this.flashMsg, 'wrong')
-            return
+            if (validateFileName) {
+                flashMsg(validateFileName, this.flashMsg, 'wrong')
+                return
+            }
         }
 
         let tipDescr = null
 
         if (this.practiceFile.files.length > 0) {
-            const path = `${this.exams[this.currentExamId]}/${this.themes[this.currentThemeId].exam_task_number}/`
+            const path = `${this.exams[this.currentExamId]}/${this.currentExamTaskNumber}/`
             this.currentCardFilePath = await this.uploadFile(this.practiceFile.files[0], path)
 
             if (!this.currentCardFilePath) {
@@ -1372,7 +1385,7 @@ class Controller {
         }
 
         if (this.practiceImage.files.length > 0) {
-            const path = `${this.exams[this.currentExamId]}/${this.themes[this.currentThemeId].exam_task_number}/`
+            const path = `${this.exams[this.currentExamId]}/${this.currentExamTaskNumber}/`
             this.currentCardImagePath = await this.uploadFile(this.practiceImage.files[0], path)
 
             if (!this.currentCardImagePath) {
@@ -1382,7 +1395,7 @@ class Controller {
         }
 
         if (this.practiceTipImage.files.length > 0) {
-            const path = `${this.exams[this.currentExamId]}/${this.themes[this.currentThemeId].exam_task_number}/`
+            const path = `${this.exams[this.currentExamId]}/${this.currentExamTaskNumber}/`
             this.currentCardTipImagePath = await this.uploadFile(this.practiceTipImage.files[0], path)
 
             if (!this.currentCardTipImagePath) {
@@ -1428,10 +1441,13 @@ class Controller {
         })
         .then(response => {
             flashMsg(response.message, this.flashMsg, 'success')
+            console.log('PIZDA')
+            console.log(response)
             this.hideField('theoryCardInput')
             this.hideField('cardDataButtons')
             this.PreviewCardPracticeImage.src = response.image_path
             this.PreviewCardPracticeImage.classList.remove('hidden-field')
+            this.PreviewCardPracticeFileDownload.href = response.file_path
             this.PreviewCardPracticeTipImage.src = response.tip_image_path
             this.PreviewCardPracticeTipImage.classList.remove('hidden-field')
             this.cardAction.innerText = 'Созданная карточка'

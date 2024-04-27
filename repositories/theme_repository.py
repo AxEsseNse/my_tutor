@@ -178,6 +178,7 @@ class ThemeRepository:
         return self._add_theme_card_response(
             image_path=new_card.image_path,
             tip_image_path=new_card.tip.image_path if hasattr(new_card, 'tip') else None,
+            file_path=new_card.file_path if hasattr(new_card, 'file_path') else None,
             message=f'В тему "{theme_model.title}" по профилю {RUS_EXAMS[theme_model.exam_id]} успешно добавлена карточка'
         )
 
@@ -192,6 +193,7 @@ class ThemeRepository:
         return self._update_theme_card_response(
             image_path=updated_card.image_path,
             tip_image_path=updated_card.tip.image_path if hasattr(updated_card, 'tip') else None,
+            file_path=updated_card.file_path if hasattr(updated_card, 'file_path') else None,
             message=f'В теме "{theme_model.title}" по профилю {RUS_EXAMS[theme_model.exam_id]} успешно изменена карточка № {new_position}'
         )
 
@@ -398,7 +400,6 @@ class ThemeRepository:
 
         match theme_card_data:
             case AddThemeTheoryCardRequest():
-                print('add theory')
                 new_card = self._material_theory(
                     card_id=await self._get_new_theme_card_id(session=session),
                     type="theory",
@@ -407,7 +408,6 @@ class ThemeRepository:
                     image_path=theme_card_data.image_path or self._get_random_default_image_path(self._default_theory_image_directory)
                 )
             case AddThemePracticeCardRequest():
-                print('add practice')
                 new_tip = self._material_practice_tip(
                     image_path=theme_card_data.tip_image_path or self._get_random_default_image_path(self._default_tip_image_directory),
                     descr=theme_card_data.tip_descr if theme_card_data.tip_descr else ""
@@ -529,7 +529,8 @@ class ThemeRepository:
                         if file_exists:
                             raise DeleteFileError
                     else:
-                        await file_repository.update_file_reference_count(session=session,
+                        if theme_card_data.new_file_uploaded:
+                            await file_repository.update_file_reference_count(session=session,
                                                                           file_path=current_file_path,
                                                                           change_value=-1)
 
