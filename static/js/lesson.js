@@ -233,42 +233,36 @@ class LessonController {
     }
 
     startLessonTimer(duration) {
-        let timer = duration, minutes, seconds;
+        const startTime = Date.now()
         const lessonTimer = this.lessonTimer
+        lessonTimer.classList.remove('hidden-field')
         const flashDuration = 500
         let flashStatus = false
 
-        function updateTimerDisplay(mins, secs) {
-            minutes = parseInt(mins, 10)
-            seconds = parseInt(secs, 10)
+        function updateTimerDisplay() {
+            const elapsed = Math.floor((Date.now() - startTime) / 1000)
+            const remaining = duration - elapsed
+            const minutes = Math.floor(remaining / 60)
+            const seconds = remaining % 60
+            lessonTimer.textContent = `${minutes < 10 ? "0" + minutes : minutes} : ${seconds < 10 ? "0" + seconds : seconds}`
 
-            minutes = minutes < 10 ? "0" + minutes : minutes
-            seconds = seconds < 10 ? "0" + seconds : seconds
-
-            lessonTimer.textContent = minutes + " : " + seconds
-        }
-
-        updateTimerDisplay(timer / 60, timer % 60);
-        lessonTimer.classList.remove('hidden-field')
-
-        var interval = setInterval(function () {
-            updateTimerDisplay(timer / 60, timer % 60)
-
-            if (--timer < 0) {
+            if (remaining <= 0) {
                 clearInterval(interval)
                 lessonTimer.textContent = "00 : 00"
                 lessonTimer.style.color = '#F6E6AE'
-
-                const flashInterval = setInterval(function () {
+                const flashInterval = setInterval(() => {
                     lessonTimer.style.visibility = flashStatus ? 'visible' : 'hidden'
                     flashStatus = !flashStatus
-                }, flashDuration);
-                setTimeout(function () {
+                }, flashDuration)
+                setTimeout(() => {
                     clearInterval(flashInterval)
                     window.location.href = '/'
                 }, 300000)
             }
-        }, 1000)
+        }
+
+        updateTimerDisplay()
+        const interval = setInterval(updateTimerDisplay, 1000)
     }
 
     loadLesson() {
