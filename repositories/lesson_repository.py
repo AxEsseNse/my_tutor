@@ -85,7 +85,7 @@ class LessonRepository:
             exam=RUS_EXAMS[lesson_model.theme.exam_id],
             exam_task_number=lesson_model.theme.exam_task_number,
             theme_title=lesson_model.theme.title,
-            pay_status='Оплачено' if lesson_model.is_paid else 'Не оплачено'
+            pay_status=lesson_model.is_paid
         )
 
     def _to_tutor_lesson(self, lesson_model: LessonModel) -> TutorLesson:

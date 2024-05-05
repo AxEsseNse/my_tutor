@@ -7,7 +7,7 @@ class StudentLesson(BaseModel):
     exam: str
     exam_task_number: int
     theme_title: str
-    pay_status: str
+    pay_status: bool
 
 
 class TutorLesson(BaseModel):
