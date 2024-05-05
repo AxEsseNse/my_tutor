@@ -479,7 +479,8 @@ class Controller {
             this.hideField('cardContent')
         }
 
-        this.currentExamTaskNumber = this.themes.find(theme => theme.id === 6).exam_task_number
+        const theme = this.themes.find(theme => theme.id == themeId)
+        this.currentExamTaskNumber = theme.exam_task_number
         this.prepareCardsSelect(themeId)
     }
 
