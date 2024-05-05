@@ -11,14 +11,13 @@ function sendForm() {
   }
 
   const login = document.getElementById('login').value
-  const password = document.getElementById('password').value
+  const passwordInput = document.getElementById('password')
+  const password = passwordInput.value
 
   const UserForm = {
     login: login,
     password: password,
   }
-
-  console.log(UserForm)
 
   fetch('/api/login', {
     method: 'POST',
@@ -29,6 +28,7 @@ function sendForm() {
     .then(data => {
       if (typeof data !== 'string') {
         console.log(data.detail)
+        passwordInput.value = ''
         alert(data.detail)
         return
       }
