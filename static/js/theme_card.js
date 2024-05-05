@@ -669,8 +669,8 @@ class Controller {
 
             if (card.file_name && card.file_path) {
                 this.PreviewCardPracticeFileField.classList.remove('hidden-field')
-                const indexLastPoint = card.file_name.lastIndexOf('.')
-                this.PreviewCardPracticeFileName.innerText = card.file_name.substring(0, indexLastPoint)
+                const lastDotIndex = card.file_name.lastIndexOf('.')
+                this.PreviewCardPracticeFileName.innerText = card.file_name.substring(0, lastDotIndex)
                 this.PreviewCardPracticeFileDownload.href = card.file_path
                 this.PreviewCardPracticeFileDownload.download = card.file_name
 
@@ -754,9 +754,9 @@ class Controller {
             this.practiceFile.value = ''
 
             if (card.file_name && card.file_path) {
-                const indexLastPoint = card.file_name.lastIndexOf('.')
-                this.practiceFileName.value = card.file_name.substring(0, indexLastPoint)
-                this.practiceFileNameLink.innerText = card.file_name.substring(0, indexLastPoint)
+                const lastDotIndex = card.file_name.lastIndexOf('.')
+                this.practiceFileName.value = card.file_name.substring(0, lastDotIndex)
+                this.practiceFileNameLink.innerText = card.file_name.substring(0, lastDotIndex)
                 this.practiceFileDownload.href = card.file_path
                 this.practiceFileDownload.download = card.file_name
 

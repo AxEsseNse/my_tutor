@@ -400,8 +400,8 @@ class LessonController {
 
             if (card.file_name && card.file_path) {
                 this.practiceDownloadFileField.classList.remove('hidden-field')
-                const indexLastPoint = card.file_name.lastIndexOf('.')
-                this.practiceDownloadFileName.innerText = card.file_name.substring(0, indexLastPoint)
+                const lastDotIndex = card.file_name.lastIndexOf('.')
+                this.practiceDownloadFileName.innerText = card.file_name.substring(0, lastDotIndex)
                 this.practiceDownloadFile.href = card.file_path
                 this.practiceDownloadFile.download = card.file_name
             } else {
