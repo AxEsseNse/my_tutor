@@ -4,7 +4,7 @@ class Controller {
             1: "ege",
             2: "oge"
         }
-        this.forbiddenSymbols = '<>:."/\\|?*'
+        this.forbiddenSymbols = '<>:"/\\|?*'
 
         this.currentExamId = null
         this.currentThemeId = null
@@ -246,7 +246,6 @@ class Controller {
                 }
                 break
             case 'practiceCardTipButtonDeleteField':
-                console.log('4')
                 if (!this.practiceTipButtonDeleteField.classList.contains('hidden-field')) {
                     this.practiceTipButtonDeleteField.classList.add('hidden-field')
                 }
@@ -670,7 +669,8 @@ class Controller {
 
             if (card.file_name && card.file_path) {
                 this.PreviewCardPracticeFileField.classList.remove('hidden-field')
-                this.PreviewCardPracticeFileName.innerText = card.file_name.split('.')[0]
+                const indexLastPoint = card.file_name.lastIndexOf('.')
+                this.PreviewCardPracticeFileName.innerText = card.file_name.substring(0, indexLastPoint)
                 this.PreviewCardPracticeFileDownload.href = card.file_path
                 this.PreviewCardPracticeFileDownload.download = card.file_name
 
@@ -722,8 +722,6 @@ class Controller {
     }
 
     checkAnswer() {
-        console.log(this.currentCardAnswer)
-
         if (this.PreviewCardPracticeAnswerField.value != this.currentCardAnswer) {
             this.PreviewCardPracticeAnswerField.classList.remove('input-answer-success')
             if (!this.PreviewCardPracticeAnswerField.classList.contains('input-answer-wrong')) {
@@ -756,8 +754,9 @@ class Controller {
             this.practiceFile.value = ''
 
             if (card.file_name && card.file_path) {
-                this.practiceFileName.value = card.file_name.split('.')[0]
-                this.practiceFileNameLink.innerText = card.file_name.split('.')[0]
+                const indexLastPoint = card.file_name.lastIndexOf('.')
+                this.practiceFileName.value = card.file_name.substring(0, indexLastPoint)
+                this.practiceFileNameLink.innerText = card.file_name.substring(0, indexLastPoint)
                 this.practiceFileDownload.href = card.file_path
                 this.practiceFileDownload.download = card.file_name
 
@@ -1255,7 +1254,7 @@ class Controller {
                 } else {
                     for (let i = 0; i < this.forbiddenSymbols.length; i++) {
                         if (this.practiceFileName.value.includes(this.forbiddenSymbols[i])) {
-                            return 'Имя файла содержит недопустимые символы - <>:."/\\|?*';
+                            return 'Имя файла содержит недопустимые символы - <>:"/\\|?*';
                         }
                     }
                 }
@@ -1442,8 +1441,6 @@ class Controller {
         })
         .then(response => {
             flashMsg(response.message, this.flashMsg, 'success')
-            console.log('PIZDA')
-            console.log(response)
             this.hideField('theoryCardInput')
             this.hideField('cardDataButtons')
             this.PreviewCardPracticeImage.src = response.image_path
