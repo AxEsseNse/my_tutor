@@ -89,6 +89,48 @@ body {
     box-shadow: 0 0 0 0.2rem #F6E6AE;
 }
 
+.changelog-title {
+    margin-top: 25px;
+    margin-bottom: 15px;
+    font-size: 36px;
+    font-family: Georgia;
+    font-weight: 600;
+    padding-left: 100px;
+    padding-top: 40px;
+    color: #14A9A5;
+}
+.changelog-hr {
+    width: 300px;
+    margin-left: 60px;
+}
+.changelog-date {
+    font-family: Georgia;
+    font-size: 36px;
+    font-weight: 400;
+    padding-left: 100px;
+    color: black;
+}
+.changelog-list {
+    padding-left: 120px;
+    font-weight: 300;
+    font-size: 24px;
+    padding-top: 20px;
+    color: black;
+    list-style-type: none;
+}
+.changelog-list li {
+    position: relative;
+    padding-left: 20px;
+    margin-top: 5px;
+}
+.changelog-list li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: #14A9A5;
+    font-size: 24px;
+}
+
 .not-available {
     padding-left: 100px;
     padding-top: 40px;
