@@ -80,7 +80,7 @@ class LessonRepository:
     def _to_student_lesson(self, lesson_model: LessonModel) -> StudentLesson:
 
         return self._student_lesson(
-            date=lesson_model.date.strftime(self._date_pattern),
+            date=datetime.strftime(lesson_model.date.astimezone(moscow_tz), self._date_pattern),
             tutor=f"{lesson_model.tutor.second_name} {lesson_model.tutor.first_name}",
             exam=RUS_EXAMS[lesson_model.theme.exam_id],
             exam_task_number=lesson_model.theme.exam_task_number,
