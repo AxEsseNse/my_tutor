@@ -381,7 +381,7 @@ hr {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    margin-top: 30px;
+    margin-top: 60px;
     margin-bottom: 30px;
 }
 
@@ -519,4 +519,14 @@ hr {
 .send-form-button:hover,
 .send-form-button:focus-visible {
     background-color: #F6E6AE;
+}
+
+.answer-tooltip {
+    background-color: #B4B7FA;
+    color: black;
+    padding: 5px 10px;
+    border: 3px solid #F6E6AE;
+    border-radius: 10px;
+    z-index: 1000;
+    white-space: nowrap;
 }

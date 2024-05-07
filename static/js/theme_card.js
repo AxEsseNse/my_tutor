@@ -591,6 +591,7 @@ class Controller {
         } else {
             this.PreviewCardPracticeDescr.innerText = ''
             this.PreviewCardPracticeAnswerField.value = ''
+            this.PreviewCardPracticeAnswerField.setAttribute('data-tooltip', '')
             this.PreviewCardPracticeTipDescr.innerText = ''
         }
     }
@@ -691,6 +692,7 @@ class Controller {
 
             this.PreviewCardPracticeAnswerField.classList.remove('input-answer-success')
             this.PreviewCardPracticeAnswerField.classList.remove('input-answer-wrong')
+            this.PreviewCardPracticeAnswerField.setAttribute('data-tooltip', card.answer)
             this.PreviewCardPracticeAnswerButton.innerText = 'Проверить'
             this.currentPracticeCardAnswer = card.answer
             this.PreviewCardPracticeAnswerButton.onclick = () => {
@@ -1513,9 +1515,41 @@ class Controller {
         this.practiceAnswer.addEventListener('input', () => {
             self.currentCardAnswer = event.target.value
             self.PreviewCardPracticeAnswerField.value = ''
+            self.PreviewCardPracticeAnswerField.setAttribute('data-tooltip', event.target.value)
             self.PreviewCardPracticeAnswerField.classList.remove('input-answer-success')
             self.PreviewCardPracticeAnswerField.classList.remove('input-answer-wrong')
             self.PreviewCardPracticeAnswerButton.innerText = 'Проверить'
+        })
+    }
+
+    setCardAnswerTitleEventListener() {
+        let tooltipTimeout
+
+        this.PreviewCardPracticeAnswerField.addEventListener('mouseover', function() {
+            const inputElement = this
+
+            if (!inputElement.getAttribute('data-tooltip').trim()) {
+                return
+            }
+
+            tooltipTimeout = setTimeout(function() {
+                let tooltip = document.createElement('div')
+                tooltip.className = 'answer-tooltip'
+                tooltip.textContent = inputElement.getAttribute('data-tooltip')
+                document.body.appendChild(tooltip)
+
+                tooltip.style.position = 'absolute'
+                tooltip.style.left = inputElement.getBoundingClientRect().left + 'px'
+                tooltip.style.top = (inputElement.getBoundingClientRect().top - tooltip.offsetHeight - 5) + 'px'
+            }, 1000)
+        })
+
+        this.PreviewCardPracticeAnswerField.addEventListener('mouseout', function() {
+            clearTimeout(tooltipTimeout)
+            const tooltip = document.querySelector('.answer-tooltip')
+            if (tooltip) {
+                tooltip.remove()
+            }
         })
     }
 }
@@ -1663,4 +1697,5 @@ document.addEventListener('DOMContentLoaded', function (event) {
     controller.setInputTextEventListener(controller.practiceTipDescr, controller.PreviewCardPracticeTipDescr)
 
     controller.setCardAnswerEventListener()
+    controller.setCardAnswerTitleEventListener()
 })

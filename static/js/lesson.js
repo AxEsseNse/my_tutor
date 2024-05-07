@@ -408,6 +408,7 @@ class LessonController {
             }
             this.practiceAnswerField.classList.remove('input-answer-wrong', 'input-answer-success');
             this.practiceAnswerField.disabled = false;
+            this.practiceAnswerField.setAttribute('data-tooltip', card.answer)
             this.practiceAnswerButton.disabled = false;
             this.practiceAnswerButton.innerHTML = 'Проверить'
 
@@ -454,6 +455,37 @@ class LessonController {
                 }
             this.wsConnection.send('fillContent', data)
         }
+    }
+
+    setCardAnswerTitleEventListener() {
+        let tooltipTimeout
+
+        this.practiceAnswerField.addEventListener('mouseover', function() {
+            const inputElement = this
+
+            if (!inputElement.getAttribute('data-tooltip').trim()) {
+                return
+            }
+
+            tooltipTimeout = setTimeout(function() {
+                let tooltip = document.createElement('div')
+                tooltip.className = 'answer-tooltip'
+                tooltip.textContent = inputElement.getAttribute('data-tooltip')
+                document.body.appendChild(tooltip)
+
+                tooltip.style.position = 'absolute'
+                tooltip.style.left = inputElement.getBoundingClientRect().left + 'px'
+                tooltip.style.top = (inputElement.getBoundingClientRect().top - tooltip.offsetHeight - 5) + 'px'
+            }, 1000)
+        })
+
+        this.practiceAnswerField.addEventListener('mouseout', function() {
+            clearTimeout(tooltipTimeout)
+            const tooltip = document.querySelector('.answer-tooltip')
+            if (tooltip) {
+                tooltip.remove()
+            }
+        })
     }
 
     checkAnswer(wsMessage=false, needUpdate=false) {
@@ -851,4 +883,8 @@ document.addEventListener('DOMContentLoaded', function (event) {
         practiceAnswerInput.classList.remove('input-answer-wrong')
         wsConnection.send('changeAnswerField', practiceAnswerInput.value)
     })
+
+    if (userRole == "Преподаватель") {
+        lessonController.setCardAnswerTitleEventListener()
+    }
 })
