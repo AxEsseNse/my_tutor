@@ -20,6 +20,41 @@
     width: 30%;
 }
 
+.join-lesson-link {
+    height: 62px;
+}
+.lesson-enter-mini-button {
+    width: 45px;
+    height: 45px;
+    font-size: 20px;
+    color: #F6E6AE;
+    font-weight: 500;
+    border: 5px solid #14A9A5;
+    border-radius: 30px;
+    text-align: center;
+    vertical-align: middle;
+    text-decoration: none;
+    cursor: default;
+    white-space: nowrap;
+    user-select: none;
+    transition: box-shadow 0.15s ease-in-out;
+}
+.lesson-enter-mini-button:hover,
+.lesson-enter-mini-button:focus-visible {
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem #F6E6AE;
+}
+.lesson-enter-mini-button:disabled {
+    opacity: 0.5;
+    box-shadow: none;
+}
+.lesson-enter-available {
+    background-color: #72E179;
+}
+.lesson-enter-not-available {
+    background-color: #E68B8F;
+}
+
 .paid-status-button {
     display: inline-block;
     padding: 2px 8px;
@@ -34,6 +69,7 @@
     cursor: default;
     user-select: none;
     font-size: 20px;
+    transition: box-shadow 0.15s ease-in-out;
 }
 .paid-status-button:hover,
 .paid-status-button:focus-visible {

@@ -2,11 +2,13 @@ from pydantic import BaseModel
 
 
 class StudentLesson(BaseModel):
+    lesson_id: int
     date: str
     tutor: str
     exam: str
     exam_task_number: int
     theme_title: str
+    status: str
     pay_status: bool
 
 

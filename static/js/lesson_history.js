@@ -85,6 +85,7 @@ class LessonsTable {
 
     fillRow(row, lesson) {
         if (lesson.hasOwnProperty('tutor')) {
+            this.addJoinLessonCell(row, lesson.status, lesson.lesson_id)
             this.addCell(row, lesson.date, 'text-center')
             this.addCell(row, lesson.tutor)
             this.addCell(row, lesson.exam)
@@ -92,12 +93,12 @@ class LessonsTable {
             this.addCell(row, lesson.theme_title)
 
             if (lesson.status !== 'CANCELED') {
-                this.addPayStatus(row, lesson.pay_status, lesson.lesson_id)
+                this.addPayStatus(row, lesson.pay_status, lesson.lesson_id, 'student')
             } else {
                 this.addCell(row, '')
             }
         } else {
-            this.addCell(row, lesson.lesson_id, 'text-center')
+            this.addJoinLessonCell(row, lesson.status, lesson.lesson_id)
             this.addCell(row, lesson.date, 'text-center')
             this.addCell(row, lesson.student)
             this.addCell(row, lesson.exam)
@@ -106,7 +107,7 @@ class LessonsTable {
             this.addCell(row, lesson.note)
 
             if (lesson.status !== 'CANCELED') {
-                this.addPayStatus(row, lesson.pay_status, lesson.lesson_id)
+                this.addPayStatus(row, lesson.pay_status, lesson.lesson_id, 'tutor')
             } else {
                 this.addCell(row, '')
             }
@@ -132,20 +133,61 @@ class LessonsTable {
         cell.innerHTML = content
     }
 
-    addPayStatus(row, isPaid, lessonId) {
+    addJoinLessonCell(row, status, lessonId) {
+        let cell = row.insertCell()
+        cell.classList.add('align-middle')
+        cell.classList.add('text-center')
+        cell.setAttribute('lessonId', lessonId)
+
+        if (status == 'FINISHED' | status == 'CANCELED') {
+            cell.innerText = ''
+            return
+        }
+
+        const link = document.createElement('a')
+        link.classList.add('join-lesson-link')
+        const button = document.createElement('button')
+        button.classList.add('lesson-enter-mini-button', 'lesson-enter-available')
+
+//        if (status !== 'FINISHED' && status !== 'CANCELED') {
+        //button.classList.add('lesson-enter-available')
+        button.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i>'
+        button.title = 'Присоединиться'
+        link.href = `/lesson/${lessonId}`
+//        } else {
+//            button.classList.add('lesson-enter-not-available')
+//            button.title = 'Урок не доступен'
+//            button.innerHTML = '<i class="fa-solid fa-ban"></i>'
+//            button.disabled = true
+//        }
+
+        link.appendChild(button)
+        cell.appendChild(link)
+    }
+
+    addPayStatus(row, isPaid, lessonId, role) {
         let cell = row.insertCell()
         cell.classList.add('align-middle')
         cell.classList.add('text-center')
         const button = document.createElement('button')
         button.classList.add('paid-status-button')
-        button.title = 'Изменить статус оплаты'
+
+        if (role == 'tutor') {
+            button.title = 'Изменить статус оплаты'
+        }
 
         if (isPaid) {
             button.innerHTML = '<i class="fa-solid fa-check"></i>'
             button.classList.add('lesson-paid')
+            if (role == 'student') {
+                button.title = 'Занятие оплачено'
+            }
         } else {
             button.innerHTML = '<i class="fa-solid fa-xmark"></i>'
             button.classList.add('lesson-not-paid')
+            if (role == 'student') {
+                button.title = 'Занятие не оплачено'
+            }
         }
 
         if (userRole == "Преподаватель") {
@@ -186,7 +228,7 @@ class LessonsTable {
         .then(response => response.json())
         .then(data => {
             button.innerHTML = ''
-            const currentLesson = this.lessons.find(obj => obj.lesson_id == row.childNodes[0].innerText)
+            const currentLesson = this.lessons.find(obj => obj.lesson_id == row.childNodes[0].getAttribute('lessonId'))
             currentLesson.pay_status = data.pay_status
 
             if (data.pay_status) {
@@ -287,7 +329,7 @@ class UpdateNoteLessonForm {
     }
 
     fillUpdateNoteForm() {
-        this.inputLessonId.value = this.updateRow.childNodes[0].innerText
+        this.inputLessonId.value = this.updateRow.childNodes[0].getAttribute('lessonId')
         this.inputTutor.value = this.tutor
         this.inputStudent.value = this.updateRow.childNodes[2].innerText
         this.inputDate.value = this.formattedDate
@@ -379,7 +421,7 @@ class RescheduleLessonForm {
     }
 
     fillRescheduleForm() {
-        this.inputLessonId.value = this.updateRow.childNodes[0].innerText
+        this.inputLessonId.value = this.updateRow.childNodes[0].getAttribute('lessonId')
         this.inputTutor.value = this.tutor
         this.inputStudent.value = this.updateRow.childNodes[2].innerText
         this.inputDate.value = this.formattedDate
@@ -500,7 +542,7 @@ class CancelLessonForm {
     }
 
     fillCancelForm() {
-        this.inputLessonId.value = this.updateRow.childNodes[0].innerText
+        this.inputLessonId.value = this.updateRow.childNodes[0].getAttribute('lessonId')
         this.inputTutor.value = this.tutor
         this.inputStudent.value = this.updateRow.childNodes[2].innerText
         this.inputDate.value = this.formattedDate
