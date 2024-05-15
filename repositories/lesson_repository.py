@@ -7,6 +7,7 @@ from zoneinfo import ZoneInfo
 from my_tutor.exceptions import (
     LessonAlreadyExistError,
     LessonNotFoundError,
+    LessonAlreadyStarted,
     LessonAlreadyFinished,
     LessonNotStarted,
     StudentAlreadyHasLesson,
@@ -571,6 +572,9 @@ class LessonRepository:
 
         if not lesson_model:
             raise LessonNotFoundError
+
+        if lesson_model.status != "CREATED":
+            raise LessonAlreadyStarted
 
         if lesson_data.new_student_id != lesson_data.current_student_id:
             previous_hour = lesson_model.date - timedelta(minutes=59)

@@ -1,4 +1,4 @@
-__all__ = ["LessonAlreadyExistError", "LessonNotFoundError", "LessonFinishError", "LessonAlreadyFinished"]
+__all__ = ["LessonAlreadyExistError", "LessonNotFoundError", "LessonFinishError", "LessonAlreadyStarted", "LessonAlreadyFinished", "LessonNotStarted"]
 
 
 class LessonAlreadyExistError(Exception):
@@ -11,6 +11,10 @@ class LessonNotFoundError(Exception):
 
 class LessonFinishError(Exception):
     message = "Урок не может автоматически завершиться"
+
+
+class LessonAlreadyStarted(Exception):
+    message = "Тему или ученика можно изменить только у НЕНАЧАТЫХ занятий"
 
 
 class LessonAlreadyFinished(Exception):

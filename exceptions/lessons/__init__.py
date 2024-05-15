@@ -1,1 +1,8 @@
-from .lesson import LessonAlreadyExistError, LessonNotFoundError, LessonFinishError, LessonAlreadyFinished, LessonNotStarted
+from .lesson import (
+    LessonAlreadyExistError,
+    LessonNotFoundError,
+    LessonFinishError,
+    LessonAlreadyStarted,
+    LessonAlreadyFinished,
+    LessonNotStarted
+)

@@ -4,7 +4,12 @@ from fastapi import Depends, HTTPException
 from pydantic import ValidationError
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from my_tutor.exceptions import LessonNotFoundError, TutorAlreadyHasLesson, StudentAlreadyHasLesson
+from my_tutor.exceptions import (
+    LessonNotFoundError,
+    TutorAlreadyHasLesson,
+    StudentAlreadyHasLesson,
+    LessonAlreadyStarted
+)
 from my_tutor.repositories import LessonRepository
 from my_tutor.routers import lessons_router
 from my_tutor.schemes import (
@@ -55,7 +60,5 @@ async def update_lesson(
         raise HTTPException(HTTPStatus.BAD_REQUEST, str(e))
     except LessonNotFoundError as e:
         raise HTTPException(HTTPStatus.NOT_FOUND, e.message)
-    except TutorAlreadyHasLesson as e:
-        raise HTTPException(HTTPStatus.BAD_REQUEST, e.message)
-    except StudentAlreadyHasLesson as e:
+    except (TutorAlreadyHasLesson, StudentAlreadyHasLesson, LessonAlreadyStarted) as e:
         raise HTTPException(HTTPStatus.BAD_REQUEST, e.message)
