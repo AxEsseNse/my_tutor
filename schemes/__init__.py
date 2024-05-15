@@ -77,5 +77,7 @@ from .lessons import (
     RescheduleLessonRequest,
     RescheduleLessonResponse,
     UpdateNoteLessonRequest,
-    UpdateNoteLessonResponse
+    UpdateNoteLessonResponse,
+    UpdateThemeLessonRequest,
+    UpdateThemeLessonResponse
 )

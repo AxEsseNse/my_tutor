@@ -15,7 +15,8 @@ class StudentLesson(BaseModel):
 class TutorLesson(BaseModel):
     lesson_id: int
     date: str
-    student: str
+    student_name: str
+    student_id: int
     exam: str
     exam_task_number: int
     theme_title: str

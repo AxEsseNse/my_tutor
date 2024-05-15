@@ -1,0 +1,116 @@
+<div
+    class="modal fade custom-modal"
+    tabindex="-1"
+    aria-labelledby="modal-lesson-update-theme"
+    aria-hidden="true"
+    id="modal-lesson-update-theme"
+>
+    <div class="modal-dialog modal-md">
+        <div class="modal-content custom-modal-body">
+            <!-- Header окна редактирования заметки занятия -->
+            <div class="modal-header">
+                <h5 class="modal-title">Изменение занятия</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <!-- Форма редактирования заметки занятия -->
+            <div class="modal-body">
+                <form class="needs-validation" id="lesson-update-theme-form" novalidate>
+                    <!-- Поле ввода даты урока -->
+                    <div class="form-group row mb-1">
+                        <label class="col-6 col-form-label" for="lesson-update-theme-form-date">Дата урока</label>
+                        <div class="col-6">
+                            <input type="date" class="form-control" id="lesson-update-theme-form-date" disabled />
+                        </div>
+                    </div>
+                    <!-- Поле ввода времени урока -->
+                    <div class="form-group row mb-1">
+                        <label class="col-6 col-form-label" for="lesson-update-theme-form-hour">Время урока</label>
+                        <div class="col-3">
+                            <select id="lesson-update-theme-form-hour" class="form-control" disabled>
+                                <option value="00" selected>00</option>
+                                <option value="01">01</option>
+                                <option value="02">02</option>
+                                <option value="03">03</option>
+                                <option value="04">04</option>
+                                <option value="05">05</option>
+                                <option value="06">06</option>
+                                <option value="07">07</option>
+                                <option value="08">08</option>
+                                <option value="09">09</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                                <option value="13">13</option>
+                                <option value="14">14</option>
+                                <option value="15">15</option>
+                                <option value="16">16</option>
+                                <option value="17">17</option>
+                                <option value="18">18</option>
+                                <option value="19">19</option>
+                                <option value="20">20</option>
+                                <option value="21">21</option>
+                                <option value="22">22</option>
+                                <option value="23">23</option>
+                            </select>
+                        </div>
+                        <div class="col-3">
+                            <select id="lesson-update-theme-form-minute" class="form-control" disabled>
+                                <option value="00" selected>00</option>
+                                <option value="05">05</option>
+                                <option value="10">10</option>
+                                <option value="15">15</option>
+                                <option value="20">20</option>
+                                <option value="25">25</option>
+                                <option value="30">30</option>
+                                <option value="35">35</option>
+                                <option value="40">40</option>
+                                <option value="45">45</option>
+                                <option value="50">50</option>
+                                <option value="55">55</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- Поле выбора студента -->
+                    <div class="input-group mt-2 mb-2">
+                        <label class="input-group-text" for="lesson-update-theme-form-student">Студент</label>
+                        <select class="form-select" id="lesson-update-theme-form-student">
+                        </select>
+                    </div>
+                        <!-- Выбор профиля -->
+                    <div class="input-group mt-2 mb-2 select-settings">
+                        <label class="input-group-text label-settings" for="lesson-update-theme-form-profile" id="theme-card-exam-label">Профиль</label>
+                        <select class="form-select" id="lesson-update-theme-form-profile">
+                            <option value="" hidden disabled selected>Выберите профиль</option>
+                            <option value="2">ОГЭ</option>
+                            <option value="1">ЕГЭ</option>
+                            <option value="3">Программирование</option>
+                        </select>
+                    </div>
+                    <!-- Выбор темы профиля -->
+                    <div class="hidden-field select-settings" id="lesson-update-theme-form-theme-select">
+                        <div class="input-group mt-2 mb-2">
+                            <label class="input-group-text label-settings" for="lesson-update-theme-form-theme" id="theme-card-theme-label">Тема</label>
+                            <select class="form-select" id="lesson-update-theme-form-theme">
+                            </select>
+                        </div>
+                    </div>
+                    <!-- Поле ответа сервера -->
+                    <hr/>
+
+                    <div class="form-group row mt-2 mb-2 align-items-center">
+                        <label class="col-4 col-form-label" for="lesson-update-theme-form-flash-msg"><strong>Feedback</strong></label>
+                        <div class="col-8" id="lesson-update-theme-form-flash-msg"></div>
+                    </div>
+
+                    <hr />
+                    <!-- Кнопка отправки формы -->
+                    <div class="text-center">
+                        <button type="button" class="btn btn-dark btn-block" id="lesson-update-theme-form-button">
+                            Изменить занятие
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

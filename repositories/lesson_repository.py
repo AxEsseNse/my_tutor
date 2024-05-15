@@ -29,7 +29,9 @@ from my_tutor.schemes import (
     RescheduleLessonRequest,
     RescheduleLessonResponse,
     UpdateNoteLessonRequest,
-    UpdateNoteLessonResponse
+    UpdateNoteLessonResponse,
+    UpdateThemeLessonRequest,
+    UpdateThemeLessonResponse
 )
 from my_tutor.domain import StudentLesson, TutorLesson
 from my_tutor.constants import LessonStatus
@@ -57,6 +59,7 @@ class LessonRepository:
     _delete_lesson_response = DeleteLessonResponse
     _finish_lesson_response = FinishLessonResponse
     _update_lesson_note_response = UpdateNoteLessonResponse
+    _update_lesson_theme_response = UpdateThemeLessonResponse
     _change_lesson_paid_status_response = ChangeLessonPaidStatusResponse
     _start_lesson_response = StartLessonResponse
     _cancel_lesson_response = CancelLessonResponse
@@ -95,7 +98,8 @@ class LessonRepository:
         return self._tutor_lesson(
             lesson_id=lesson_model.lesson_id,
             date=datetime.strftime(lesson_model.date.astimezone(moscow_tz), self._date_pattern),
-            student=f"{lesson_model.student.second_name} {lesson_model.student.first_name}",
+            student_name=f"{lesson_model.student.second_name} {lesson_model.student.first_name}",
+            student_id=lesson_model.student_id,
             exam=RUS_EXAMS[lesson_model.theme.exam_id],
             exam_task_number=lesson_model.theme.exam_task_number,
             theme_title=lesson_model.theme.title,
@@ -146,6 +150,17 @@ class LessonRepository:
         return self._update_lesson_note_response(
             note=lesson_model.note,
             message=f'Заметка урока преподавателя "{lesson_model.tutor.second_name} {lesson_model.tutor.first_name}" со студентом "{lesson_model.student.second_name} {lesson_model.student.first_name}" {datetime.strftime(lesson_model.date, self._date_pattern)} по теме "{lesson_model.theme.title}" обновлена на "{lesson_model.note}"'
+        )
+
+    def _to_update_lesson_theme_response(self, lesson_model: LessonModel) -> UpdateThemeLessonResponse:
+
+        return self._update_lesson_theme_response(
+            student_id=lesson_model.student_id,
+            student_name=f"{lesson_model.student.second_name} {lesson_model.student.first_name}",
+            exam=RUS_EXAMS[lesson_model.theme.exam_id],
+            exam_task_number=lesson_model.theme.exam_task_number,
+            theme_title=lesson_model.theme.title,
+            message=f'Тема занятия преподавателя "{lesson_model.tutor.second_name} {lesson_model.tutor.first_name}" со студентом "{lesson_model.student.second_name} {lesson_model.student.first_name}" {datetime.strftime(lesson_model.date, self._date_pattern)} изменена на "{lesson_model.theme.title}"'
         )
 
     def _to_change_lesson_paid_status_response(self, lesson_model: LessonModel) -> ChangeLessonPaidStatusResponse:
@@ -548,6 +563,50 @@ class LessonRepository:
 
         return self._to_update_lesson_note_response(lesson_model=lesson_model)
 
+    async def update_lesson_theme(self, session: AsyncSession, lesson_data: UpdateThemeLessonRequest) -> UpdateThemeLessonResponse:
+        lesson_model = (await session.execute(
+            select(self._lesson_model)
+            .filter_by(lesson_id=lesson_data.lesson_id)
+        )).scalars().first()
+
+        if not lesson_model:
+            raise LessonNotFoundError
+
+        if lesson_data.new_student_id != lesson_data.current_student_id:
+            previous_hour = lesson_model.date - timedelta(minutes=59)
+            next_hour = lesson_model.date + timedelta(minutes=59)
+
+            student_lessons = (
+                await session.execute(
+                    select(self._lesson_model)
+                    .filter(
+                        self._lesson_model.student_id == lesson_data.new_student_id,
+                        and_(
+                            self._lesson_model.date >= previous_hour,
+                            self._lesson_model.date <= next_hour
+                        )
+                    )
+                )
+            ).scalars().first()
+
+            if student_lessons:
+                raise StudentAlreadyHasLesson
+
+        lesson_model.theme_id = lesson_data.theme_id
+        lesson_model.student_id = lesson_data.new_student_id
+        session.add(lesson_model)
+
+        lesson_model = (await session.execute(
+            select(self._lesson_model)
+            .options(
+                selectinload(self._lesson_model.tutor),
+                selectinload(self._lesson_model.student),
+                selectinload(self._lesson_model.theme)
+            )
+            .filter_by(lesson_id=lesson_data.lesson_id)
+        )).scalars().first()
+
+        return self._to_update_lesson_theme_response(lesson_model=lesson_model)
 
     async def authorize_lesson(self, session: AsyncSession, lesson_id: int, student_id: int | None = None, tutor_id: int | None = None) -> bool:
         lesson_model = None

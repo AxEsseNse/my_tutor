@@ -31,6 +31,22 @@ class UpdateNoteLessonResponse(BaseModel):
     message: str
 
 
+class UpdateThemeLessonRequest(BaseModel):
+    lesson_id: int = Field(alias="lessonId")
+    current_student_id: int = Field(alias="currentStudentId")
+    new_student_id: int = Field(alias="newStudentId")
+    theme_id: int = Field(alias="themeId")
+
+
+class UpdateThemeLessonResponse(BaseModel):
+    student_id: int
+    student_name: str
+    exam: str
+    exam_task_number: int
+    theme_title: str
+    message: str
+
+
 class RescheduleLessonRequest(BaseModel):
     lesson_id: int = Field(alias="lessonId")
     new_date: str = Field(alias="newDate")

@@ -10,7 +10,9 @@ from .update_lesson import (
     UpdateNoteLessonRequest,
     UpdateNoteLessonResponse,
     FinishLessonRequest,
-    FinishLessonResponse
+    FinishLessonResponse,
+    UpdateThemeLessonRequest,
+    UpdateThemeLessonResponse
 )
 from .start_lesson import StartLessonResponse
 from .get_lesson_status import GetLessonStatusResponse

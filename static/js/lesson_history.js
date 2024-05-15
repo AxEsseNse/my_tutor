@@ -100,7 +100,7 @@ class LessonsTable {
         } else {
             this.addJoinLessonCell(row, lesson.status, lesson.lesson_id)
             this.addCell(row, lesson.date, 'text-center')
-            this.addCell(row, lesson.student)
+            this.addStudentNameCell(row, lesson.student_name, lesson.student_id)
             this.addCell(row, lesson.exam)
             this.addCell(row, lesson.exam_task_number)
             this.addCell(row, lesson.theme_title)
@@ -116,6 +116,10 @@ class LessonsTable {
             controllers.classList.add('text-center')
             controllers.style.right = '0px'
             controllers.appendChild(this.createUpdateNoteLessonButton(row))
+
+            if (lesson.status == 'CREATED') {
+                controllers.appendChild(this.createUpdateThemeLessonButton(row))
+            }
 
             if (lesson.status !== 'FINISHED' && lesson.status !== 'CANCELED') {
                 controllers.appendChild(this.createRescheduleLessonButton(row))
@@ -148,21 +152,20 @@ class LessonsTable {
         link.classList.add('join-lesson-link')
         const button = document.createElement('button')
         button.classList.add('lesson-enter-mini-button', 'lesson-enter-available')
-
-//        if (status !== 'FINISHED' && status !== 'CANCELED') {
-        //button.classList.add('lesson-enter-available')
         button.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i>'
         button.title = 'Присоединиться'
-        link.href = `/lesson/${lessonId}`
-//        } else {
-//            button.classList.add('lesson-enter-not-available')
-//            button.title = 'Урок не доступен'
-//            button.innerHTML = '<i class="fa-solid fa-ban"></i>'
-//            button.disabled = true
-//        }
 
+        link.href = `/lesson/${lessonId}`
         link.appendChild(button)
         cell.appendChild(link)
+    }
+
+    addStudentNameCell(row, studentName, studentId) {
+        let cell = row.insertCell()
+        cell.classList.add('align-middle')
+        cell.classList.add('text-start')
+        cell.innerText = studentName
+        cell.setAttribute('studentId', studentId)
     }
 
     addPayStatus(row, isPaid, lessonId, role) {
@@ -259,6 +262,22 @@ class LessonsTable {
         btn.onclick = () => {
             const form = new UpdateNoteLessonForm(row)
             form.fillUpdateNoteForm()
+        }
+
+        return btn
+    }
+
+    createUpdateThemeLessonButton(row) {
+        const btn = document.createElement('button')
+        btn.classList.add('btn', 'btn-sm', 'btn-secondary')
+        btn.setAttribute('type', 'button')
+        btn.setAttribute('title', 'Изменить тему')
+        btn.setAttribute('data-bs-toggle', 'modal')
+        btn.setAttribute('data-bs-target', '#modal-lesson-update-theme')
+        btn.innerHTML = '<i class="fa-solid fa-gear"></i>'
+        btn.onclick = () => {
+            const form = new UpdateThemeLessonForm(row)
+            form.fillUpdateThemeForm()
         }
 
         return btn
@@ -379,6 +398,218 @@ class UpdateNoteLessonForm {
             if (lesson.hasOwnProperty('note')) {
                 this.updateRow.childNodes[6].innerText = lesson.note
                 console.log(lesson.message)
+                flashMsg(lesson.message, this.flashMsg, 'success')
+            } else {
+                flashMsg(lesson.detail, this.flashMsg, 'wrong')
+            }
+        })
+        .catch(error => {
+            console.log(error)
+        })
+    }
+}
+
+class UpdateThemeLessonForm {
+    constructor(updateRow) {
+        this.updateRow = updateRow
+        this.setDatetimeConsts(this.updateRow.childNodes[1].innerText)
+        this.lessonId = this.updateRow.childNodes[0].getAttribute('lessonId')
+        this.currentStudentId = this.updateRow.childNodes[2].getAttribute('studentId')
+
+        this.inputDate = document.getElementById('lesson-update-theme-form-date')
+        this.inputHour = document.getElementById('lesson-update-theme-form-hour')
+        this.inputMinute = document.getElementById('lesson-update-theme-form-minute')
+        this.inputStudent = document.getElementById('lesson-update-theme-form-student')
+        this.inputProfile = document.getElementById('lesson-update-theme-form-profile')
+        this.themesSelectField = document.getElementById('lesson-update-theme-form-theme-select')
+        this.inputTheme = document.getElementById('lesson-update-theme-form-theme')
+
+        const self = this
+        this.inputStudent.addEventListener('change', function() {
+            self.chooseStudent(this.value)
+        })
+        this.inputProfile.addEventListener('change', function() {
+            self.chooseExam(this.value)
+        })
+        this.inputTheme.addEventListener('change', function() {
+            self.btnUpdateThemeLesson.disabled = false
+        })
+
+        this.flashMsg = document.getElementById('lesson-update-theme-form-flash-msg')
+
+        this.btnUpdateThemeLesson = document.getElementById('lesson-update-theme-form-button')
+        this.btnUpdateThemeLesson.onclick = () => {
+            this.updateThemeLesson()
+        }
+    }
+
+    setDatetimeConsts(dateTimeStr) {
+        const dateTimeParts = dateTimeStr.split(' ')
+        const dateParts = dateTimeParts[0].split('.')
+        const timeParts = dateTimeParts[1].split(':')
+        this.formattedDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`
+        this.hours = timeParts[0]
+        this.minutes = timeParts[1]
+    }
+
+    fillUpdateThemeForm() {
+        this.fillStudentSelectOptions()
+        this.inputDate.value = this.formattedDate
+        this.inputHour.value = this.hours
+        this.inputMinute.value = this.minutes
+        this.inputProfile.options[0].selected = true
+        this.flashMsg.innerText = ''
+        this.btnUpdateThemeLesson.disabled = true
+
+        if (!this.themesSelectField.classList.contains('hidden-field')) {
+            this.themesSelectField.classList.add('hidden-field')
+        }
+    }
+
+    loadStudents() {
+        let token = getCookie('My-Tutor-Auth-Token')
+
+        if (token == undefined) {
+            return
+        }
+
+        return fetch('/api/students/options/', {
+        method: 'GET',
+        headers: {
+            'My-Tutor-Auth-Token': token
+            },
+        })
+        .then(response => response.json())
+        .then(students => {
+            this.students = students
+        })
+        .catch(error => {
+            console.error(error)
+        })
+    }
+
+    fillStudentSelectOptions() {
+        this.loadStudents()
+        .then(() => {
+            this.inputStudent.innerHTML = ""
+
+            for (const studentOption of this.students) {
+                const option = document.createElement('option')
+                option.value = studentOption.id
+                option.innerText = studentOption.name
+                this.inputStudent.append(option)
+                if (studentOption.id == this.currentStudentId) {
+                    option.selected = true
+                }
+            }
+        })
+    }
+
+    chooseStudent(studentId) {
+        flashMsg('Вы сменили ученика', this.flashMsg, 'wrong')
+
+        if (!this.themesSelectField.classList.contains('hidden-field')) {
+            this.themesSelectField.classList.add('hidden-field')
+        }
+
+        this.inputProfile.options[0].selected = true
+        this.btnUpdateThemeLesson.disabled = true
+    }
+
+    chooseExam(examId) {
+        this.prepareThemesSelect(examId)
+        this.btnUpdateThemeLesson.disabled = true
+    }
+
+    prepareThemesSelect(examId) {
+        let token = getCookie('My-Tutor-Auth-Token')
+
+        if (token == undefined) {
+            return
+        }
+
+        fetch(`/api/themes/exam/${examId}/options/`, {
+            method: 'GET',
+            headers: {
+                'My-Tutor-Auth-Token': token
+                },
+        })
+        .then(response => response.json())
+        .then(themes => {
+            this.themes = themes
+            this.setThemesSelectOptions()
+            this.themesSelectField.classList.remove('hidden-field')
+        })
+        .catch(error => {
+            console.error(error)
+        })
+    }
+
+    setThemesSelectOptions() {
+        this.inputTheme.innerHTML = ""
+
+        const emptyOption = document.createElement('option')
+        emptyOption.value = ""
+        emptyOption.hidden = true
+        emptyOption.disabled = true
+        emptyOption.innerText = "Выберите тему"
+        this.inputTheme.append(emptyOption)
+
+        for (const theme of Object.values(this.themes)) {
+            const option = document.createElement('option')
+            option.value = theme.id
+            option.innerText = `${theme.exam_task_number}. ${theme.title}`
+            this.inputTheme.append(option)
+        }
+        this.inputTheme.options[0].selected = true
+    }
+
+    updateThemeLesson() {
+        let token = getCookie('My-Tutor-Auth-Token')
+
+        if (token == undefined) {
+            return
+        }
+
+        const lessonData = {
+            lessonId: this.lessonId,
+            currentStudentId: this.currentStudentId,
+            newStudentId: this.inputStudent.value,
+            themeId: this.inputTheme.value
+        }
+
+        console.log(lessonData)
+
+        fetch(`/api/lessons/${this.lessonId}/`, {
+            method: 'PUT',
+            headers: {
+            'Content-Type': 'application/json',
+            'My-Tutor-Auth-Token': token
+            },
+            body: JSON.stringify(lessonData),
+        })
+        .then(response => {
+            if (!response.ok) {
+
+                if (!(response.status == 400)) {
+                    return Promise.reject(response.text())
+                }
+
+            }
+            return Promise.resolve(response.text())
+        })
+        .then(text => {
+            return JSON.parse(text)
+        })
+        .then(lesson => {
+            console.log(lesson)
+            if (lesson.hasOwnProperty('student_name')) {
+                console.log(lesson.message)
+                this.updateRow.childNodes[2].innerText = lesson.student_name
+                this.updateRow.childNodes[2].setAttribute('studentId', lesson.student_id)
+                this.updateRow.childNodes[3].innerText = lesson.exam
+                this.updateRow.childNodes[4].innerText = lesson.exam_task_number
+                this.updateRow.childNodes[5].innerText = lesson.theme_title
                 flashMsg(lesson.message, this.flashMsg, 'success')
             } else {
                 flashMsg(lesson.detail, this.flashMsg, 'wrong')

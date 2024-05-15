@@ -63,8 +63,9 @@
     {% block tutor_scripts %}
         <!-- Подключение js страницы-->
         <script src="/static/js/lesson_history.js"></script>
+        {% include "lessonFormUpdateNote.html" %}
+        {% include "lessonFormUpdateTheme.html" %}
         {% include "lessonFormReschedule.html" %}
         {% include "lessonFormCancel.html" %}
-        {% include "lessonFormUpdateNote.html" %}
     {% endblock tutor_scripts %}
 {% endif %}

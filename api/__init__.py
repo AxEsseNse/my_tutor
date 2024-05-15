@@ -21,7 +21,8 @@ from .students import (
     add_student,
     delete_student,
     get_my_student_id,
-    get_student_progress
+    get_student_progress,
+    get_student_options
 )
 from .themes import (
     get_themes,
