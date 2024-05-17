@@ -38,7 +38,7 @@ class LessonsTable {
     }
 
     setStudentsSelectOptions(lessons) {
-        const students = lessons.map(student => student.student).sort()
+        const students = lessons.map(student => student.student_name).sort()
         this.selectStudent.innerHTML = ""
 
         const optionAllStudents = document.createElement('option')
@@ -75,7 +75,7 @@ class LessonsTable {
             })
         } else {
             this.lessons.forEach(lesson => {
-                if (lesson.student == student) {
+                if (lesson.student_name == student) {
                     const row = body.insertRow()
                     this.fillRow(row, lesson)
                 }
@@ -85,7 +85,7 @@ class LessonsTable {
 
     fillRow(row, lesson) {
         if (lesson.hasOwnProperty('tutor')) {
-            this.addJoinLessonCell(row, lesson.status, lesson.lesson_id)
+            this.addJoinLessonCell(row, lesson.status, lesson.lesson_id, lesson.date)
             this.addCell(row, lesson.date, 'text-center')
             this.addCell(row, lesson.tutor)
             this.addCell(row, lesson.exam)
@@ -98,7 +98,7 @@ class LessonsTable {
                 this.addCell(row, '')
             }
         } else {
-            this.addJoinLessonCell(row, lesson.status, lesson.lesson_id)
+            this.addJoinLessonCell(row, lesson.status, lesson.lesson_id, lesson.date)
             this.addCell(row, lesson.date, 'text-center')
             this.addStudentNameCell(row, lesson.student_name, lesson.student_id)
             this.addCell(row, lesson.exam)
@@ -137,13 +137,21 @@ class LessonsTable {
         cell.innerHTML = content
     }
 
-    addJoinLessonCell(row, status, lessonId) {
+    addJoinLessonCell(row, status, lessonId, datetime) {
         let cell = row.insertCell()
         cell.classList.add('align-middle')
         cell.classList.add('text-center')
         cell.setAttribute('lessonId', lessonId)
 
         if (status == 'FINISHED' | status == 'CANCELED') {
+            cell.innerText = ''
+            return
+        }
+
+        const lessonDateTime = moment.tz(datetime, 'DD.MM.YYYY HH:mm', 'Europe/Moscow')
+        const currentDateTime = moment()
+
+        if (lessonDateTime.isAfter(currentDateTime)) {
             cell.innerText = ''
             return
         }
