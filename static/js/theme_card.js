@@ -5,6 +5,8 @@ class Controller {
             2: "oge"
         }
         this.forbiddenSymbols = '<>:"/\\|?*'
+        this.correctAnswerSound = document.getElementById('correctAnswerSound')
+        this.incorrectAnswerSound = document.getElementById('incorrectAnswerSound')
 
         this.currentExamId = null
         this.currentThemeId = null
@@ -730,12 +732,14 @@ class Controller {
                 this.PreviewCardPracticeAnswerField.classList.add('input-answer-wrong')
             }
             this.PreviewCardPracticeAnswerButton.innerText = 'Ответ неверный'
+            playSound(this.incorrectAnswerSound)
         } else {
             this.PreviewCardPracticeAnswerField.classList.remove('input-answer-wrong')
             if (!this.PreviewCardPracticeAnswerField.classList.contains('input-answer-success')) {
                 this.PreviewCardPracticeAnswerField.classList.add('input-answer-success')
             }
             this.PreviewCardPracticeAnswerButton.innerText = 'Ответ верный'
+            playSound(this.correctAnswerSound)
         }
     }
 

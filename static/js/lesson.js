@@ -8,6 +8,8 @@ function arrayRemove(arr, value) {
 class LessonController {
     constructor(wsConnection, lessonId) {
         this.wsConnection = wsConnection
+        this.correctAnswerSound = document.getElementById('correctAnswerSound')
+        this.incorrectAnswerSound = document.getElementById('incorrectAnswerSound')
 
         this.studentReadyButton = document.getElementById('student-ready-button')
         this.studentReadyStatus = document.getElementById('student-ready-status')
@@ -498,23 +500,25 @@ class LessonController {
         this.studentAnswers[this.currentPracticeCardId] = studentAnswer
 
         if (studentAnswer != this.currentPracticeCardAnswer) {
-            this.practiceAnswerField.classList.remove('input-answer-success');
-            this.practiceAnswerField.classList.add('input-answer-wrong');
+            this.practiceAnswerField.classList.remove('input-answer-success')
+            this.practiceAnswerField.classList.add('input-answer-wrong')
             document.querySelectorAll('.lesson-menu-button.active-lesson-menu-item').forEach(button => {
-                button.classList.add('lesson-button-wrong');
+                button.classList.add('lesson-button-wrong')
             })
+            playSound(this.incorrectAnswerSound)
         } else {
             document.querySelectorAll('.lesson-menu-button.active-lesson-menu-item').forEach(button => {
-                button.classList.remove('lesson-button-wrong');
-                button.classList.add('lesson-button-success');
+                button.classList.remove('lesson-button-wrong')
+                button.classList.add('lesson-button-success')
             })
-            this.practiceAnswerField.classList.remove('input-answer-wrong');
-            this.practiceAnswerField.classList.add('input-answer-success');
+            this.practiceAnswerField.classList.remove('input-answer-wrong')
+            this.practiceAnswerField.classList.add('input-answer-success')
             this.practiceAnswerButton.innerHTML = '<i class="fa-solid fa-check"></i>'
-            this.practiceAnswerField.disabled = true;
-            this.practiceAnswerButton.disabled = true;
+            this.practiceAnswerField.disabled = true
+            this.practiceAnswerButton.disabled = true
             this.practiceAnswerButton.classList.remove('practice-answer-button')
             this.practiceAnswerButton.classList.add('practice-answer-button-success')
+            playSound(this.correctAnswerSound)
         }
 
         if (needUpdate == true && userRole == "Студент") {

@@ -57,6 +57,11 @@ function flashMsg(flashMsg, flashMsgDiv, flashMsgType, flashMsgTime = null) {
     }
 }
 
+function playSound(sound) {
+    sound.currentTime = 0
+    sound.play()
+}
+
 function setTodayDate() {
     var today = moment().format('YYYY-MM-DD')
     document.getElementById('lesson-add-form-date').value = today

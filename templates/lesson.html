@@ -158,6 +158,12 @@
         </div>
     </div>
 </div>
+<audio id="correctAnswerSound" preload="auto">
+    <source src="/static/audio/success.wav" type="audio/mpeg">
+</audio>
+<audio id="incorrectAnswerSound" preload="auto">
+    <source src="/static/audio/wrong.wav" type="audio/mpeg">
+</audio>
 {% if user.role == "Преподаватель" %}
     {% include "lessonFormFinish.html" %}
 {% endif %}
