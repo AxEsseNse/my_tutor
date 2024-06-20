@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block head %}
+    <link rel="stylesheet" href="/static/css/theme.css" />
+{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row flex-row">
+        <!-- Контент урока -->
+        <div class="col content-col" id="lesson-content">
+            <!-- Строка названия карточки -->
+            <div class="row" id="title-row">
+                <div class="col-12" id="card-title">
+                </div>
+            </div>
+            <!-- Слайд с теорией -->
+            <div class="hidden-field" id="theory-content">
+                <div class="row">
+                    <div class="col-4 text-end">
+                        <img src="" id="theory-image">
+                    </div>
+                    <div class="col-8 text-start">
+                        <div id="theory-descr"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- Слайд с практикой -->
+            <div class="hidden-field" id="practice-content">
+                <div class="row">
+                    <div class="col-4 text-end" id="practice-image-field">
+                        <img src="" id="practice-image">
+                    </div>
+                    <div class="col-8 text-start" id="practice-descr">
+                        <div id="practice">
+                            <div id="practice-descr-field"></div>
+                            <div class="hidden-field" id="practice-download-file-field">
+                                <div id="practice-download-file-name"></div>
+                                <a id="practice-download-file">
+                                    <button id="practice-download-file-button"><i class="fa-solid fa-file-arrow-down fa-lg"></i></button>
+                                </a>
+                            </div>
+                            <div id="practice-answer-field">
+                                <input
+                                    class="answer-input"
+                                    type="text"
+                                    id="practice-answer"
+                                    value=""
+                                    data-tooltip=""
+                                    placeholder="Введите сюда ваш ответ"
+                                    autocomplete="off"
+                                />
+                                <button type="button" class="practice-answer-button" id="practice-answer-button">
+                                    Проверить
+                                </button>
+                                <button type="button" class="lesson-button" id="practice-tip-button">
+                                    Показать решение
+                                </button>
+                            </div>
+                            <div class="hidden-field" id="practice-tip-field">
+                                <div id="practice-tip-descr"></div>
+                                <div class="text-center">
+                                    <img src="" id="practice-tip-image">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Меню урока -->
+        <div class="col menu-col" id="lesson-menu">
+            <div class="row align-items-center" id="lesson-header">
+                <div class="col-3 hidden-field" id="lesson-exam">
+                    <button class="exam-btn" id="lesson-exam-btn">
+                    </button>
+                </div>
+                <div class="col-8" id="lesson-exam-task-id">
+                </div>
+            </div>
+            <hr/>
+            <div id="lesson-title">
+            </div>
+            <hr/>
+		    <div class="menu-list">
+                <ul id="lesson-list">
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<audio id="correctAnswerSound" preload="auto">
+    <source src="/static/audio/success.wav" type="audio/mpeg">
+</audio>
+<audio id="incorrectAnswerSound" preload="auto">
+    <source src="/static/audio/wrong.wav" type="audio/mpeg">
+</audio>
+{% endblock content %}
+{% block scripts %}
+    <script src="/static/js/theme.js"></script>
+{% endblock %}

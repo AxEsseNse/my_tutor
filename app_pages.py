@@ -2,8 +2,8 @@ from fastapi import Request, Depends, HTTPException
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import RedirectResponse
 
-from my_tutor.depends import get_authorized_user, check_access
-from my_tutor.constants import LessonAccess
+from my_tutor.depends import get_authorized_user, check_lesson_access, check_theme_access
+from my_tutor.constants import LessonAccess, ThemeAccess
 
 templates = Jinja2Templates(directory="templates")
 LOGIN_URL = "/login"
@@ -165,7 +165,7 @@ async def theme_cards(request: Request, authorized_user=Depends(get_authorized_u
     )
 
 
-async def join_lesson(request: Request, lesson_id: int, access: LessonAccess = Depends(check_access), authorized_user=Depends(get_authorized_user)):
+async def join_lesson(request: Request, lesson_id: int, access: LessonAccess = Depends(check_lesson_access), authorized_user=Depends(get_authorized_user)):
     if authorized_user is None:
         return templates.TemplateResponse(
             "not_authorized.html",
@@ -198,6 +198,40 @@ async def join_lesson(request: Request, lesson_id: int, access: LessonAccess = D
         case LessonAccess.NOT_AVAILABLE:
             raise HTTPException(status_code=403, detail="В данный момент ресурс не доступен")
         case LessonAccess.ERROR:
+            raise HTTPException(status_code=403, detail="В данный момент ресурс не доступен")
+
+
+async def join_theme(request: Request, theme_id: int, access: ThemeAccess = Depends(check_theme_access), authorized_user=Depends(get_authorized_user)):
+    if authorized_user is None:
+        return templates.TemplateResponse(
+            "not_authorized.html",
+            {
+                "request": request,
+                "title": "Ошибка авторизации",
+                "user": authorized_user
+            }
+        )
+    match access:
+        case ThemeAccess.AVAILABLE:
+            return templates.TemplateResponse(
+                "theme.html",
+                {
+                    "request": request,
+                    "title": "Тема",
+                    "user": authorized_user,
+                    "theme_id": theme_id
+                }
+            )
+        case ThemeAccess.NOT_AUTHORIZED:
+            return templates.TemplateResponse(
+                "not_authorized.html",
+                {
+                    "request": request,
+                    "title": "Ошибка авторизации",
+                    "user": authorized_user
+                }
+            )
+        case ThemeAccess.ERROR:
             raise HTTPException(status_code=403, detail="В данный момент ресурс не доступен")
 
 

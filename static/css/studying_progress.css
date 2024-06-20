@@ -17,8 +17,28 @@
     font-size: 36px;
 }
 
-.hidden-content {
-    display: none
+.theme-enter-button {
+    width: 45px;
+    height: 45px;
+    font-size: 20px;
+    color: blue;
+    background-color: #B4D8FA;
+    font-weight: 500;
+    border: 2px solid #B4D8FA;
+    border-radius: 30px;
+    text-align: center;
+    vertical-align: middle;
+    text-decoration: none;
+    cursor: default;
+    white-space: nowrap;
+    user-select: none;
+    transition: box-shadow 0.15s ease-in-out;
+}
+.theme-enter-button:hover,
+.theme-enter-button:focus-visible {
+    outline: 0;
+    background-color: #B4B7FA;
+    border-color: blue;
 }
 
 .btn-exam{

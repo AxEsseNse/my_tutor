@@ -55,3 +55,8 @@ class ThemeStudyingStatus(BaseModel):
     theme_id: int
     status: str
     date: str
+
+
+class ThemeDemo(BaseModel):
+    theme: Theme
+    progress_cards: dict

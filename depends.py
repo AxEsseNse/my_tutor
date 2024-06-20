@@ -4,13 +4,14 @@ from fastapi import Cookie, Depends, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from my_tutor.domain import UserInfo
-from my_tutor.constants import LessonAccess
-from my_tutor.repositories import UserRepository, LessonRepository, TutorRepository, StudentRepository
+from my_tutor.constants import LessonAccess, ThemeAccess
+from my_tutor.repositories import UserRepository, LessonRepository, TutorRepository, StudentRepository, ThemeRepository
 from my_tutor.session import get_db_session
 
 
 user_repository = UserRepository()
 lesson_repository = LessonRepository()
+theme_repository = ThemeRepository()
 tutor_repository = TutorRepository()
 student_repository = StudentRepository()
 
@@ -58,7 +59,7 @@ async def get_authorized_user(
     return user
 
 
-async def check_access(
+async def check_lesson_access(
     request: Request,
     token: Annotated[str | None, Cookie(alias=AUTH_TOKEN_NAME)] = None,
     session: AsyncSession = Depends(get_db_session),
@@ -97,3 +98,30 @@ async def check_access(
         except Exception as e:
             print('DEPEND oshibka get user info?', e)
             return LessonAccess.ERROR
+
+
+async def check_theme_access(
+    request: Request,
+    token: Annotated[str | None, Cookie(alias=AUTH_TOKEN_NAME)] = None,
+    session: AsyncSession = Depends(get_db_session),
+) -> ThemeAccess:
+    theme_id = int(request.url.path.split('/')[-1])
+
+    async with session.begin():
+        try:
+            user = await user_repository.get_user_info(session=session, token=token)
+
+            if user.role == "Преподаватель" or user.role == "Администратор":
+                return ThemeAccess.AVAILABLE
+
+            elif user.role == "Студент":
+                student_id = await student_repository.get_student_id(session=session, user_id=user.user_id)
+                progress_cards = await theme_repository.get_theme_student_progress(session=session, theme_id=theme_id,
+                                                                                   student_id=student_id)
+                if progress_cards:
+                    return ThemeAccess.AVAILABLE
+                else:
+                    return ThemeAccess.NOT_AUTHORIZED
+
+        except Exception as e:
+            return ThemeAccess.ERROR

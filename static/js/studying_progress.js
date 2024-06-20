@@ -143,6 +143,7 @@ class Controller {
     }
 
     fillRow(row, theme) {
+        this.addCell(row, "")
         this.addCell(row, theme.exam_task_number, theme.theme_id)
         this.addCell(row, theme.title)
         this.addCell(row, theme.descr)
@@ -151,6 +152,8 @@ class Controller {
         this.addCell(row, '')
 
         if (userRole == "Преподаватель") {
+            this.addShowThemeButton(row, theme.theme_id)
+
             const controllers = document.createElement('div')
             controllers.style.right = '0px'
             controllers.appendChild(this.createUpdateButton(row))
@@ -220,24 +223,24 @@ class Controller {
 
     updateRow(theme) {
         const row = document.getElementById(`theme-id-${theme.theme_id}`).parentNode
-        console.log(theme.status)
-        this.addStatusIcon(row, theme.status)
-        row.cells[4].textContent = theme.date
+        this.addStatusIcon(row, theme.status, theme.theme_id)
+        row.cells[5].textContent = theme.date
     }
 
-    addStatusIcon(row, status) {
-        console.log(status)
-        row.cells[3].innerHTML = ""
+    addStatusIcon(row, status, themeId) {
+        row.cells[4].innerHTML = ""
         const button = document.createElement('button')
         if (status == "COMPLETED" | status == "Изучено") {
             button.classList.add('theme-status', 'theme-done')
             button.title = 'Тема изучена'
             button.innerHTML = '<i class="fa-solid fa-check"></i>'
+            this.addShowThemeButton(row, themeId)
         }
         if (status == "IN PROGRESS" | status == "В процессе") {
             button.classList.add('theme-status', 'theme-process')
             button.title = 'Тема изучается'
             button.innerHTML = '<i class="fa-solid fa-hourglass"></i>'
+            this.addShowThemeButton(row, themeId)
         }
         if (status == "PLANNED" | status == "Запланировано") {
             button.classList.add('theme-status', 'theme-planned')
@@ -245,12 +248,25 @@ class Controller {
             button.innerHTML = '<i class="fa-regular fa-clock"></i>'
         }
         if (status == "NOT STUDIED" | status == "Не изучалось") {
-            console.log('da?')
             button.classList.add('theme-status', 'theme-undone')
             button.title = 'Тема не изучалась'
             button.innerHTML = '<i class="fa-solid fa-xmark"></i>'
         }
-        row.cells[3].appendChild(button)
+        row.cells[4].appendChild(button)
+    }
+
+    addShowThemeButton(row, themeId) {
+        row.cells[0].innerHTML = ""
+        const link = document.createElement('a')
+        link.href = `/theme/${themeId}`
+
+        const button = document.createElement('button')
+        button.classList.add('theme-enter-button')
+        button.title = 'Просмотреть тему'
+        button.innerHTML = '<i class="fa-solid fa-eye"></i>'
+
+        link.appendChild(button)
+        row.cells[0].appendChild(link)
     }
 }
 

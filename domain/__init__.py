@@ -25,7 +25,8 @@ from .themes import (
     CardPractice,
     CardPracticeTip,
     ThemeOption,
-    ThemeStudyingStatus
+    ThemeStudyingStatus,
+    ThemeDemo
 )
 from .lessons import (
     StudentLesson,
