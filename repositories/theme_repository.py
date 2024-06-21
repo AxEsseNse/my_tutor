@@ -64,6 +64,7 @@ VARIABLE_SYMBOLS = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
                     '0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 CURRENT_DIRECTORY = os.getcwd()
 
+
 class ThemeRepository:
     _theme = Theme
     _theme_info = ThemeInfo
