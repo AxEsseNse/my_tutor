@@ -7,3 +7,5 @@ from .tutors import TutorModel
 from .lessons import LessonModel
 from .studying import StudyingModel, ThemeStatusModel
 from .files import FileModel
+from .demo_exams import DemoExamModel
+from .demo_exam_progress import DemoExamProgressModel

@@ -40,3 +40,9 @@ from .files import (
     FileDataAlreadyExistError,
     SaveFileError
 )
+from .demo_exams import (
+    DemoExamNotFoundError,
+    DemoExamAlreadyExistError,
+    DemoExamTaskAlreadyExistError,
+    DemoExamTaskNotFoundError
+)

@@ -28,6 +28,9 @@ from .themes import (
     ThemeStudyingStatus,
     ThemeDemo
 )
+from .demo_exam import (
+    DemoExamTask
+)
 from .lessons import (
     StudentLesson,
     TutorLesson,

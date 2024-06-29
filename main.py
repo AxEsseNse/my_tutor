@@ -26,6 +26,7 @@ from my_tutor.routers import (
     tutors_router,
     students_router,
     themes_router,
+    demo_exams_router,
     lessons_router,
     monitoring_router
 )
@@ -58,6 +59,7 @@ api_router.include_router(users_router)
 api_router.include_router(tutors_router)
 api_router.include_router(students_router)
 api_router.include_router(themes_router)
+api_router.include_router(demo_exams_router)
 api_router.include_router(lessons_router)
 app.include_router(api_router)
 app.include_router(monitoring_router)

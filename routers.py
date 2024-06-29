@@ -31,6 +31,10 @@ themes_router = APIRouter(
     prefix="/themes",
     tags=["Users"]
 )
+demo_exams_router = APIRouter(
+    prefix="/demo-exams",
+    tags=["Users"]
+)
 lessons_router = APIRouter(
     prefix="/lessons",
     tags=["Users"]

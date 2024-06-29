@@ -1,15 +1,15 @@
 from pydantic import BaseModel, Field
 
 
-class UpdateThemeRequest(BaseModel):
+class UpdateDemoExamRequest(BaseModel):
     demo_exam_id: int = Field(alias="demoExamId")
     exam_id: int = Field(alias="examId")
     title: str
     descr: str
 
 
-class UpdateThemeResponse(BaseModel):
-    theme_id: int
+class UpdateDemoExamResponse(BaseModel):
+    demo_exam_id: int
     exam: str
     title: str
     descr: str

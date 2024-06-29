@@ -81,3 +81,15 @@ from .lessons import (
     UpdateThemeLessonRequest,
     UpdateThemeLessonResponse
 )
+from .demo_exams import (
+    AddDemoExamRequest,
+    AddDemoExamResponse,
+    DeleteDemoExamResponse,
+    UpdateDemoExamRequest,
+    UpdateDemoExamResponse,
+    AddDemoExamTaskRequest,
+    AddDemoExamTaskResponse,
+    DeleteDemoExamTaskResponse,
+    UpdateDemoExamTaskRequest,
+    UpdateDemoExamTaskResponse
+)

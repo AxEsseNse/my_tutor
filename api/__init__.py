@@ -40,6 +40,13 @@ from .themes import (
     get_theme_cards,
     theme_upload_file
 )
+from .demo_exams import (
+    add_demo_exam,
+    delete_demo_exam,
+    update_demo_exam,
+    add_demo_exam_task,
+    delete_demo_exam_task
+)
 from .tutors import (
     get_tutors,
     add_tutor,

@@ -25,7 +25,7 @@ async def update_theme(
     try:
         async with session.begin():
 
-            return await theme_repository.update_theme(session, theme_data=theme_data)
+            return await theme_repository.update_theme(session=session, theme_data=theme_data)
     except ValidationError as e:
         raise HTTPException(HTTPStatus.BAD_REQUEST, str(e))
     except ThemeNotFoundError as e:
