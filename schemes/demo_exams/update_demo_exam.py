@@ -9,7 +9,6 @@ class UpdateDemoExamRequest(BaseModel):
 
 
 class UpdateDemoExamResponse(BaseModel):
-    demo_exam_id: int
     exam: str
     title: str
     descr: str

@@ -8,6 +8,7 @@ from my_tutor.app_pages import (
     tutors_list,
     students_list,
     themes_list,
+    demo_exams_list,
     tutor_profile,
     student_profile,
     join_lesson,
@@ -47,6 +48,7 @@ app.add_api_route(path="/admin/tutors", endpoint=tutors_list)
 app.add_api_route(path="/admin/students", endpoint=students_list)
 app.add_api_route(path="/admin/themes", endpoint=themes_list)
 app.add_api_route(path="/admin/theme-card", endpoint=theme_cards)
+app.add_api_route(path="/admin/demo-exams", endpoint=demo_exams_list)
 app.add_api_route(path="/lesson/{lesson_id}", endpoint=join_lesson)
 app.add_api_route(path="/theme/{theme_id}", endpoint=join_theme)
 app.add_api_route(path="/tutor-profile", endpoint=tutor_profile)

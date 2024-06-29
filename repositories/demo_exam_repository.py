@@ -56,7 +56,7 @@ from my_tutor.schemes import (
     # UpdateStudentProgressResponse,
     # UploadFileResponse
 )
-from my_tutor.domain import DemoExamTask
+from my_tutor.domain import DemoExamTask, DemoExamInfo
 
 
 moscow_tz = ZoneInfo('Europe/Moscow')
@@ -81,7 +81,7 @@ CURRENT_DIRECTORY = os.getcwd()
 
 class DemoExamRepository:
     # _theme = Theme
-    # _theme_info = ThemeInfo
+    _demo_exam_info = DemoExamInfo
     # _lesson = Lesson
     _demo_exam_task = DemoExamTask
     # _theme_option = ThemeOption
@@ -108,15 +108,14 @@ class DemoExamRepository:
     async def _get_new_demo_exam_task_id(self, session: AsyncSession) -> int:
         return (await session.execute(self._demo_exam_model.demo_exam_task_id_seq.next_value())).scalar()
 
-    # def _to_theme_info(self, theme_model: ThemeModel) -> ThemeInfo:
-    #
-    #     return self._theme_info(
-    #         theme_id=theme_model.theme_id,
-    #         exam=RUS_EXAMS[theme_model.exam_id],
-    #         exam_task_number=theme_model.exam_task_number,
-    #         title=theme_model.title,
-    #         descr=theme_model.descr
-    #     )
+    def _to_demo_exam_info(self, demo_exam_model: DemoExamModel) -> DemoExamInfo:
+
+        return self._demo_exam_info(
+            demo_exam_id=demo_exam_model.demo_exam_id,
+            exam=RUS_EXAMS[demo_exam_model.exam_id],
+            title=demo_exam_model.title,
+            descr=demo_exam_model.descr
+        )
 
     def _to_add_demo_exam_response(self, demo_exam_model: DemoExamModel) -> AddDemoExamResponse:
 
@@ -133,14 +132,12 @@ class DemoExamRepository:
         return self._delete_demo_exam_response(
             exam=RUS_EXAMS[demo_exam_model.exam_id],
             title=demo_exam_model.title,
-            descr=demo_exam_model.descr,
             message="Демоверсия успешно удалена"
         )
 
     def _to_update_demo_exam_response(self, demo_exam_model: DemoExamModel) -> UpdateDemoExamResponse:
 
         return self._update_demo_exam_response(
-            demo_exam_id=demo_exam_model.demo_exam_id,
             exam=RUS_EXAMS[demo_exam_model.exam_id],
             title=demo_exam_model.title,
             descr=demo_exam_model.descr,
@@ -188,10 +185,10 @@ class DemoExamRepository:
     #         file_path=file_path
     #     )
 
-    # async def get_themes(self, session: AsyncSession) -> list[ThemeInfo]:
-    #     themes_models = (await session.execute(select(self._theme_model).order_by(self._theme_model.exam_id, self._theme_model.exam_task_number, self._theme_model.title))).scalars().all()
-    #
-    #     return [self._to_theme_info(theme_model=theme_model) for theme_model in themes_models]
+    async def get_demo_exams(self, session: AsyncSession) -> list[DemoExamInfo]:
+        demo_exams_models = (await session.execute(select(self._demo_exam_model).order_by(self._demo_exam_model.exam_id, self._demo_exam_model.title, self._demo_exam_model.descr))).scalars().all()
+
+        return [self._to_demo_exam_info(demo_exam_model=demo_exam_model) for demo_exam_model in demo_exams_models]
     #
     # async def get_exam_themes(self, session: AsyncSession, exam_id: int) -> list[ThemeInfo]:
     #     themes_models = (await session.execute(select(self._theme_model).filter_by(exam_id=exam_id).order_by(self._theme_model.exam_task_number, self._theme_model.title))).scalars().all()

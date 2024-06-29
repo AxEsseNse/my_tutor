@@ -165,6 +165,26 @@ async def theme_cards(request: Request, authorized_user=Depends(get_authorized_u
     )
 
 
+async def demo_exams_list(request: Request, authorized_user=Depends(get_authorized_user)):
+    if authorized_user is None or authorized_user.role != "Администратор":
+        return templates.TemplateResponse(
+            "not_authorized.html",
+            {
+                "request": request,
+                "title": "Ошибка авторизации",
+                "user": authorized_user
+            }
+        )
+    return templates.TemplateResponse(
+        "demo_exams_list.html",
+        {
+            "request": request,
+            "title": "Панель администрирования",
+            "user": authorized_user
+        }
+    )
+
+
 async def join_lesson(request: Request, lesson_id: int, access: LessonAccess = Depends(check_lesson_access), authorized_user=Depends(get_authorized_user)):
     if authorized_user is None:
         return templates.TemplateResponse(

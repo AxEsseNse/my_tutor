@@ -29,7 +29,8 @@ from .themes import (
     ThemeDemo
 )
 from .demo_exam import (
-    DemoExamTask
+    DemoExamTask,
+    DemoExamInfo
 )
 from .lessons import (
     StudentLesson,
