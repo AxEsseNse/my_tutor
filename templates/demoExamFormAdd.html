@@ -1,0 +1,86 @@
+<div
+    class="modal fade custom-modal"
+    tabindex="-1"
+    aria-labelledby="modal-demo-exam-add"
+    aria-hidden="true"
+    id="modal-demo-exam-add"
+>
+    <div class="modal-dialog modal-md">
+        <div class="modal-content custom-modal-body">
+            <!-- Header окна создания нового пробника -->
+            <div class="modal-header">
+                <h5 class="modal-title">Создание нового пробника</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <!-- Форма создания нового пробника -->
+            <div class="modal-body">
+                <form class="needs-validation" id="demo-exam-add-form" novalidate>
+                    <!-- Поле выбора профиля -->
+                    <div class="input-group mb-3">
+                        <label class="input-group-text" for="demo-exam-add-form-exam">Профиль</label>
+                        <select class="form-select" id="demo-exam-add-form-exam">
+                            <option value="" disabled hidden selected>Выберите профиль</option>
+                            <option value="1" selected>ЕГЭ</option>
+                            <option value="2">ОГЭ</option>
+                        </select>
+                    </div>
+                    <div class="hidden-field" id="demo-exam-add-form-input-field">
+                        <!-- Кнопка очистки формы -->
+                        <div class="form-group text-end mb-3 mt-4">
+                            <button
+                                class="btn btn-sm btn-secondary"
+                                type="button"
+                                title="Очистить форму"
+                                id="demo-exam-add-form-button-clear-form"
+                                onclick="clearAddThemeForm()"
+                            >
+                                <i class="fa-solid fa-eraser fa-lg"></i>
+                            </button>
+                        </div>
+                        <!-- Поле ввода названия пробника -->
+                        <div class="form-group row mb-1">
+                            <label class="col-3 col-form-label" for="demo-exam-add-form-title">Название</label>
+                            <div class="col-9">
+                                <textarea
+                                    class="form-control"
+                                    id="demo-exam-add-form-title"
+                                    style="height: 120px"
+                                    placeholder="Введите название пробника"
+                                    required
+                                ></textarea>
+                            </div>
+                        </div>
+                        <!-- Поле ввода описания пробника -->
+                        <div class="form-group row mb-1">
+                            <label class="col-3 col-form-label" for="demo-exam-add-form-descr">Описание</label>
+                            <div class="col-9">
+                                <textarea
+                                    class="form-control"
+                                    id="demo-exam-add-form-descr"
+                                    style="height: 330px"
+                                    placeholder="Введите описание пробника"
+                                    required
+                                ></textarea>
+                            </div>
+                        </div>
+                        <!-- Поле ответа сервера -->
+                        <hr/>
+
+                        <div class="form-group row mt-2 mb-2">
+                            <label class="col-4 col-form-label" for="demo-exam-add-form-flash-msg"><strong>Feedback</strong></label>
+                            <div class="col-8" id="demo-exam-add-form-flash-msg"></div>
+                        </div>
+
+                        <hr />
+                        <!-- Кнопка отправки формы -->
+                        <div class="text-center">
+                            <button type="button" class="btn send-form-button" id="demo-exam-add-form-button">
+                                Создать
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

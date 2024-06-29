@@ -1,0 +1,69 @@
+<div
+    class="modal fade bd-example-modal-lg custom-modal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="modal-demo-exam-update"
+    aria-hidden="true"
+    id="modal-demo-exam-update"
+>
+    <div class="modal-dialog modal-md">
+        <div class="modal-content custom-modal-body">
+            <!-- Header окна изменения темы -->
+            <div class="modal-header">
+                <h5 class="modal-title">Изменение пробника</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <div class="modal-body">
+                <form class="needs-validation" id="demo-exam-update-form" novalidate>
+                    <!-- Поле выбора профиля -->
+                    <div class="input-group mb-3">
+                        <label class="input-group-text" for="demo-exam-update-form-exam">Профиль</label>
+                        <select class="form-select" id="demo-exam-update-form-exam">
+                            <option value="1">ЕГЭ</option>
+                            <option value="2">ОГЭ</option>
+                        </select>
+                    </div>
+                    <!-- Поле ввода названия пробника -->
+                    <div class="form-group row mb-1">
+                        <label class="col-3 col-form-label" for="demo-exam-update-form-title">Название</label>
+                        <div class="col-9">
+                            <textarea
+                                class="form-control"
+                                id="demo-exam-update-form-title"
+                                style="height: 120px"
+                                required
+                            ></textarea>
+                        </div>
+                    </div>
+                    <!-- Поле ввода описания пробника -->
+                    <div class="form-group row mb-1">
+                        <label class="col-3 col-form-label" for="demo-exam-update-form-descr">Описание</label>
+                        <div class="col-9">
+                            <textarea
+                                class="form-control"
+                                id="demo-exam-update-form-descr"
+                                style="height: 330px"
+                                required
+                            ></textarea>
+                        </div>
+                    </div>
+                    <!-- Поле ответа сервера -->
+                    <hr/>
+
+                    <div class="form-group row mt-2 mb-2">
+                        <label class="col-4 col-form-label" for="demo-exam-update-form-flash-msg"><strong>Feedback</strong></label>
+                        <div class="col-8" id="demo-exam-update-form-flash-msg"></div>
+                    </div>
+
+                    <hr />
+                    <!-- Кнопка отправки формы -->
+                    <div class="text-center">
+                        <button type="button" class="btn send-form-button" id="demo-exam-update-form-button">
+                            Изменить
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

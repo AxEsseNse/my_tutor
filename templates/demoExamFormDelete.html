@@ -1,0 +1,69 @@
+<div
+    class="modal fade bd-example-modal-lg custom-modal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="modal-demo-exam-delete"
+    aria-hidden="true"
+    id="modal-demo-exam-delete"
+>
+    <div class="modal-dialog modal-md">
+        <div class="modal-content custom-modal-body">
+            <!-- Header окна удаления пробника -->
+            <div class="modal-header">
+                <h5 class="modal-title">Удаление пробника</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
+            </div>
+            <!-- Форма удаления пробника -->
+            <div class="modal-body">
+                <form class="needs-validation" id="demo-exam-delete-form" novalidate>
+                    <!-- Профиль удаляемого пробника -->
+                    <div class="form-group row mb-1">
+                        <label class="col-3 col-form-label" for="demo-exam-delete-form-exam">Профиль</label>
+                        <div class="col-9">
+                            <input class="form-control disabled-input" type="text" id="demo-exam-delete-form-exam" value="" disabled />
+                        </div>
+                    </div>
+                    <!-- Название удаляемого пробника -->
+                    <div class="form-group row mb-1">
+                        <label class="col-3 col-form-label" for="demo-exam-delete-form-title">Название</label>
+                        <div class="col-9">
+                            <textarea
+                                class="form-control disabled-input"
+                                id="demo-exam-delete-form-title"
+                                style="height: 200px"
+                                disabled
+                            ></textarea>
+                        </div>
+                    </div>
+                    <!-- Описание удаляемого пробника -->
+                    <div class="form-group row mb-1">
+                        <label class="col-3 col-form-label" for="demo-exam-delete-form-descr">Описание</label>
+                        <div class="col-9">
+                            <textarea
+                                class="form-control disabled-input"
+                                id="demo-exam-delete-form-descr"
+                                style="height: 200px"
+                                disabled
+                            ></textarea>
+                        </div>
+                    </div>
+                    <!-- Поле ответа сервера -->
+                    <hr/>
+
+                    <div class="form-group row mt-2 mb-2">
+                        <label class="col-4 col-form-label" for="demo-exam-delete-form-flash-msg"><strong>Feedback</strong></label>
+                        <div class="col-8" id="demo-exam-delete-form-flash-msg"></div>
+                    </div>
+
+                    <hr />
+                    <!-- Кнопка отправки формы -->
+                    <div class="text-center">
+                        <button type="button" class="btn send-form-button" id="demo-exam-delete-form-button">
+                            Удалить
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
