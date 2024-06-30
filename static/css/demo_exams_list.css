@@ -3,6 +3,16 @@
     margin-bottom: 10px;
 }
 
+.add-demo-exam-button {
+    color: black;
+    background-color: #B4B7FA;
+    transition: background-color 0.15s ease-in-out;
+}
+.add-demo-exam-button:hover,
+.add-demo-exam-button:focus-visible {
+    background-color: #F6E6AE;
+}
+
 .send-form-button {
     color: black;
     background-color: #B4B7FA;
@@ -10,6 +20,17 @@
 }
 .send-form-button:hover,
 .send-form-button:focus-visible {
+    background-color: #F6E6AE;
+}
+
+.table-controller {
+    background-color: #B4B7FA;
+    width: 45px;
+    height: 45px;
+    padding-left: 10px;
+}
+.table-controller:hover,
+.table-controller:focus-visible {
     background-color: #F6E6AE;
 }
 
@@ -21,7 +42,7 @@
 
 .table tr:hover td {
     background-image: linear-gradient(to right, #B4D8FA, #C8C8F4 15%, #C8C8F4 50%, #B4D8FA);
-    background-size: calc(100% * 6) 100%;
+    background-size: calc(100% * 4) 100%;
 }
 
 .table tr:hover td:first-child {
@@ -38,12 +59,4 @@
 
 .table tr:hover td:nth-child(4) {
     background-position: -300% 0;
-}
-
-.table tr:hover td:nth-child(5) {
-    background-position: -400% 0;
-}
-
-.table tr:hover td:nth-child(6) {
-    background-position: -500% 0;
 }

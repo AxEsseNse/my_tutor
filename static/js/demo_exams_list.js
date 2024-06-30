@@ -327,6 +327,7 @@ class DemoExamTable {
         const controllers = document.createElement('div')
         controllers.classList.add('text-end')
         controllers.style.right = '0px'
+        controllers.appendChild(this.createUpdateContentButton(row, demoExam.demo_exam_id))
         controllers.appendChild(this.createUpdateButton(row, demoExam.demo_exam_id))
         controllers.appendChild(this.createDeleteButton(row, demoExam.demo_exam_id))
         this.addCell(row, controllers)
@@ -344,14 +345,28 @@ class DemoExamTable {
         return cell
     }
 
+    createUpdateContentButton(row, demoExamId) {
+        const btn = document.createElement('button')
+        btn.classList.add('btn', 'btn-sm', 'ms-1', 'table-controller')
+        btn.style.color = '#228B22'
+        btn.setAttribute('type', 'button')
+        btn.setAttribute('title', 'Изменить содержимое пробника')
+        btn.innerHTML = '<i class="fa-solid fa-book-open-reader"></i>'
+        btn.onclick = () => {
+            window.location.href = `/demo-exams/${demoExamId}/update-content`
+        }
+        return btn
+    }
+
     createUpdateButton(row, demoExamId) {
         const btn = document.createElement('button')
-        btn.classList.add('btn', 'btn-sm', 'btn-warning')
+        btn.classList.add('btn', 'btn-sm', 'ms-1', 'table-controller')
+        btn.style.color = '#228B22'
         btn.setAttribute('type', 'button')
         btn.setAttribute('title', 'Изменить пробник')
         btn.setAttribute('data-bs-toggle', 'modal')
         btn.setAttribute('data-bs-target', '#modal-demo-exam-update')
-        btn.innerHTML = '<i class="fa-solid fa-pen-to-square text-dark"></i>'
+        btn.innerHTML = '<i class="fa-solid fa-pen-to-square"></i>'
         btn.onclick = () => {
             const form = new DemoExamFormUpdate(row, this.validator, demoExamId)
             form.fillUpdateForm()
@@ -361,12 +376,13 @@ class DemoExamTable {
 
     createDeleteButton(row, demoExamId) {
         const btn = document.createElement('button')
-        btn.classList.add('btn', 'btn-sm', 'btn-danger')
+        btn.classList.add('btn', 'btn-sm', 'ms-1', 'table-controller')
+        btn.style.color = '#C41E3A'
         btn.setAttribute('type', 'button')
         btn.setAttribute('title', 'Удалить пробник')
         btn.setAttribute('data-bs-toggle', 'modal')
         btn.setAttribute('data-bs-target', '#modal-demo-exam-delete')
-        btn.innerHTML = '<i class="fa-solid fa-trash text-dark"></i>'
+        btn.innerHTML = '<i class="fa-solid fa-trash"></i>'
         btn.onclick = () => {
             const form = new DemoExamFormDelete(row, demoExamId)
             form.fillDeleteForm()
